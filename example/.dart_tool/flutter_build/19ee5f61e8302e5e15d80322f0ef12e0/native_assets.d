@@ -1,0 +1,1 @@
+ /Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/example/.dart_tool/flutter_build/19ee5f61e8302e5e15d80322f0ef12e0/native_assets.yaml: 

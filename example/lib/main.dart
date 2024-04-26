@@ -97,8 +97,7 @@ class _HealthAppState extends State<HealthApp> {
     if (!hasPermissions) {
       // requesting access to the data types before reading them
       try {
-        authorized = await Health()
-            .requestAuthorization(types, permissions: permissions);
+        authorized = await Health().requestAuthorization(types, permissions: permissions);
       } catch (error) {
         debugPrint("Exception in authorize: $error");
       }
@@ -126,7 +125,7 @@ class _HealthAppState extends State<HealthApp> {
 
     // get data within the last 24 hours
     final now = DateTime.now();
-    final yesterday = now.subtract(Duration(hours: 24));
+    final yesterday = now.subtract(Duration(days: 40));
 
     // Clear old data points
     _healthDataList.clear();
@@ -259,17 +258,7 @@ class _HealthAppState extends State<HealthApp> {
       diastolic: 80,
       startTime: now,
     );
-    success &= await Health().writeMeal(
-      mealType: MealType.SNACK,
-      startTime: earlier,
-      endTime: now,
-      caloriesConsumed: 1000,
-      carbohydrates: 50,
-      protein: 25,
-      fatTotal: 50,
-      name: "Banana",
-      caffeine: 0.002,
-    );
+
 
     // Store an Audiogram - only available on iOS
     // const frequencies = [125.0, 500.0, 1000.0, 2000.0, 4000.0, 8000.0];
