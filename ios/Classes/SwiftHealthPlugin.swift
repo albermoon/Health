@@ -554,7 +554,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             })
     }
 
-    func delete(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    func delete(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let arguments = call.arguments as? NSDictionary
         let dataTypeKey = (arguments?["dataTypeKey"] as? String)!
         let startTime = (arguments?["startTime"] as? NSNumber) ?? 0
