@@ -472,7 +472,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             let caloriesSample = HKQuantitySample(type: HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!, quantity: HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: calories), start: dateFrom, end: dateTo, metadata: metadata)
             nutrition.insert(caloriesSample)
         }
- 
+
         if(carbs > 0) {
             let carbsSample = HKQuantitySample(type: HKSampleType.quantityType(forIdentifier: .dietaryCarbohydrates)!, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: carbs), start: dateFrom, end: dateTo, metadata: metadata)
             nutrition.insert(carbsSample)

@@ -242,8 +242,8 @@ class Health {
                 type == HealthDataType.IRREGULAR_HEART_RATE_EVENT ||
                 type == HealthDataType.WALKING_HEART_RATE) &&
             permission != HealthDataAccess.READ) {
-          throw ArgumentError(
-              'Requesting WRITE permission on ELECTROCARDIOGRAM / HIGH_HEART_RATE_EVENT / LOW_HEART_RATE_EVENT / IRREGULAR_HEART_RATE_EVENT / WALKING_HEART_RATE is not allowed.');
+          // throw ArgumentError(  
+          //     'Requesting WRITE permission on ELECTROCARDIOGRAM / HIGH_HEART_RATE_EVENT / LOW_HEART_RATE_EVENT / IRREGULAR_HEART_RATE_EVENT / WALKING_HEART_RATE is not allowed.');
         }
       }
     }
