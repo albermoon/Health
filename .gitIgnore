@@ -1,0 +1,54 @@
+# Miscellaneous
+*.lock
+*.log
+*.generated
+*.g.dart
+*.g.dart.map
+*.freezed.dart
+*.part
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.*
+# iOS related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/xcuserdata/
+**/ios/.generated/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/Generated.xcconfig
+# macOS related
+**/macos/Flutter/ephemeral/
+# Web related
+/web/favicon.png
+/web/icons/
+/web/images/
+/web/splash/
+/web/flutter_service_worker.js
+# Windows related
+**/windows/flutter/ephemeral/
+# Linux related
+**/linux/flutter/ephemeral/
+# IntelliJ related
+.idea/
+*.iml
+*.ipr
+*.iws
+# Visual Studio Code related
+.vscode/
+**/.vscode
+# Packages & Plugin pub related
+.pubspec.lock

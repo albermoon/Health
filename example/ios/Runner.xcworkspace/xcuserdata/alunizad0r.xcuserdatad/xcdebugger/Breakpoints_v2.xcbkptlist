@@ -68,6 +68,36 @@
             landmarkType = "7">
             <Locations>
                <Location
+                  uuid = "C21DB57E-E79E-4732-A61B-762BA8AD7B98 - 163cd6de8dde2972"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "499"
+                  endingLineNumber = "499"
+                  offsetFromSymbolStart = "11236">
+               </Location>
+               <Location
+                  uuid = "C21DB57E-E79E-4732-A61B-762BA8AD7B98 - 2e89d9fb3d49d57f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "500"
+                  endingLineNumber = "500"
+                  offsetFromSymbolStart = "228">
+               </Location>
+               <Location
                   uuid = "C21DB57E-E79E-4732-A61B-762BA8AD7B98 - 163cd6de8dde29b4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -80,10 +110,10 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "497"
                   endingLineNumber = "497"
-                  offsetFromSymbolStart = "11428">
+                  offsetFromSymbolStart = "10932">
                </Location>
                <Location
-                  uuid = "C21DB57E-E79E-4732-A61B-762BA8AD7B98 - 163cd6de8dde29d5"
+                  uuid = "C21DB57E-E79E-4732-A61B-762BA8AD7B98 - 163cd6de8dde29b4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -93,8 +123,8 @@
                   urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "496"
-                  endingLineNumber = "496"
+                  startingLineNumber = "497"
+                  endingLineNumber = "497"
                   offsetFromSymbolStart = "11428">
                </Location>
             </Locations>
@@ -115,6 +145,36 @@
             landmarkName = "writeMeal(call:result:)"
             landmarkType = "7">
             <Locations>
+               <Location
+                  uuid = "B3296A87-3DB9-4145-9C3B-F9C445DE8452 - 2e89d9fb3d49d57f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "500"
+                  endingLineNumber = "500"
+                  offsetFromSymbolStart = "228">
+               </Location>
+               <Location
+                  uuid = "B3296A87-3DB9-4145-9C3B-F9C445DE8452 - 163cd6de8dde2972"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "499"
+                  endingLineNumber = "499"
+                  offsetFromSymbolStart = "11236">
+               </Location>
                <Location
                   uuid = "B3296A87-3DB9-4145-9C3B-F9C445DE8452 - 163cd6de8dde2972"
                   shouldBeEnabled = "Yes"
@@ -145,36 +205,6 @@
                   endingLineNumber = "500"
                   offsetFromSymbolStart = "280">
                </Location>
-               <Location
-                  uuid = "B3296A87-3DB9-4145-9C3B-F9C445DE8452 - 163cd6de8dde2993"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
-                  moduleName = "health"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "498"
-                  endingLineNumber = "498"
-                  offsetFromSymbolStart = "11772">
-               </Location>
-               <Location
-                  uuid = "B3296A87-3DB9-4145-9C3B-F9C445DE8452 - 2e89d9fb3d49d55c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
-                  moduleName = "health"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "499"
-                  endingLineNumber = "499"
-                  offsetFromSymbolStart = "280">
-               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -194,6 +224,21 @@
             landmarkType = "7">
             <Locations>
                <Location
+                  uuid = "C467BF1B-FEC8-4509-875C-E5A3A19C156C - 163cd6de8dde29b4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "497"
+                  endingLineNumber = "497"
+                  offsetFromSymbolStart = "10932">
+               </Location>
+               <Location
                   uuid = "C467BF1B-FEC8-4509-875C-E5A3A19C156C - 163cd6de8dde29d5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -206,10 +251,10 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "496"
                   endingLineNumber = "496"
-                  offsetFromSymbolStart = "11404">
+                  offsetFromSymbolStart = "10908">
                </Location>
                <Location
-                  uuid = "C467BF1B-FEC8-4509-875C-E5A3A19C156C - 163cd6de8dde29f6"
+                  uuid = "C467BF1B-FEC8-4509-875C-E5A3A19C156C - 163cd6de8dde29d5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -219,8 +264,8 @@
                   urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "495"
-                  endingLineNumber = "495"
+                  startingLineNumber = "496"
+                  endingLineNumber = "496"
                   offsetFromSymbolStart = "11404">
                </Location>
             </Locations>
@@ -242,6 +287,21 @@
             landmarkType = "7">
             <Locations>
                <Location
+                  uuid = "B8382C63-DEE7-4B9E-BB18-DFC9559D32D6 - 163cd6de8dde2a59"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "492"
+                  endingLineNumber = "492"
+                  offsetFromSymbolStart = "10308">
+               </Location>
+               <Location
                   uuid = "B8382C63-DEE7-4B9E-BB18-DFC9559D32D6 - 163cd6de8dde2a7a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -254,10 +314,10 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "491"
                   endingLineNumber = "491"
-                  offsetFromSymbolStart = "10740">
+                  offsetFromSymbolStart = "10284">
                </Location>
                <Location
-                  uuid = "B8382C63-DEE7-4B9E-BB18-DFC9559D32D6 - 163cd6de8dde2a9b"
+                  uuid = "B8382C63-DEE7-4B9E-BB18-DFC9559D32D6 - 163cd6de8dde2a7a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -267,8 +327,8 @@
                   urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "490"
-                  endingLineNumber = "490"
+                  startingLineNumber = "491"
+                  endingLineNumber = "491"
                   offsetFromSymbolStart = "10740">
                </Location>
             </Locations>
@@ -290,6 +350,21 @@
             landmarkType = "7">
             <Locations>
                <Location
+                  uuid = "0230168F-3285-402F-98EA-8337C833FB98 - 163cd6de8dde250e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "471"
+                  endingLineNumber = "471"
+                  offsetFromSymbolStart = "7788">
+               </Location>
+               <Location
                   uuid = "0230168F-3285-402F-98EA-8337C833FB98 - 163cd6de8dde2550"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -302,10 +377,10 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "469"
                   endingLineNumber = "469"
-                  offsetFromSymbolStart = "8044">
+                  offsetFromSymbolStart = "7748">
                </Location>
                <Location
-                  uuid = "0230168F-3285-402F-98EA-8337C833FB98 - 163cd6de8dde2571"
+                  uuid = "0230168F-3285-402F-98EA-8337C833FB98 - 163cd6de8dde2550"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -315,8 +390,8 @@
                   urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "468"
-                  endingLineNumber = "468"
+                  startingLineNumber = "469"
+                  endingLineNumber = "469"
                   offsetFromSymbolStart = "8044">
                </Location>
             </Locations>
@@ -338,6 +413,21 @@
             landmarkType = "7">
             <Locations>
                <Location
+                  uuid = "9510C32F-9ABE-4B7E-9E07-4D1FDC6F00E8 - 163cd6de8dde25b3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.writeMeal(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "466"
+                  endingLineNumber = "466"
+                  offsetFromSymbolStart = "7272">
+               </Location>
+               <Location
                   uuid = "9510C32F-9ABE-4B7E-9E07-4D1FDC6F00E8 - 163cd6de8dde25d4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -350,10 +440,10 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "465"
                   endingLineNumber = "465"
-                  offsetFromSymbolStart = "7480">
+                  offsetFromSymbolStart = "7184">
                </Location>
                <Location
-                  uuid = "9510C32F-9ABE-4B7E-9E07-4D1FDC6F00E8 - 163cd6de8dde25f5"
+                  uuid = "9510C32F-9ABE-4B7E-9E07-4D1FDC6F00E8 - 163cd6de8dde25d4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -363,8 +453,8 @@
                   urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "464"
-                  endingLineNumber = "464"
+                  startingLineNumber = "465"
+                  endingLineNumber = "465"
                   offsetFromSymbolStart = "7480">
                </Location>
             </Locations>
@@ -386,19 +476,34 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "316682C1-B318-4957-9421-38631416815F - b659f758272bdf98"
+                  uuid = "316682C1-B318-4957-9421-38631416815F - 5fc984867763490f"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "health.SwiftHealthPlugin.delete(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  symbolName = "health.SwiftHealthPlugin.delete(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
                   moduleName = "health"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "557"
-                  endingLineNumber = "557"
-                  offsetFromSymbolStart = "344">
+                  startingLineNumber = "559"
+                  endingLineNumber = "559"
+                  offsetFromSymbolStart = "524">
+               </Location>
+               <Location
+                  uuid = "316682C1-B318-4957-9421-38631416815F - 5fc984867763496e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.delete(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "558"
+                  endingLineNumber = "558"
+                  offsetFromSymbolStart = "288">
                </Location>
                <Location
                   uuid = "316682C1-B318-4957-9421-38631416815F - 5fc984867763496e"
@@ -416,6 +521,1493 @@
                   offsetFromSymbolStart = "348">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9BD0592B-8BDB-4F73-A13E-1184F175ADED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
+            landmarkName = "hasPermissions(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "83BCB230-5A67-453D-8416-50308759D553"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "251"
+            endingLineNumber = "251"
+            landmarkName = "hasPermission(type:access:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "458CD9F8-ABD9-4D48-92FE-2C5BC1E33F5F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "598"
+            endingLineNumber = "598"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2124544D-6362-4321-BEA0-2923326F582C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "599"
+            endingLineNumber = "599"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2124544D-6362-4321-BEA0-2923326F582C - bf19fcac5eace08e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "599"
+                  endingLineNumber = "599"
+                  offsetFromSymbolStart = "552">
+               </Location>
+               <Location
+                  uuid = "2124544D-6362-4321-BEA0-2923326F582C - bf19fcac5eace08e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "599"
+                  endingLineNumber = "599"
+                  offsetFromSymbolStart = "612">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F6E0E85F-25F7-4EFE-A5CB-5DCBD37C1BD1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "600"
+            endingLineNumber = "600"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F6E0E85F-25F7-4EFE-A5CB-5DCBD37C1BD1 - bf19fcac5eace06d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "600"
+                  endingLineNumber = "600"
+                  offsetFromSymbolStart = "1036">
+               </Location>
+               <Location
+                  uuid = "F6E0E85F-25F7-4EFE-A5CB-5DCBD37C1BD1 - bf19fcac5eace06d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "600"
+                  endingLineNumber = "600"
+                  offsetFromSymbolStart = "1116">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6695C54B-CFAC-41A4-9565-0465BC7C0A6B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "603"
+            endingLineNumber = "603"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A8F9510D-7F05-4AD3-8FA3-FCDA865A0846"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "616"
+            endingLineNumber = "616"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A8F9510D-7F05-4AD3-8FA3-FCDA865A0846 - bf19fcac5eacee5d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "616"
+                  endingLineNumber = "616"
+                  offsetFromSymbolStart = "4344">
+               </Location>
+               <Location
+                  uuid = "A8F9510D-7F05-4AD3-8FA3-FCDA865A0846 - bf19fcac5eacee5d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "616"
+                  endingLineNumber = "616"
+                  offsetFromSymbolStart = "4524">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B283684-FE81-429C-A7AF-CA3420D26748"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "627"
+            endingLineNumber = "627"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DF65C407-663C-4BE6-8365-9BCEFABD9D6A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "647"
+            endingLineNumber = "647"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "DF65C407-663C-4BE6-8365-9BCEFABD9D6A - ed3a601c4bbe015e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "649"
+                  endingLineNumber = "649"
+                  offsetFromSymbolStart = "1184">
+               </Location>
+               <Location
+                  uuid = "DF65C407-663C-4BE6-8365-9BCEFABD9D6A - ed3a601c4bbe011c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "647"
+                  endingLineNumber = "647"
+                  offsetFromSymbolStart = "1116">
+               </Location>
+               <Location
+                  uuid = "DF65C407-663C-4BE6-8365-9BCEFABD9D6A - ed3a601c4bbe011c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "647"
+                  endingLineNumber = "647"
+                  offsetFromSymbolStart = "1172">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7F150C3B-BBF9-4994-8F0E-E2E63CDE0A48"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "628"
+            endingLineNumber = "628"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7F150C3B-BBF9-4994-8F0E-E2E63CDE0A48 - ed3a601c4bbe072c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "631"
+                  endingLineNumber = "631"
+                  offsetFromSymbolStart = "380">
+               </Location>
+               <Location
+                  uuid = "7F150C3B-BBF9-4994-8F0E-E2E63CDE0A48 - ed3a601c4bbe072c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "631"
+                  endingLineNumber = "631"
+                  offsetFromSymbolStart = "416">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "064C336B-0FC5-4FC7-9AAD-E2734044E8F8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "727"
+            endingLineNumber = "727"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "064C336B-0FC5-4FC7-9AAD-E2734044E8F8 - fc4ffab5df3662e8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #19 @Swift.MainActor () -&gt; () in closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "728"
+                  endingLineNumber = "728"
+                  offsetFromSymbolStart = "124">
+               </Location>
+               <Location
+                  uuid = "064C336B-0FC5-4FC7-9AAD-E2734044E8F8 - fc4ffab5df366d0b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #19 @Swift.MainActor () -&gt; () in closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "727"
+                  endingLineNumber = "727"
+                  offsetFromSymbolStart = "60">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B816059-8F2A-4C11-81A0-5C138A539357"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "863"
+            endingLineNumber = "863"
+            landmarkName = "getIntervalData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9B816059-8F2A-4C11-81A0-5C138A539357 - a445c18b1a1078d7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "864"
+                  endingLineNumber = "864"
+                  offsetFromSymbolStart = "3780">
+               </Location>
+               <Location
+                  uuid = "9B816059-8F2A-4C11-81A0-5C138A539357 - a445c18b1a107834"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "863"
+                  endingLineNumber = "863"
+                  offsetFromSymbolStart = "3192">
+               </Location>
+               <Location
+                  uuid = "9B816059-8F2A-4C11-81A0-5C138A539357 - a445c18b1a107834"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "863"
+                  endingLineNumber = "863"
+                  offsetFromSymbolStart = "3432">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AFF3E8E1-AC1D-4A66-8DBF-33B6DEDBE538"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "938"
+            endingLineNumber = "938"
+            landmarkName = "getIntervalData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AFF3E8E1-AC1D-4A66-8DBF-33B6DEDBE538 - 648ccfa5299e5c76"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #5 @Swift.MainActor () -&gt; () in closure #1 (__C.HKStatisticsCollectionQuery, Swift.Optional&lt;__C.HKStatisticsCollection&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "939"
+                  endingLineNumber = "939"
+                  offsetFromSymbolStart = "176">
+               </Location>
+               <Location
+                  uuid = "AFF3E8E1-AC1D-4A66-8DBF-33B6DEDBE538 - 648ccfa5299e5c17"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #5 @Swift.MainActor () -&gt; () in closure #1 (__C.HKStatisticsCollectionQuery, Swift.Optional&lt;__C.HKStatisticsCollection&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "938"
+                  endingLineNumber = "938"
+                  offsetFromSymbolStart = "68">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "16322F4D-4421-4E19-90A5-3AD535DF1FA3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "941"
+            endingLineNumber = "941"
+            landmarkName = "getIntervalData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "16322F4D-4421-4E19-90A5-3AD535DF1FA3 - a445c18b1a1062e5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "942"
+                  endingLineNumber = "942"
+                  offsetFromSymbolStart = "6340">
+               </Location>
+               <Location
+                  uuid = "16322F4D-4421-4E19-90A5-3AD535DF1FA3 - a445c18b1a1062ca"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "941"
+                  endingLineNumber = "941"
+                  offsetFromSymbolStart = "6304">
+               </Location>
+               <Location
+                  uuid = "16322F4D-4421-4E19-90A5-3AD535DF1FA3 - a445c18b1a1062ca"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getIntervalData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "941"
+                  endingLineNumber = "941"
+                  offsetFromSymbolStart = "6584">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "043F6419-3F6C-4CE0-BE30-8F66ECB8116C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
+            landmarkName = "hasPermission(type:access:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3014FA53-1845-43B3-BD74-3CDB456C8B1A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "hasPermissions(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4CF9F52A-5B2A-4F8E-A831-3DA35FC3E5ED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "257"
+            endingLineNumber = "257"
+            landmarkName = "hasPermission(type:access:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E64837AD-D87B-4837-A3CC-3C61C4E8094A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
+            landmarkName = "hasPermission(type:access:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8344B7B3-35D3-41B3-8015-B0A8360B51AD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
+            landmarkName = "hasPermission(type:access:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7D89C6A8-0BD2-43FF-B4BD-533FEC2C4648"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F99A642B-83AD-46EE-8C25-6F8480FB777F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F99A642B-83AD-46EE-8C25-6F8480FB777F - 669e90fff8417dd7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "272"
+                  endingLineNumber = "272"
+                  offsetFromSymbolStart = "3716">
+               </Location>
+               <Location
+                  uuid = "F99A642B-83AD-46EE-8C25-6F8480FB777F - 669e90fff8417dd7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "272"
+                  endingLineNumber = "272"
+                  offsetFromSymbolStart = "3808">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CFC4EE64-C243-451E-84DF-3439CC3C75F5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6C44450A-9307-4F91-9C76-634769FD70D2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C03901BD-0890-4692-ACFA-2A3CFB36AAFF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "C03901BD-0890-4692-ACFA-2A3CFB36AAFF - 669e90fff8414116"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "305"
+                  endingLineNumber = "305"
+                  offsetFromSymbolStart = "3120">
+               </Location>
+               <Location
+                  uuid = "C03901BD-0890-4692-ACFA-2A3CFB36AAFF - f04aacc83c169015"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "307"
+                  endingLineNumber = "307"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "C03901BD-0890-4692-ACFA-2A3CFB36AAFF - 669e90fff84141f7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "304"
+                  endingLineNumber = "304"
+                  offsetFromSymbolStart = "3112">
+               </Location>
+               <Location
+                  uuid = "C03901BD-0890-4692-ACFA-2A3CFB36AAFF - 669e90fff84141f7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "304"
+                  endingLineNumber = "304"
+                  offsetFromSymbolStart = "3152">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F29FA497-45DF-40F1-9977-007A60A644D2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "243F9B32-F640-4C1B-909F-E23322E52DA8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B77F49E4-B52B-43A4-BA74-76FB40F37B56"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "299"
+            endingLineNumber = "299"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9BF7A3CB-E6C9-4E38-AE2F-D8A2EBA1DB0F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9BF7A3CB-E6C9-4E38-AE2F-D8A2EBA1DB0F - f04aacc83c169015"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "307"
+                  endingLineNumber = "307"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "9BF7A3CB-E6C9-4E38-AE2F-D8A2EBA1DB0F - 7ef98c18e85a9409"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "308"
+                  endingLineNumber = "308"
+                  offsetFromSymbolStart = "76">
+               </Location>
+               <Location
+                  uuid = "9BF7A3CB-E6C9-4E38-AE2F-D8A2EBA1DB0F - 669e90fff8414116"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "305"
+                  endingLineNumber = "305"
+                  offsetFromSymbolStart = "3120">
+               </Location>
+               <Location
+                  uuid = "9BF7A3CB-E6C9-4E38-AE2F-D8A2EBA1DB0F - 669e90fff8414116"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "305"
+                  endingLineNumber = "305"
+                  offsetFromSymbolStart = "3160">
+               </Location>
+               <Location
+                  uuid = "9BF7A3CB-E6C9-4E38-AE2F-D8A2EBA1DB0F - f04aacc83c169015"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "307"
+                  endingLineNumber = "307"
+                  offsetFromSymbolStart = "256">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2269CDE0-68B9-46E1-9ECB-84130E089C1E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D2562C25-C21B-49AD-85D5-A3187701B852"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D2562C25-C21B-49AD-85D5-A3187701B852 - 7ef98c18e85a9409"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "308"
+                  endingLineNumber = "308"
+                  offsetFromSymbolStart = "76">
+               </Location>
+               <Location
+                  uuid = "D2562C25-C21B-49AD-85D5-A3187701B852 - f04aacc83c169015"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "307"
+                  endingLineNumber = "307"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "D2562C25-C21B-49AD-85D5-A3187701B852 - f04aacc83c169015"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "307"
+                  endingLineNumber = "307"
+                  offsetFromSymbolStart = "256">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "964785CC-4992-4CCD-807D-B52876DBC200"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "964785CC-4992-4CCD-807D-B52876DBC200 - 7ef98c18e85a97e8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "309"
+                  endingLineNumber = "309"
+                  offsetFromSymbolStart = "132">
+               </Location>
+               <Location
+                  uuid = "964785CC-4992-4CCD-807D-B52876DBC200 - 7ef98c18e85a9409"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "308"
+                  endingLineNumber = "308"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "360B5616-033F-461E-9A07-0161C311CD31"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "handle(_:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "43318211-B634-473E-B4FC-FE0FBABBF614"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "handle(_:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5B885A87-80B8-4B4E-980F-075048FCD623"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
+            landmarkName = "requestAuthorization(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5B885A87-80B8-4B4E-980F-075048FCD623 - 669e90fff8417ecf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "280"
+                  endingLineNumber = "280"
+                  offsetFromSymbolStart = "2020">
+               </Location>
+               <Location
+                  uuid = "5B885A87-80B8-4B4E-980F-075048FCD623 - 669e90fff8417ecf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.requestAuthorization(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) throws -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "280"
+                  endingLineNumber = "280"
+                  offsetFromSymbolStart = "2060">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A5AC6683-9E57-48CC-9875-69C47D5934E6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "624"
+            endingLineNumber = "624"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A5AC6683-9E57-48CC-9875-69C47D5934E6 - bf19fcac5eaced55"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "624"
+                  endingLineNumber = "624"
+                  offsetFromSymbolStart = "5032">
+               </Location>
+               <Location
+                  uuid = "A5AC6683-9E57-48CC-9875-69C47D5934E6 - bf19fcac5eaced55"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "624"
+                  endingLineNumber = "624"
+                  offsetFromSymbolStart = "5212">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "42F3D3B5-723B-495A-9CAB-6145F6FAAAE8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "630"
+            endingLineNumber = "630"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "42F3D3B5-723B-495A-9CAB-6145F6FAAAE8 - ed3a601c4bbe072c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "631"
+                  endingLineNumber = "631"
+                  offsetFromSymbolStart = "380">
+               </Location>
+               <Location
+                  uuid = "42F3D3B5-723B-495A-9CAB-6145F6FAAAE8 - ed3a601c4bbe072c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "631"
+                  endingLineNumber = "631"
+                  offsetFromSymbolStart = "416">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FA1AA3A2-436D-469A-A574-BC04A7B0AF1A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "613"
+            endingLineNumber = "613"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E9EE68C8-53EE-40AA-BB67-85F39B9CB83A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "612"
+            endingLineNumber = "612"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6897320F-139A-4C60-97D6-C60D66640F86"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "631"
+            endingLineNumber = "631"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6897320F-139A-4C60-97D6-C60D66640F86 - ed3a601c4bbe072c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "631"
+                  endingLineNumber = "631"
+                  offsetFromSymbolStart = "380">
+               </Location>
+               <Location
+                  uuid = "6897320F-139A-4C60-97D6-C60D66640F86 - ed3a601c4bbe072c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.HKSampleQuery, Swift.Optional&lt;Swift.Array&lt;__C.HKSample&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in health.SwiftHealthPlugin.getData(call: __C.FlutterMethodCall, result: (Swift.Optional&lt;Any&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "health"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alunizad0r/Documents/Source/siscare/PACKAGES/health-plugins/packages/health/ios/Classes/SwiftHealthPlugin.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "631"
+                  endingLineNumber = "631"
+                  offsetFromSymbolStart = "416">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9045832F-BF99-4A62-87F6-DB2E3243FED9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "703"
+            endingLineNumber = "703"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "36E9C316-BD8A-42D8-BC86-07A17F6B3DCE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "730"
+            endingLineNumber = "730"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F55A1F23-9ADC-4FE6-896A-BB511A61C0E2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "757"
+            endingLineNumber = "757"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5E9410CA-87CF-40BB-8475-621B57052D38"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "805"
+            endingLineNumber = "805"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EA7AE2C8-1843-4BC9-BC7F-588354469FED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "633"
+            endingLineNumber = "633"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8B2B4C7B-1DBA-4238-972D-CAB158C0A598"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "634"
+            endingLineNumber = "634"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "31C614BA-9C8D-4B5F-ABC5-C5F5B0DFAA92"
+            shouldBeEnabled = "No"
+            condition = "if"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "635"
+            endingLineNumber = "635"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+            <Actions>
+               <BreakpointActionProxy
+                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
+                  <ActionContent>
+                  </ActionContent>
+               </BreakpointActionProxy>
+            </Actions>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "17C6461E-EC00-4013-BBDD-CF4925ED105E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "691"
+            endingLineNumber = "691"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "11BD0493-FDCB-4278-B858-7D0B1C450F75"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../ios/Classes/SwiftHealthPlugin.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "649"
+            endingLineNumber = "649"
+            landmarkName = "getData(call:result:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
