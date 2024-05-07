@@ -12,6 +12,11 @@
 .pub-cache/
 .pub/
 /build/
+/examples/
+example/build/
+example
+*.apk
+*.so
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
