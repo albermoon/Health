@@ -1,0 +1,30 @@
+{
+  "name": "health",
+  "version": "1.0.4",
+  "summary": "Wrapper for the iOS HealthKit and Android GoogleFit services.",
+  "description": "Wrapper for the iOS HealthKit and Android GoogleFit services.",
+  "homepage": "https://pub.dev/packages/health",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "Copenhagen Center for Health Technology": "cph.cachet@gmail.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "public_header_files": "Classes/**/*.h",
+  "dependencies": {
+    "Flutter": [
+
+    ]
+  },
+  "platforms": {
+    "ios": "13.0"
+  },
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES",
+    "VALID_ARCHS[sdk=iphonesimulator*]": "x86_64"
+  }
+}
