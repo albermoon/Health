@@ -39,9 +39,9 @@ class BloodPressureValue extends HealthValue{
     );
 
   @override
-  String toString() => """$runtimeType - frequencies: ${systolic.toString()},
-    left ear sensitivities: ${diastolic.toString()},
-    right ear sensitivities: ${heartrate.toString()}""";
+  String toString() => """$runtimeType - systolica: ${systolic.toString()},
+    diastolica: ${diastolic.toString()},
+    ritmo cardiaco: ${heartrate.toString()}""";
 
   @override
   Function get fromJsonFunction => _$BloodPressureValueFromJson;
