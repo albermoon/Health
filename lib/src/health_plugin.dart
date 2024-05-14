@@ -826,10 +826,7 @@ class Health {
     final dataType = message["dataType"] as HealthDataType;
     final dataPoints = message["dataPoints"] as List;
 
-    return dataPoints
-        .map<HealthDataPoint>((dataPoint) =>
-            HealthDataPoint.fromHealthDataPoint(dataType, dataPoint))
-        .toList();
+    return dataPoints.map<HealthDataPoint>((dataPoint) => HealthDataPoint.fromHealthDataPoint(dataType, dataPoint)).toList();
   }
 
   /// Return a list of [HealthDataPoint] based on [points] with no duplicates.

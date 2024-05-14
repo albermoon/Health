@@ -109,8 +109,8 @@ class HealthDataPoint {
 
     final DateTime from = DateTime.fromMillisecondsSinceEpoch(dataPoint['date_from'] as int);
     final DateTime to = DateTime.fromMillisecondsSinceEpoch(dataPoint['date_to'] as int);
-    final String sourceId = dataPoint["source_id"] as String;
-    final String sourceName = dataPoint["source_name"] as String;
+    final String sourceId = dataPoint["source_id"] as String? ?? "";
+    final String sourceName = dataPoint["source_name"] as String? ?? "";
     final bool isManualEntry = dataPoint["is_manual_entry"] as bool? ?? false;
     final unit = dataTypeToUnit[dataType] ?? HealthDataUnit.UNKNOWN_UNIT;
 

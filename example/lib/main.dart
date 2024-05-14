@@ -57,7 +57,7 @@ class _HealthAppState extends State<HealthApp> {
   // Set up corresponding permissions
   // READ only
   List<HealthDataAccess> get permissions =>
-      types.map((e) => HealthDataAccess.READ).toList();
+      types.map((e) => HealthDataAccess.READ_WRITE).toList();
 
   // Or both READ and WRITE
   // List<HealthDataAccess> get permissions =>
