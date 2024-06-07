@@ -1906,7 +1906,7 @@ class HealthPlugin(private var channel: MethodChannel? = null) : MethodCallHandl
                                         "date_from" to rec.time.toEpochMilli(),
                                         "date_to" to rec.metadata.lastModifiedTime.toEpochMilli(),
                                         "source_id" to rec.metadata.dataOrigin.packageName,
-                                        "device" to rec.metadata.device,
+                                        //"device" to rec.metadata.device,
                                         //"body_position" to rec.bodyPosition.,
                                         //"measurementLocation" to rec.measurementLocation
 
