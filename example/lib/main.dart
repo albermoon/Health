@@ -57,7 +57,7 @@ class _HealthAppState extends State<HealthApp> {
   // Set up corresponding permissions
   // READ only
   List<HealthDataAccess> get permissions =>
-      types.map((e) => HealthDataAccess.READ_WRITE).toList();
+      types.map((e) => HealthDataAccess.READ).toList();
 
   // Or both READ and WRITE
   // List<HealthDataAccess> get permissions =>
@@ -91,10 +91,10 @@ class _HealthAppState extends State<HealthApp> {
 
     // hasPermissions = false because the hasPermission cannot disclose if WRITE access exists.
     // Hence, we have to request with WRITE as well.
-    hasPermissions = false;
+    //hasPermissions = false;
 
     bool authorized = false;
-    if (!hasPermissions) {
+    //if (!hasPermissions!) {
       // requesting access to the data types before reading them
       try {
         authorized = await Health()
@@ -102,7 +102,7 @@ class _HealthAppState extends State<HealthApp> {
       } catch (error) {
         debugPrint("Exception in authorize: $error");
       }
-    }
+   // }
 
     setState(() => _state =
         (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED);

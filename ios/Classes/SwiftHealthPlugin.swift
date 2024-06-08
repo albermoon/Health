@@ -24,6 +24,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let BLOOD_PRESSURE = "BLOOD_PRESSURE"
     let BLOOD_PRESSURE_DIASTOLIC = "BLOOD_PRESSURE_DIASTOLIC"
     let BLOOD_PRESSURE_SYSTOLIC = "BLOOD_PRESSURE_SYSTOLIC"
+ 
     let BODY_FAT_PERCENTAGE = "BODY_FAT_PERCENTAGE"
     let BODY_MASS_INDEX = "BODY_MASS_INDEX"
     let BODY_TEMPERATURE = "BODY_TEMPERATURE"
@@ -253,14 +254,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             let status = healthStore.authorizationStatus(for: type)
             switch access {
             case 0:  // READ
-                return nil
+                return (status == HKAuthorizationStatus.sharingAuthorized)
             case 1:  // WRITE
                 return (status == HKAuthorizationStatus.sharingAuthorized)
             default:  // READ_WRITE
-                return nil
+                return (status == HKAuthorizationStatus.sharingAuthorized)
             }
         } else {
-            return nil
+            return false
         }
     }
 
@@ -287,6 +288,24 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 typesToWrite.insert(proteinType);
                 typesToWrite.insert(fatType);
                 typesToWrite.insert(caffeineType);
+            } else if (key == BLOOD_PRESSURE){
+                let access = permissions[index]
+                let systolicType = HKObjectType.quantityType(forIdentifier: .bloodPressureSystolic)!
+                let diastolicType = HKObjectType.quantityType(forIdentifier: .bloodPressureDiastolic)!
+                let bloodPressureTypes: Set<HKObjectType> = [systolicType, diastolicType]
+                switch access{
+                    case 0:
+                        typesToRead.insert(systolicType)
+                        typesToRead.insert(diastolicType)
+                    case 1:
+                        typesToWrite.insert(systolicType)
+                        typesToWrite.insert(diastolicType)
+                    default:
+                        typesToRead.insert(systolicType)
+                        typesToRead.insert(diastolicType)
+                        typesToWrite.insert(systolicType)
+                        typesToWrite.insert(diastolicType)
+                }
             } else {
                 let dataType = dataTypeLookUp(key: key)
                 let access = permissions[index]
@@ -301,17 +320,21 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
             }
         }
-
+        
         if #available(iOS 13.0, *) {
-            healthStore.requestAuthorization(toShare: typesToWrite, read: typesToRead) {
-                (success, error) in
-                DispatchQueue.main.async {
-                    result(success)
+                healthStore.requestAuthorization(toShare: typesToWrite, read: typesToRead) { (success, error) in
+                    DispatchQueue.main.async {
+                        if let error = error {
+                            print("Authorization Error: \(error.localizedDescription)")
+                            result(FlutterError(code: "AUTHORIZATION_ERROR", message: error.localizedDescription, details: nil))
+                        } else {
+                            result(success)
+                        }
+                    }
                 }
+            } else {
+                result(false)  // Handle the error here.
             }
-        } else {
-            result(false)  // Handle the error here.
-        }
     }
 
     func writeData(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
@@ -1180,7 +1203,6 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[RESPIRATORY_RATE] = HKSampleType.quantityType(forIdentifier: .respiratoryRate)!
             dataTypesDict[PERIPHERAL_PERFUSION_INDEX] = HKSampleType.quantityType(
                 forIdentifier: .peripheralPerfusionIndex)!
-
             dataTypesDict[BLOOD_PRESSURE] = HKCorrelationType.correlationType(forIdentifier: .bloodPressure)!
             dataTypesDict[BLOOD_PRESSURE_DIASTOLIC] = HKSampleType.quantityType(forIdentifier: .bloodPressureDiastolic)!
             dataTypesDict[BLOOD_PRESSURE_SYSTOLIC] = HKSampleType.quantityType(forIdentifier: .bloodPressureSystolic)!
