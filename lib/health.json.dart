@@ -15,7 +15,7 @@ void _registerFromJsonFunctions() {
       leftEarSensitivities: [],
       rightEarSensitivities: [],
     ),
-    SymptomsHealthValue(symptom: ''),
+    SymptomsHealthValue(symptom: {'symptom_name': 'headache'}),
     BloodPressureValue(systolic: 2, diastolic: 2),
     WorkoutHealthValue(workoutActivityType: HealthWorkoutActivityType.AEROBICS),
     ElectrocardiogramHealthValue(voltageValues: []),

@@ -479,28 +479,28 @@ class NutritionHealthValue extends HealthValue {
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class SymptomsHealthValue extends HealthValue {
   /// The symptom recorded for the health data point.
-  String symptom;
+  Map<String, dynamic> symptom;
 
   SymptomsHealthValue({required this.symptom});
 
   /// Create a [SymptomsHealthValue] based on a health data point from native data format.
   factory SymptomsHealthValue.fromHealthDataPoint(dynamic dataPoint) =>
-      SymptomsHealthValue(symptom: dataPoint['symptom'] as String);
+      SymptomsHealthValue(symptom: dataPoint['symptom'] as Map<String, dynamic>);
 
   @override
   String toString() => '$runtimeType - symptom: $symptom';
 
   @override
   Function get fromJsonFunction => _$SymptomsHealthValueFromJson;
-  factory SymptomsHealthValue.fromJson(Map<String, dynamic> json) =>
-      FromJsonFactory().fromJson(json) as SymptomsHealthValue;
+  factory SymptomsHealthValue.fromJson(Map<String, dynamic> json) => _$SymptomsHealthValueFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$SymptomsHealthValueToJson(this);
 
   @override
   bool operator ==(Object other) =>
-      other is SymptomsHealthValue && symptom == other.symptom;
+      other is SymptomsHealthValue && mapEquals(symptom, other.symptom);
 
   @override
   int get hashCode => symptom.hashCode;
 }
+

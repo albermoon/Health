@@ -103,6 +103,7 @@ const _$HealthDataTypeEnumMap = {
   HealthDataType.HEADACHE_SEVERE: 'HEADACHE_SEVERE',
   HealthDataType.HEADACHE_UNSPECIFIED: 'HEADACHE_UNSPECIFIED',
   HealthDataType.NUTRITION: 'NUTRITION',
+  HealthDataType.SYMPTOM: 'SYMPTOM',
   HealthDataType.HIGH_HEART_RATE_EVENT: 'HIGH_HEART_RATE_EVENT',
   HealthDataType.LOW_HEART_RATE_EVENT: 'LOW_HEART_RATE_EVENT',
   HealthDataType.IRREGULAR_HEART_RATE_EVENT: 'IRREGULAR_HEART_RATE_EVENT',
@@ -554,7 +555,7 @@ Map<String, dynamic> _$NutritionHealthValueToJson(
 
 SymptomsHealthValue _$SymptomsHealthValueFromJson(Map<String, dynamic> json) =>
     SymptomsHealthValue(
-      symptom: json['symptom'] as String,
+      symptom: json['symptom'] as Map<String, dynamic>,
     )..$type = json['__type'] as String?;
 
 Map<String, dynamic> _$SymptomsHealthValueToJson(SymptomsHealthValue instance) {
