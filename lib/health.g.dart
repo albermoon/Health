@@ -552,6 +552,25 @@ Map<String, dynamic> _$NutritionHealthValueToJson(
   return val;
 }
 
+SymptomsHealthValue _$SymptomsHealthValueFromJson(Map<String, dynamic> json) =>
+    SymptomsHealthValue(
+      symptom: json['symptom'] as String,
+    )..$type = json['__type'] as String?;
+
+Map<String, dynamic> _$SymptomsHealthValueToJson(SymptomsHealthValue instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('__type', instance.$type);
+  val['symptom'] = instance.symptom;
+  return val;
+}
+
 WorkoutSummary _$WorkoutSummaryFromJson(Map<String, dynamic> json) =>
     WorkoutSummary(
       workoutType: json['workout_type'] as String,

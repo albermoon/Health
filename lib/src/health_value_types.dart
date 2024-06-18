@@ -13,6 +13,7 @@ class HealthValue extends Serializable {
   Map<String, dynamic> toJson() => _$HealthValueToJson(this);
 }
 
+
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class BloodPressureValue extends HealthValue{
    /// Array of frequencies of the test.
@@ -58,10 +59,11 @@ class BloodPressureValue extends HealthValue{
       heartrate == other.heartrate;
 
   @override
-  int get hashCode =>
-      Object.hash(systolic, diastolic, heartrate);
+  int get hashCode =>  Object.hash(systolic, diastolic, heartrate);
 
 }
+
+
 /// A numerical value from Apple HealthKit or Google Fit
 /// such as integer or double. E.g. 1, 2.9, -3
 ///
@@ -468,4 +470,37 @@ class NutritionHealthValue extends HealthValue {
   @override
   int get hashCode =>
       Object.hash(protein, calories, fat, name, carbs, caffeine);
+}
+
+/// A [HealthValue] object for symptoms.
+///
+/// Parameters:
+/// * [symptoms] - a single symptom recorded for the [HealthDataPoint]
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class SymptomsHealthValue extends HealthValue {
+  /// The symptom recorded for the health data point.
+  String symptom;
+
+  SymptomsHealthValue({required this.symptom});
+
+  /// Create a [SymptomsHealthValue] based on a health data point from native data format.
+  factory SymptomsHealthValue.fromHealthDataPoint(dynamic dataPoint) =>
+      SymptomsHealthValue(symptom: dataPoint['symptom'] as String);
+
+  @override
+  String toString() => '$runtimeType - symptom: $symptom';
+
+  @override
+  Function get fromJsonFunction => _$SymptomsHealthValueFromJson;
+  factory SymptomsHealthValue.fromJson(Map<String, dynamic> json) =>
+      FromJsonFactory().fromJson(json) as SymptomsHealthValue;
+  @override
+  Map<String, dynamic> toJson() => _$SymptomsHealthValueToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      other is SymptomsHealthValue && symptom == other.symptom;
+
+  @override
+  int get hashCode => symptom.hashCode;
 }
