@@ -34,6 +34,7 @@ enum HealthDataType {
   FLIGHTS_CLIMBED,
   MOVE_MINUTES,
   DISTANCE_DELTA,
+  MOOD,
   MINDFULNESS,
   WATER,
   SLEEP_IN_BED,
@@ -199,6 +200,7 @@ const Map<HealthDataType, HealthDataUnit> dataTypeToUnit = {
   HealthDataType.FLIGHTS_CLIMBED: HealthDataUnit.COUNT,
   HealthDataType.MOVE_MINUTES: HealthDataUnit.MINUTE,
   HealthDataType.DISTANCE_DELTA: HealthDataUnit.METER,
+  HealthDataType.MOOD: HealthDataUnit.NO_UNIT,
 
   HealthDataType.WATER: HealthDataUnit.LITER,
   HealthDataType.SLEEP_IN_BED: HealthDataUnit.MINUTE,

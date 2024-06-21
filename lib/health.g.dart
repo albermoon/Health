@@ -15,9 +15,9 @@ HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
       dateTo: DateTime.parse(json['date_to'] as String),
       sourcePlatform:
           $enumDecode(_$HealthPlatformTypeEnumMap, json['source_platform']),
-      sourceDeviceId: json['source_device_id'] as String,
-      sourceId: json['source_id'] as String,
-      sourceName: json['source_name'] as String,
+      sourceDeviceId: json['source_device_id'] as String?,
+      sourceId: json['source_id'] as String?,
+      sourceName: json['source_name'] as String?,
       isManualEntry: json['is_manual_entry'] as bool? ?? false,
       workoutSummary: json['workout_summary'] == null
           ? null
@@ -33,10 +33,6 @@ Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) {
     'date_from': instance.dateFrom.toIso8601String(),
     'date_to': instance.dateTo.toIso8601String(),
     'source_platform': _$HealthPlatformTypeEnumMap[instance.sourcePlatform]!,
-    'source_device_id': instance.sourceDeviceId,
-    'source_id': instance.sourceId,
-    'source_name': instance.sourceName,
-    'is_manual_entry': instance.isManualEntry,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -45,6 +41,10 @@ Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) {
     }
   }
 
+  writeNotNull('source_device_id', instance.sourceDeviceId);
+  writeNotNull('source_id', instance.sourceId);
+  writeNotNull('source_name', instance.sourceName);
+  writeNotNull('is_manual_entry', instance.isManualEntry);
   writeNotNull('workout_summary', instance.workoutSummary);
   return val;
 }
@@ -82,6 +82,7 @@ const _$HealthDataTypeEnumMap = {
   HealthDataType.FLIGHTS_CLIMBED: 'FLIGHTS_CLIMBED',
   HealthDataType.MOVE_MINUTES: 'MOVE_MINUTES',
   HealthDataType.DISTANCE_DELTA: 'DISTANCE_DELTA',
+  HealthDataType.MOOD: 'MOOD',
   HealthDataType.MINDFULNESS: 'MINDFULNESS',
   HealthDataType.WATER: 'WATER',
   HealthDataType.SLEEP_IN_BED: 'SLEEP_IN_BED',
@@ -569,6 +570,26 @@ Map<String, dynamic> _$SymptomsHealthValueToJson(SymptomsHealthValue instance) {
 
   writeNotNull('__type', instance.$type);
   val['symptom'] = instance.symptom;
+  return val;
+}
+
+MoodValue _$MoodValueFromJson(Map<String, dynamic> json) => MoodValue(
+      moodRating: (json['mood_rating'] as num).toInt(),
+      relationToCondition: (json['relation_to_condition'] as num).toInt(),
+    )..$type = json['__type'] as String?;
+
+Map<String, dynamic> _$MoodValueToJson(MoodValue instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('__type', instance.$type);
+  val['mood_rating'] = instance.moodRating;
+  val['relation_to_condition'] = instance.relationToCondition;
   return val;
 }
 

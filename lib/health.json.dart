@@ -21,6 +21,7 @@ void _registerFromJsonFunctions() {
     ElectrocardiogramHealthValue(voltageValues: []),
     ElectrocardiogramVoltageValue(voltage: 12, timeSinceSampleStart: 0),
     NutritionHealthValue(),
+    MoodValue(),
   ]);
 
   _fromJsonFunctionsRegistered = true;
