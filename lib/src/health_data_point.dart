@@ -1,7 +1,7 @@
 part of '../health.dart';
 
 /// Types of health platforms.
-enum HealthPlatformType { appleHealth, googleFit, googleHealthConnect }
+enum HealthPlatformType { appleHealth, googleFit, googleHealthConnect, others, none }
 
 /// A [HealthDataPoint] object corresponds to a data point capture from
 /// Apple HealthKit or Google Fit or Google Health Connect with a [HealthValue]
@@ -54,9 +54,9 @@ class HealthDataPoint {
     required this.dateFrom,
     required this.dateTo,
     required this.sourcePlatform,
-    required this.sourceDeviceId,
-    required this.sourceId,
-    required this.sourceName,
+    this.sourceDeviceId,
+    this.sourceId,
+    this.sourceName,
     this.isManualEntry = false,
     this.workoutSummary,
   }) {
