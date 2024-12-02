@@ -11,8 +11,7 @@
 .pub-cache/
 .pub/
 /build/
-/example/build/
-example/build/
+example/
 android/build/
 *.apk
 *.so
@@ -56,3 +55,4 @@ android/build/
 **/.vscode
 # Packages & Plugin pub related
 .pubspec.lock
+
