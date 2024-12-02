@@ -12,7 +12,7 @@ HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
       type: $enumDecode(_$HealthDataTypeEnumMap, json['type']),
       unit: $enumDecode(_$HealthDataUnitEnumMap, json['unit']),
       dateFrom: DateTime.parse(json['date_from'] as String),
-      dateTo: json['date_to'] != null 
+      dateTo: json['date_to'] != '' 
         ? DateTime.parse(json['date_to'] as String)
         : DateTime.parse(json['date_from'] as String),
       sourcePlatform:
