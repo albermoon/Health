@@ -27,29 +27,20 @@ HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
               json['workout_summary'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) {
-  final val = <String, dynamic>{
-    'value': instance.value,
-    'type': _$HealthDataTypeEnumMap[instance.type]!,
-    'unit': _$HealthDataUnitEnumMap[instance.unit]!,
-    'date_from': instance.dateFrom.toIso8601String(),
-    'date_to': instance.dateTo.toIso8601String(),
-    'source_platform': _$HealthPlatformTypeEnumMap[instance.sourcePlatform]!,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('source_device_id', instance.sourceDeviceId);
-  writeNotNull('source_id', instance.sourceId);
-  writeNotNull('source_name', instance.sourceName);
-  writeNotNull('is_manual_entry', instance.isManualEntry);
-  writeNotNull('workout_summary', instance.workoutSummary);
-  return val;
-}
+Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+      'type': _$HealthDataTypeEnumMap[instance.type]!,
+      'unit': _$HealthDataUnitEnumMap[instance.unit]!,
+      'date_from': instance.dateFrom.toIso8601String(),
+      'date_to': instance.dateTo.toIso8601String(),
+      'source_platform': _$HealthPlatformTypeEnumMap[instance.sourcePlatform]!,
+      if (instance.sourceDeviceId case final value?) 'source_device_id': value,
+      if (instance.sourceId case final value?) 'source_id': value,
+      if (instance.sourceName case final value?) 'source_name': value,
+      if (instance.isManualEntry case final value?) 'is_manual_entry': value,
+      if (instance.workoutSummary case final value?) 'workout_summary': value,
+    };
 
 const _$HealthDataTypeEnumMap = {
   HealthDataType.ACTIVE_ENERGY_BURNED: 'ACTIVE_ENERGY_BURNED',
@@ -171,23 +162,17 @@ const _$HealthPlatformTypeEnumMap = {
   HealthPlatformType.appleHealth: 'appleHealth',
   HealthPlatformType.googleFit: 'googleFit',
   HealthPlatformType.googleHealthConnect: 'googleHealthConnect',
+  HealthPlatformType.others: 'others',
+  HealthPlatformType.none: 'none',
 };
 
 HealthValue _$HealthValueFromJson(Map<String, dynamic> json) =>
     HealthValue()..$type = json['__type'] as String?;
 
-Map<String, dynamic> _$HealthValueToJson(HealthValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  return val;
-}
+Map<String, dynamic> _$HealthValueToJson(HealthValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+    };
 
 BloodPressureValue _$BloodPressureValueFromJson(Map<String, dynamic> json) =>
     BloodPressureValue(
@@ -196,40 +181,24 @@ BloodPressureValue _$BloodPressureValueFromJson(Map<String, dynamic> json) =>
       heartrate: json['heartrate'] as num?,
     )..$type = json['__type'] as String?;
 
-Map<String, dynamic> _$BloodPressureValueToJson(BloodPressureValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['systolic'] = instance.systolic;
-  val['diastolic'] = instance.diastolic;
-  writeNotNull('heartrate', instance.heartrate);
-  return val;
-}
+Map<String, dynamic> _$BloodPressureValueToJson(BloodPressureValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      'systolic': instance.systolic,
+      'diastolic': instance.diastolic,
+      if (instance.heartrate case final value?) 'heartrate': value,
+    };
 
 NumericHealthValue _$NumericHealthValueFromJson(Map<String, dynamic> json) =>
     NumericHealthValue(
       numericValue: json['numeric_value'] as num,
     )..$type = json['__type'] as String?;
 
-Map<String, dynamic> _$NumericHealthValueToJson(NumericHealthValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['numeric_value'] = instance.numericValue;
-  return val;
-}
+Map<String, dynamic> _$NumericHealthValueToJson(NumericHealthValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      'numeric_value': instance.numericValue,
+    };
 
 AudiogramHealthValue _$AudiogramHealthValueFromJson(
         Map<String, dynamic> json) =>
@@ -245,21 +214,13 @@ AudiogramHealthValue _$AudiogramHealthValueFromJson(
     )..$type = json['__type'] as String?;
 
 Map<String, dynamic> _$AudiogramHealthValueToJson(
-    AudiogramHealthValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['frequencies'] = instance.frequencies;
-  val['left_ear_sensitivities'] = instance.leftEarSensitivities;
-  val['right_ear_sensitivities'] = instance.rightEarSensitivities;
-  return val;
-}
+        AudiogramHealthValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      'frequencies': instance.frequencies,
+      'left_ear_sensitivities': instance.leftEarSensitivities,
+      'right_ear_sensitivities': instance.rightEarSensitivities,
+    };
 
 WorkoutHealthValue _$WorkoutHealthValueFromJson(Map<String, dynamic> json) =>
     WorkoutHealthValue(
@@ -276,29 +237,23 @@ WorkoutHealthValue _$WorkoutHealthValueFromJson(Map<String, dynamic> json) =>
           _$HealthDataUnitEnumMap, json['total_steps_unit']),
     )..$type = json['__type'] as String?;
 
-Map<String, dynamic> _$WorkoutHealthValueToJson(WorkoutHealthValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['workout_activity_type'] =
-      _$HealthWorkoutActivityTypeEnumMap[instance.workoutActivityType]!;
-  writeNotNull('total_energy_burned', instance.totalEnergyBurned);
-  writeNotNull('total_energy_burned_unit',
-      _$HealthDataUnitEnumMap[instance.totalEnergyBurnedUnit]);
-  writeNotNull('total_distance', instance.totalDistance);
-  writeNotNull('total_distance_unit',
-      _$HealthDataUnitEnumMap[instance.totalDistanceUnit]);
-  writeNotNull('total_steps', instance.totalSteps);
-  writeNotNull(
-      'total_steps_unit', _$HealthDataUnitEnumMap[instance.totalStepsUnit]);
-  return val;
-}
+Map<String, dynamic> _$WorkoutHealthValueToJson(WorkoutHealthValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      'workout_activity_type':
+          _$HealthWorkoutActivityTypeEnumMap[instance.workoutActivityType]!,
+      if (instance.totalEnergyBurned case final value?)
+        'total_energy_burned': value,
+      if (_$HealthDataUnitEnumMap[instance.totalEnergyBurnedUnit]
+          case final value?)
+        'total_energy_burned_unit': value,
+      if (instance.totalDistance case final value?) 'total_distance': value,
+      if (_$HealthDataUnitEnumMap[instance.totalDistanceUnit] case final value?)
+        'total_distance_unit': value,
+      if (instance.totalSteps case final value?) 'total_steps': value,
+      if (_$HealthDataUnitEnumMap[instance.totalStepsUnit] case final value?)
+        'total_steps_unit': value,
+    };
 
 const _$HealthWorkoutActivityTypeEnumMap = {
   HealthWorkoutActivityType.ARCHERY: 'ARCHERY',
@@ -468,23 +423,18 @@ ElectrocardiogramHealthValue _$ElectrocardiogramHealthValueFromJson(
     )..$type = json['__type'] as String?;
 
 Map<String, dynamic> _$ElectrocardiogramHealthValueToJson(
-    ElectrocardiogramHealthValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['voltage_values'] = instance.voltageValues;
-  writeNotNull('average_heart_rate', instance.averageHeartRate);
-  writeNotNull('sampling_frequency', instance.samplingFrequency);
-  writeNotNull('classification',
-      _$ElectrocardiogramClassificationEnumMap[instance.classification]);
-  return val;
-}
+        ElectrocardiogramHealthValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      'voltage_values': instance.voltageValues,
+      if (instance.averageHeartRate case final value?)
+        'average_heart_rate': value,
+      if (instance.samplingFrequency case final value?)
+        'sampling_frequency': value,
+      if (_$ElectrocardiogramClassificationEnumMap[instance.classification]
+          case final value?)
+        'classification': value,
+    };
 
 const _$ElectrocardiogramClassificationEnumMap = {
   ElectrocardiogramClassification.NOT_SET: 'NOT_SET',
@@ -508,20 +458,12 @@ ElectrocardiogramVoltageValue _$ElectrocardiogramVoltageValueFromJson(
     )..$type = json['__type'] as String?;
 
 Map<String, dynamic> _$ElectrocardiogramVoltageValueToJson(
-    ElectrocardiogramVoltageValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['voltage'] = instance.voltage;
-  val['time_since_sample_start'] = instance.timeSinceSampleStart;
-  return val;
-}
+        ElectrocardiogramVoltageValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      'voltage': instance.voltage,
+      'time_since_sample_start': instance.timeSinceSampleStart,
+    };
 
 NutritionHealthValue _$NutritionHealthValueFromJson(
         Map<String, dynamic> json) =>
@@ -536,64 +478,41 @@ NutritionHealthValue _$NutritionHealthValueFromJson(
     )..$type = json['__type'] as String?;
 
 Map<String, dynamic> _$NutritionHealthValueToJson(
-    NutritionHealthValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  writeNotNull('meal_type', instance.mealType);
-  writeNotNull('protein', instance.protein);
-  writeNotNull('calories', instance.calories);
-  writeNotNull('fat', instance.fat);
-  writeNotNull('name', instance.name);
-  writeNotNull('carbs', instance.carbs);
-  writeNotNull('caffeine', instance.caffeine);
-  return val;
-}
+        NutritionHealthValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      if (instance.mealType case final value?) 'meal_type': value,
+      if (instance.protein case final value?) 'protein': value,
+      if (instance.calories case final value?) 'calories': value,
+      if (instance.fat case final value?) 'fat': value,
+      if (instance.name case final value?) 'name': value,
+      if (instance.carbs case final value?) 'carbs': value,
+      if (instance.caffeine case final value?) 'caffeine': value,
+    };
 
 SymptomsHealthValue _$SymptomsHealthValueFromJson(Map<String, dynamic> json) =>
     SymptomsHealthValue(
       symptom: json['symptom'] as Map<String, dynamic>,
     )..$type = json['__type'] as String?;
 
-Map<String, dynamic> _$SymptomsHealthValueToJson(SymptomsHealthValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['symptom'] = instance.symptom;
-  return val;
-}
+Map<String, dynamic> _$SymptomsHealthValueToJson(
+        SymptomsHealthValue instance) =>
+    <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      'symptom': instance.symptom,
+    };
 
 MoodValue _$MoodValueFromJson(Map<String, dynamic> json) => MoodValue(
-      moodRating: (json['mood_rating'] as num).toInt(),
-      relationToCondition: (json['relation_to_condition'] as num).toInt(),
+      moodRating: (json['mood_rating'] as num?)?.toInt(),
+      relationToCondition: (json['relation_to_condition'] as num?)?.toInt(),
     )..$type = json['__type'] as String?;
 
-Map<String, dynamic> _$MoodValueToJson(MoodValue instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('__type', instance.$type);
-  val['mood_rating'] = instance.moodRating;
-  val['relation_to_condition'] = instance.relationToCondition;
-  return val;
-}
+Map<String, dynamic> _$MoodValueToJson(MoodValue instance) => <String, dynamic>{
+      if (instance.$type case final value?) '__type': value,
+      if (instance.moodRating case final value?) 'mood_rating': value,
+      if (instance.relationToCondition case final value?)
+        'relation_to_condition': value,
+    };
 
 WorkoutSummary _$WorkoutSummaryFromJson(Map<String, dynamic> json) =>
     WorkoutSummary(

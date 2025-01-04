@@ -104,8 +104,8 @@ class HealthDataPoint {
       HealthDataType.WORKOUT => WorkoutHealthValue.fromHealthDataPoint(dataPoint),
       HealthDataType.ELECTROCARDIOGRAM => ElectrocardiogramHealthValue.fromHealthDataPoint(dataPoint),
       HealthDataType.NUTRITION => NutritionHealthValue.fromHealthDataPoint(dataPoint),
-      // HealthDataType.SYMPTOM => SymptomsHealthValue.fromHealthDataPoint(dataPoint),
-      // HealthDataType.MOOD => SymptomsHealthValue.fromHealthDataPoint(dataPoint),
+      HealthDataType.SYMPTOM => SymptomsHealthValue.fromHealthDataPoint(dataPoint),
+      HealthDataType.MOOD => MoodValue.fromHealthDataPoint(dataPoint),
       _ => NumericHealthValue.fromHealthDataPoint(dataPoint),
     };
 

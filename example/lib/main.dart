@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:health/health.dart';
 import 'package:health_example/util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:carp_serializable/carp_serializable.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(HealthApp());
 
@@ -354,6 +356,49 @@ class _HealthAppState extends State<HealthApp> {
     }
   }
 
+  Future<void> fetchApi() async {
+   final baseUrl = 'http://192.168.1.39:5000';
+  final endpoint = Uri.parse('$baseUrl/measures/patient/1');
+  
+  try {
+    final response = await http.get(endpoint);
+    
+    if (response.statusCode == HttpStatus.ok) {
+      
+         final List<dynamic> rawData = json.decode(response.body) as List<dynamic>;
+        
+        final List<HealthDataPoint> healthData = rawData
+            .map((item) => item as Map<String, dynamic>)
+            .map((data) => HealthDataPoint.fromJson(data))
+            .toList();
+            
+        debugPrint('Total number of data points: ${healthData.length}. '
+            '${healthData.length > 100 ? 'Only showing the first 100.' : ''}');
+            
+        // Limpiar la lista anterior si es necesario
+        _healthDataList.clear();
+        
+        // Añadir los nuevos puntos de datos (solo los primeros 100)
+        _healthDataList.addAll(
+          (healthData.length < 100) ? healthData : healthData.sublist(0, 100)
+        );
+        debugPrint('\n=== Health Data List Contents ===');
+        for (var i = 0; i < _healthDataList.length; i++) {
+          debugPrint('\nItem $i:');
+          debugPrint(_healthDataList[i].toString());
+        }
+        debugPrint('\nTotal items in _healthDataList: ${_healthDataList.length}');
+        debugPrint('=== End of Health Data List ===\n');
+
+    }
+  } catch (e) {
+    throw HttpException(
+      'Error getting measures: ${e.toString()}',
+      uri: endpoint
+    );
+  }
+}
+
   // UI building below
 
   @override
@@ -415,6 +460,13 @@ class _HealthAppState extends State<HealthApp> {
                   TextButton(
                       onPressed: revokeAccess,
                       child: Text("Revoke Access",
+                          style: TextStyle(color: Colors.white)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.blue))),
+                  TextButton(
+                      onPressed: fetchApi,
+                      child: Text("api fetch",
                           style: TextStyle(color: Colors.white)),
                       style: ButtonStyle(
                           backgroundColor:
