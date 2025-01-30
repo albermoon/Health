@@ -47,7 +47,7 @@ class BloodPressureValue extends HealthValue{
   @override
   Function get fromJsonFunction => _$BloodPressureValueFromJson;
   factory BloodPressureValue.fromJson(Map<String, dynamic> json) =>
-      FromJsonFactory().fromJson(json) as BloodPressureValue;
+    _$BloodPressureValueFromJson(json);
   @override
   Map<String, dynamic> toJson() => _$BloodPressureValueToJson(this);
   

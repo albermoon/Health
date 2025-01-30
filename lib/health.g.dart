@@ -162,6 +162,7 @@ const _$HealthPlatformTypeEnumMap = {
   HealthPlatformType.appleHealth: 'appleHealth',
   HealthPlatformType.googleFit: 'googleFit',
   HealthPlatformType.googleHealthConnect: 'googleHealthConnect',
+  HealthPlatformType.web: 'web',
   HealthPlatformType.others: 'others',
   HealthPlatformType.none: 'none',
 };
