@@ -37,12 +37,20 @@ class Health {
   factory Health() => _instance;
 
   /// The type of platform of this device.
-  HealthPlatformType get platformType => Platform.isIOS
-      ? HealthPlatformType.appleHealth
-      : useHealthConnectIfAvailable
-          ? HealthPlatformType.googleHealthConnect
-          : HealthPlatformType.googleFit;
-
+  HealthPlatformType get platformType {
+    if (kIsWeb) {
+      return HealthPlatformType.web;
+    }
+    if (Platform.isIOS) {
+      return HealthPlatformType.appleHealth;
+    }
+    if (Platform.isAndroid) {
+      return useHealthConnectIfAvailable 
+        ? HealthPlatformType.googleHealthConnect
+        : HealthPlatformType.googleFit;
+    }
+    return HealthPlatformType.web;
+  }
   /// The id of this device.
   ///
   /// On Android this is the [ID](https://developer.android.com/reference/android/os/Build#ID) of the BUILD.
