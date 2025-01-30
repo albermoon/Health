@@ -1,10 +1,7 @@
 part of 'health.dart';
 
-bool _fromJsonFunctionsRegistered = false;
-
 /// Register all the fromJson functions for the health domain classes.
 void _registerFromJsonFunctions() {
-  if (_fromJsonFunctionsRegistered) return;
 
   // Protocol classes
   FromJsonFactory().registerAll([
@@ -23,6 +20,4 @@ void _registerFromJsonFunctions() {
     NutritionHealthValue(),
     MoodValue(),
   ]);
-
-  _fromJsonFunctionsRegistered = true;
 }
