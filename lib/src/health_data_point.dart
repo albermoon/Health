@@ -47,7 +47,7 @@ class HealthDataPoint {
   /// The summary of the workout data point, if available.
   WorkoutSummary? workoutSummary;
 
-  /// Unique identifier for this health data point (optional)
+  /// Unique identifier for this health data point
   String? id;
 
   HealthDataPoint({
@@ -64,7 +64,8 @@ class HealthDataPoint {
     this.workoutSummary,
     String? id,
   }) {
-    // id remains as provided (can be null)
+    this.id = id ?? const uuid_pkg.Uuid().v4();
+    
     // set the value to minutes rather than the category
     // returned by the native API
     if (type == HealthDataType.MINDFULNESS ||

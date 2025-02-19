@@ -9,6 +9,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:uuid/uuid.dart' as uuid_pkg;
 
 part 'src/heath_data_types.dart';
 part 'src/functions.dart';

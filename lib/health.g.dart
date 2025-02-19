@@ -7,42 +7,42 @@ part of 'health.dart';
 // **************************************************************************
 
 HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
-    HealthDataPoint(
-      value: HealthValue.fromJson(json['value'] as Map<String, dynamic>),
-      type: $enumDecode(_$HealthDataTypeEnumMap, json['type']),
-      unit: $enumDecode(_$HealthDataUnitEnumMap, json['unit']),
-      dateFrom: DateTime.parse(json['date_from'] as String),
-      dateTo: json['date_to'] != '' 
-        ? DateTime.parse(json['date_to'] as String)
-        : DateTime.parse(json['date_from'] as String),
-      sourcePlatform:
-          $enumDecode(_$HealthPlatformTypeEnumMap, json['source_platform']),
-      sourceDeviceId: json['source_device_id'] as String?,
-      sourceId: json['source_id'] as String?,
-      sourceName: json['source_name'] as String?,
-      isManualEntry: json['is_manual_entry'] as bool? ?? false,
-      workoutSummary: json['workout_summary'] == null
-          ? null
-          : WorkoutSummary.fromJson(
-              json['workout_summary'] as Map<String, dynamic>),
-      id: json['id'] as String?,
-    );
+  HealthDataPoint(
+    value: HealthValue.fromJson(json['value'] as Map<String, dynamic>),
+    type: $enumDecode(_$HealthDataTypeEnumMap, json['type']),
+    unit: $enumDecode(_$HealthDataUnitEnumMap, json['unit']),
+    dateFrom: DateTime.parse(json['date_from'] as String),
+    dateTo: json['date_to'] != ''
+      ? DateTime.parse(json['date_to'] as String)
+      : DateTime.parse(json['date_from'] as String),
+    sourcePlatform:
+      $enumDecode(_$HealthPlatformTypeEnumMap, json['source_platform']),
+    sourceDeviceId: json['source_device_id'] as String?,
+    sourceId: json['source_id'] as String?,
+    sourceName: json['source_name'] as String?,
+    isManualEntry: json['is_manual_entry'] as bool? ?? false,
+    workoutSummary: json['workout_summary'] == null
+      ? null
+      : WorkoutSummary.fromJson(
+          json['workout_summary'] as Map<String, dynamic>),
+    id: json['id'] as String?,
+  );
 
 Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) =>
-    <String, dynamic>{
-      'value': instance.value,
-      'type': _$HealthDataTypeEnumMap[instance.type]!,
-      'unit': _$HealthDataUnitEnumMap[instance.unit]!,
-      'date_from': instance.dateFrom.toIso8601String(),
-      'date_to': instance.dateTo.toIso8601String(),
-      'source_platform': _$HealthPlatformTypeEnumMap[instance.sourcePlatform]!,
-      if (instance.sourceDeviceId case final value?) 'source_device_id': value,
-      if (instance.sourceId case final value?) 'source_id': value,
-      if (instance.sourceName case final value?) 'source_name': value,
-      if (instance.isManualEntry case final value?) 'is_manual_entry': value,
-      if (instance.workoutSummary case final value?) 'workout_summary': value,
-      if (instance.id case final value?) 'id': value,
-    };
+  <String, dynamic>{
+    'value': instance.value,
+    'type': _$HealthDataTypeEnumMap[instance.type]!,
+    'unit': _$HealthDataUnitEnumMap[instance.unit]!,
+    'date_from': instance.dateFrom.toIso8601String(),
+    'date_to': instance.dateTo.toIso8601String(),
+    'source_platform': _$HealthPlatformTypeEnumMap[instance.sourcePlatform]!,
+    if (instance.sourceDeviceId case final value?) 'source_device_id': value,
+    if (instance.sourceId case final value?) 'source_id': value,
+    if (instance.sourceName case final value?) 'source_name': value,
+    if (instance.isManualEntry case final value?) 'is_manual_entry': value,
+    if (instance.workoutSummary case final value?) 'workout_summary': value,
+    if (instance.id case final value?) 'id': value,
+};
 
 const _$HealthDataTypeEnumMap = {
   HealthDataType.ACTIVE_ENERGY_BURNED: 'ACTIVE_ENERGY_BURNED',
