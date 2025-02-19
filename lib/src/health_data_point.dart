@@ -47,6 +47,9 @@ class HealthDataPoint {
   /// The summary of the workout data point, if available.
   WorkoutSummary? workoutSummary;
 
+  /// Unique identifier for this health data point (optional)
+  String? id;
+
   HealthDataPoint({
     required this.value,
     required this.type,
@@ -59,7 +62,9 @@ class HealthDataPoint {
     this.sourceName,
     this.isManualEntry = false,
     this.workoutSummary,
+    String? id,
   }) {
+    // id remains as provided (can be null)
     // set the value to minutes rather than the category
     // returned by the native API
     if (type == HealthDataType.MINDFULNESS ||
@@ -137,11 +142,13 @@ class HealthDataPoint {
       sourceName: sourceName,
       isManualEntry: isManualEntry,
       workoutSummary: workoutSummary,
+      id: dataPoint["id"] as String?,
     );
   }
 
   @override
   String toString() => """$runtimeType -
+    id: $id,
     value: ${value.toString()},
     unit: ${unit.name},
     dateFrom: $dateFrom,
