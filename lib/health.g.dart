@@ -26,7 +26,7 @@ HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
       : WorkoutSummary.fromJson(
           json['workout_summary'] as Map<String, dynamic>),
     id: json['id'] != null 
-      ? BigInt.from(json['id'] as int) 
+      ? BigInt.from(json['id'] as num) 
       : null,
   );
 

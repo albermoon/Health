@@ -62,7 +62,7 @@ class HealthDataPoint {
     this.sourceName,
     this.isManualEntry = false,
     this.workoutSummary,
-    BigInt? id,
+    this.id,
   }) {
     // set the value to minutes rather than the category
     // returned by the native API
