@@ -48,7 +48,7 @@ class HealthDataPoint {
   WorkoutSummary? workoutSummary;
 
   /// Unique identifier for this health data point
-  String? id;
+  BigInt? id;
 
   HealthDataPoint({
     required this.value,
@@ -62,10 +62,8 @@ class HealthDataPoint {
     this.sourceName,
     this.isManualEntry = false,
     this.workoutSummary,
-    String? id,
+    BigInt? id,
   }) {
-    this.id = id ?? const uuid_pkg.Uuid().v4();
-    
     // set the value to minutes rather than the category
     // returned by the native API
     if (type == HealthDataType.MINDFULNESS ||
@@ -143,7 +141,7 @@ class HealthDataPoint {
       sourceName: sourceName,
       isManualEntry: isManualEntry,
       workoutSummary: workoutSummary,
-      id: dataPoint["id"] as String?,
+      id: dataPoint["id"] as BigInt?,
     );
   }
 
