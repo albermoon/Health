@@ -1,8 +1,8 @@
-library health;
+library;
 
 import 'dart:async';
 import 'dart:collection';
-import 'package:universal_io/io.dart';
+import 'dart:io' show Platform;
 
 import 'package:carp_serializable/carp_serializable.dart';
 import 'package:json_annotation/json_annotation.dart';

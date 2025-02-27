@@ -1,8 +1,12 @@
 part of '../health.dart';
 
-/// Main class for the Plugin. This class works as a singleton and should be accessed
-/// via `Health()` factory method. The plugin must be configured using the [configure] method
-/// before used.
+/// Main class for the Plugin.
+///
+/// Use this class to get an instance of the Health plugin, like this:
+///
+///         final health = Health();
+///
+/// The plugin must be configured using the [configure] method before used.
 ///
 /// Overall, the plugin supports:
 ///
@@ -19,38 +23,41 @@ part of '../health.dart';
 ///    and [getHealthAggregateDataFromTypes] methods.
 ///  * Reading total step counts using the [getTotalStepsInInterval] method.
 ///  * Writing different types of specialized health data like the [writeWorkoutData],
-///    [writeBloodPressure], [writeBloodOxygen], [writeAudiogram], and [writeMeal]
-///    methods.
+///    [writeBloodPressure], [writeBloodOxygen], [writeAudiogram], [writeMeal],
+///    [writeMenstruationFlow], [writeInsulinDelivery] methods.
+///
+/// On **Android**, this plugin relies on the Google Health Connect (GHC) SDK.
+/// Since Health Connect is not installed on SDK level < 34, the plugin has a
+/// set of specialized methods to handle GHC:
+///
+///  * [getHealthConnectSdkStatus] to check the status of GHC
+///  * [isHealthConnectAvailable] to check if GHC is installed on this phone
+///  * [installHealthConnect] to direct the user to the app store to install GHC
+///
+/// **Note** that you should check the availability of GHC before using any setter
+/// or getter methods. Otherwise, the plugin will throw an exception.
 class Health {
   static const MethodChannel _channel = MethodChannel('flutter_health');
-  static final _instance = Health._();
 
   String? _deviceId;
-  final _deviceInfo = DeviceInfoPlugin();
-  bool _useHealthConnectIfAvailable = false;
+  final DeviceInfoPlugin _deviceInfo;
+  HealthConnectSdkStatus _healthConnectSdkStatus =
+      HealthConnectSdkStatus.sdkUnavailable;
 
-  Health._() {
+  /// Get an instance of the health plugin.
+  Health({DeviceInfoPlugin? deviceInfo})
+      : _deviceInfo = deviceInfo ?? DeviceInfoPlugin() {
     _registerFromJsonFunctions();
   }
 
-  /// Get the singleton [Health] instance.
-  factory Health() => _instance;
+  /// The latest status on availability of Health Connect SDK on this phone.
+  HealthConnectSdkStatus get healthConnectSdkStatus => _healthConnectSdkStatus;
 
   /// The type of platform of this device.
-  HealthPlatformType get platformType {
-    if (kIsWeb) {
-      return HealthPlatformType.web;
-    }
-    if (Platform.isIOS) {
-      return HealthPlatformType.appleHealth;
-    }
-    if (Platform.isAndroid) {
-      return useHealthConnectIfAvailable 
-        ? HealthPlatformType.googleHealthConnect
-        : HealthPlatformType.googleFit;
-    }
-    return HealthPlatformType.web;
-  }
+  HealthPlatformType get platformType => Platform.isIOS
+      ? HealthPlatformType.appleHealth
+      : HealthPlatformType.googleHealthConnect;
+
   /// The id of this device.
   ///
   /// On Android this is the [ID](https://developer.android.com/reference/android/os/Build#ID) of the BUILD.
@@ -58,24 +65,11 @@ class Health {
   String get deviceId => _deviceId ?? 'unknown';
 
   /// Configure the health plugin. Must be called before using the plugin.
-  ///
-  /// If [useHealthConnectIfAvailable] is true, Google Health Connect on
-  /// Android will be used. Has no effect on iOS.
-  Future<void> configure({bool useHealthConnectIfAvailable = false}) async {
-    _deviceId ??= Platform.isAndroid
+  Future<void> configure() async {
+    _deviceId = Platform.isAndroid
         ? (await _deviceInfo.androidInfo).id
         : (await _deviceInfo.iosInfo).identifierForVendor;
-
-    _useHealthConnectIfAvailable = useHealthConnectIfAvailable;
-    if (_useHealthConnectIfAvailable) {
-      await _channel.invokeMethod('useHealthConnectIfAvailable');
-    }
   }
-
-  /// Is this plugin using Health Connect (true) or Google Fit (false)?
-  ///
-  /// This is set in the [configure] method.
-  bool get useHealthConnectIfAvailable => _useHealthConnectIfAvailable;
 
   /// Check if a given data type is available on the platform
   bool isDataTypeAvailable(HealthDataType dataType) => Platform.isAndroid
@@ -110,6 +104,7 @@ class Health {
     List<HealthDataType> types, {
     List<HealthDataAccess>? permissions,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
     if (permissions != null && permissions.length != types.length) {
       throw ArgumentError(
           "The lists of types and permissions must be of same length.");
@@ -130,85 +125,79 @@ class Health {
     });
   }
 
-  /// Revokes permissions of all types.
+  /// Revokes Google Health Connect permissions on Android of all types.
   ///
-  /// Uses `disableFit()` on Google Fit.
-  ///
+  /// NOTE: The app must be completely killed and restarted for the changes to take effect.
   /// Not implemented on iOS as there is no way to programmatically remove access.
+  ///
+  /// Android only. On iOS this does nothing.
   Future<void> revokePermissions() async {
+    if (Platform.isIOS) return;
+
+    await _checkIfHealthConnectAvailableOnAndroid();
     try {
-      if (Platform.isIOS) {
-        throw UnsupportedError(
-            'Revoke permissions is not supported on iOS. Please revoke permissions manually in the settings.');
-      }
       await _channel.invokeMethod('revokePermissions');
-      return;
     } catch (e) {
       debugPrint('$runtimeType - Exception in revokePermissions(): $e');
     }
   }
 
-  /// Returns the current status of Health Connect availability.
+  /// Checks the current status of Health Connect availability.
   ///
   /// See this for more info:
   /// https://developer.android.com/reference/kotlin/androidx/health/connect/client/HealthConnectClient#getSdkStatus(android.content.Context,kotlin.String)
   ///
-  /// Android only.
+  /// Android only. Returns null on iOS or if an error occurs.
   Future<HealthConnectSdkStatus?> getHealthConnectSdkStatus() async {
+    if (Platform.isIOS) return null;
+
     try {
-      if (Platform.isIOS) {
-        throw UnsupportedError('Health Connect is not available on iOS.');
-      }
-      final int status =
-          (await _channel.invokeMethod('getHealthConnectSdkStatus'))!;
-      return HealthConnectSdkStatus.fromNativeValue(status);
+      final status =
+          await _channel.invokeMethod<int>('getHealthConnectSdkStatus');
+      _healthConnectSdkStatus = status != null
+          ? HealthConnectSdkStatus.fromNativeValue(status)
+          : HealthConnectSdkStatus.sdkUnavailable;
+
+      return _healthConnectSdkStatus;
     } catch (e) {
       debugPrint('$runtimeType - Exception in getHealthConnectSdkStatus(): $e');
       return null;
     }
   }
 
-  /// Prompt the user to install the Health Connect app via the installed store
-  /// (most likely Play Store).
+  /// Is Google Health Connect available on this phone?
   ///
-  /// Android only.
+  /// Android only. Returns always true on iOS.
+  Future<bool> isHealthConnectAvailable() async => !Platform.isAndroid
+      ? true
+      : (await getHealthConnectSdkStatus() ==
+          HealthConnectSdkStatus.sdkAvailable);
+
+  /// Prompt the user to install the Google Health Connect app via the
+  /// installed store (most likely Play Store).
+  ///
+  /// Android only. On iOS this does nothing.
   Future<void> installHealthConnect() async {
+    if (Platform.isIOS) return;
+
     try {
-      if (!Platform.isAndroid) {
-        throw UnsupportedError(
-            'installHealthConnect is only available on Android');
-      }
       await _channel.invokeMethod('installHealthConnect');
     } catch (e) {
       debugPrint('$runtimeType - Exception in installHealthConnect(): $e');
     }
   }
 
-  /// Disconnect from Google fit.
-  ///
-  /// Not supported on iOS and Google Health Connect, and the method does nothing.
-  Future<bool?> disconnect(
-    List<HealthDataType> types, {
-    List<HealthDataAccess>? permissions,
-  }) async {
-    if (permissions != null && permissions.length != types.length) {
-      throw ArgumentError(
-          'The length of [types] must be same as that of [permissions].');
+  /// Checks if Google Health Connect is available and throws an [UnsupportedError]
+  /// if not.
+  /// Internal methods used to check availability before any getter or setter methods.
+  Future<void> _checkIfHealthConnectAvailableOnAndroid() async {
+    if (!Platform.isAndroid) return;
+
+    if (!(await isHealthConnectAvailable())) {
+      throw UnsupportedError(
+          "Google Health Connect is not available on this Android device. "
+          "You may prompt the user to install it using the 'installHealthConnect' method");
     }
-
-    final mTypes = List<HealthDataType>.from(types, growable: true);
-    final mPermissions = permissions == null
-        ? List<int>.filled(types.length, HealthDataAccess.READ.index,
-            growable: true)
-        : permissions.map((permission) => permission.index).toList();
-
-    // on Android, if BMI is requested, then also ask for weight and height
-    if (Platform.isAndroid) _handleBMI(mTypes, mPermissions);
-
-    List<String> keys = mTypes.map((dataType) => dataType.name).toList();
-
-    return await _channel.invokeMethod(
-        'disconnect', {'types': keys, "permissions": mPermissions});
   }
 
   /// Requests permissions to access health data [types].
@@ -235,6 +224,7 @@ class Health {
     List<HealthDataType> types, {
     List<HealthDataAccess>? permissions,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
     if (permissions != null && permissions.length != types.length) {
       throw ArgumentError(
           'The length of [types] must be same as that of [permissions].');
@@ -248,13 +238,10 @@ class Health {
                 type == HealthDataType.HIGH_HEART_RATE_EVENT ||
                 type == HealthDataType.LOW_HEART_RATE_EVENT ||
                 type == HealthDataType.IRREGULAR_HEART_RATE_EVENT ||
-                type == HealthDataType.EXERCISE_TIME ||
-                type == HealthDataType.WALKING_HEART_RATE) &&
+                type == HealthDataType.WALKING_HEART_RATE ||
+                type == HealthDataType.ATRIAL_FIBRILLATION_BURDEN) &&
             permission != HealthDataAccess.READ) {
-          // throw ArgumentError(  
-          //     'Requesting WRITE permission on ELECTROCARDIOGRAM / HIGH_HEART_RATE_EVENT / LOW_HEART_RATE_EVENT / IRREGULAR_HEART_RATE_EVENT / WALKING_HEART_RATE is not allowed.');
-          permissions[i] = HealthDataAccess.READ;
-        }
+          permissions[i] = HealthDataAccess.READ;        }
       }
     }
 
@@ -295,17 +282,17 @@ class Health {
   Future<List<HealthDataPoint>> _computeAndroidBMI(
     DateTime startTime,
     DateTime endTime,
-    bool includeManualEntry,
+    List<RecordingMethod> recordingMethodsToFilter,
   ) async {
     List<HealthDataPoint> heights = await _prepareQuery(
-        startTime, endTime, HealthDataType.HEIGHT, includeManualEntry);
+        startTime, endTime, HealthDataType.HEIGHT, recordingMethodsToFilter);
 
     if (heights.isEmpty) {
       return [];
     }
 
     List<HealthDataPoint> weights = await _prepareQuery(
-        startTime, endTime, HealthDataType.WEIGHT, includeManualEntry);
+        startTime, endTime, HealthDataType.WEIGHT, recordingMethodsToFilter);
 
     double h =
         (heights.last.value as NumericHealthValue).numericValue.toDouble();
@@ -319,6 +306,7 @@ class Health {
           (weights[i].value as NumericHealthValue).numericValue.toDouble() /
               (h * h);
       final x = HealthDataPoint(
+        uuid: '',
         value: NumericHealthValue(numericValue: bmiValue),
         type: dataType,
         unit: unit,
@@ -328,7 +316,7 @@ class Health {
         sourceDeviceId: _deviceId!,
         sourceId: '',
         sourceName: '',
-        isManualEntry: !includeManualEntry,
+        recordingMethod: RecordingMethod.unknown,
       );
 
       bmiHealthPoints.add(x);
@@ -350,6 +338,8 @@ class Health {
   ///    It must be equal to or later than [startTime].
   ///    Simply set [endTime] equal to [startTime] if the [value] is measured
   ///    only at a specific point in time (default).
+  ///  * [recordingMethod] - the recording method of the data point, automatic by default.
+  ///    (on iOS this must be manual or automatic)
   ///
   /// Values for Sleep and Headache are ignored and will be automatically assigned
   /// the default value.
@@ -359,10 +349,22 @@ class Health {
     required HealthDataType type,
     required DateTime startTime,
     DateTime? endTime,
+    RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
+    if (Platform.isIOS &&
+        [RecordingMethod.active, RecordingMethod.unknown]
+            .contains(recordingMethod)) {
+      throw ArgumentError("recordingMethod must be manual or automatic on iOS");
+    }
+
     if (type == HealthDataType.WORKOUT) {
       throw ArgumentError(
           "Adding workouts should be done using the writeWorkoutData method.");
+    }
+    // If not implemented on platform, throw an exception
+    if (!isDataTypeAvailable(type)) {
+      throw HealthException(type, 'Not available on platform $platformType');
     }
     endTime ??= startTime;
     if (startTime.isAfter(endTime)) {
@@ -389,9 +391,7 @@ class Health {
         type == HealthDataType.SLEEP_IN_BED ||
         type == HealthDataType.SLEEP_DEEP ||
         type == HealthDataType.SLEEP_REM ||
-        type == HealthDataType.SLEEP_ASLEEP_CORE ||
-        type == HealthDataType.SLEEP_ASLEEP_DEEP ||
-        type == HealthDataType.SLEEP_ASLEEP_REM ||
+        type == HealthDataType.SLEEP_LIGHT ||
         type == HealthDataType.HEADACHE_NOT_PRESENT ||
         type == HealthDataType.HEADACHE_MILD ||
         type == HealthDataType.HEADACHE_MODERATE ||
@@ -405,7 +405,8 @@ class Health {
       'dataTypeKey': type.name,
       'dataUnitKey': unit.name,
       'startTime': startTime.millisecondsSinceEpoch,
-      'endTime': endTime.millisecondsSinceEpoch
+      'endTime': endTime.millisecondsSinceEpoch,
+      'recordingMethod': recordingMethod.toInt(),
     };
     bool? success = await _channel.invokeMethod('writeData', args);
     return success ?? false;
@@ -426,6 +427,7 @@ class Health {
     required DateTime startTime,
     DateTime? endTime,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
     endTime ??= startTime;
     if (startTime.isAfter(endTime)) {
       throw ArgumentError("startTime must be equal or earlier than endTime");
@@ -453,12 +455,21 @@ class Health {
   ///    Must be equal to or later than [startTime].
   ///    Simply set [endTime] equal to [startTime] if the blood pressure is measured
   ///    only at a specific point in time. If omitted, [endTime] is set to [startTime].
+  ///  * [recordingMethod] - the recording method of the data point.
   Future<bool> writeBloodPressure({
     required int systolic,
     required int diastolic,
     required DateTime startTime,
     DateTime? endTime,
+    RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
+    if (Platform.isIOS &&
+        [RecordingMethod.active, RecordingMethod.unknown]
+            .contains(recordingMethod)) {
+      throw ArgumentError("recordingMethod must be manual or automatic on iOS");
+    }
+
     endTime ??= startTime;
     if (startTime.isAfter(endTime)) {
       throw ArgumentError("startTime must be equal or earlier than endTime");
@@ -468,7 +479,8 @@ class Health {
       'systolic': systolic,
       'diastolic': diastolic,
       'startTime': startTime.millisecondsSinceEpoch,
-      'endTime': endTime.millisecondsSinceEpoch
+      'endTime': endTime.millisecondsSinceEpoch,
+      'recordingMethod': recordingMethod.toInt(),
     };
     return await _channel.invokeMethod('writeBloodPressure', args) == true;
   }
@@ -479,20 +491,26 @@ class Health {
   ///
   /// Parameters:
   ///  * [saturation] - the saturation of the blood oxygen in percentage
-  ///  * [flowRate] - optional supplemental oxygen flow rate, only supported on
-  ///    Google Fit (default 0.0)
   ///  * [startTime] - the start time when this [saturation] is measured.
   ///    Must be equal to or earlier than [endTime].
   ///  * [endTime] - the end time when this [saturation] is measured.
   ///    Must be equal to or later than [startTime].
   ///    Simply set [endTime] equal to [startTime] if the blood oxygen saturation
   ///    is measured only at a specific point in time (default).
+  ///  * [recordingMethod] - the recording method of the data point.
   Future<bool> writeBloodOxygen({
     required double saturation,
-    double flowRate = 0.0,
     required DateTime startTime,
     DateTime? endTime,
+    RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
+    if (Platform.isIOS &&
+        [RecordingMethod.active, RecordingMethod.unknown]
+            .contains(recordingMethod)) {
+      throw ArgumentError("recordingMethod must be manual or automatic on iOS");
+    }
+
     endTime ??= startTime;
     if (startTime.isAfter(endTime)) {
       throw ArgumentError("startTime must be equal or earlier than endTime");
@@ -504,21 +522,22 @@ class Health {
           value: saturation,
           type: HealthDataType.BLOOD_OXYGEN,
           startTime: startTime,
-          endTime: endTime);
+          endTime: endTime,
+          recordingMethod: recordingMethod);
     } else if (Platform.isAndroid) {
       Map<String, dynamic> args = {
         'value': saturation,
-        'flowRate': flowRate,
         'startTime': startTime.millisecondsSinceEpoch,
         'endTime': endTime.millisecondsSinceEpoch,
         'dataTypeKey': HealthDataType.BLOOD_OXYGEN.name,
+        'recordingMethod': recordingMethod.toInt(),
       };
       success = await _channel.invokeMethod('writeBloodOxygen', args);
     }
     return success ?? false;
   }
 
-  /// Saves meal record into Apple Health or Google Fit / Health Connect.
+  /// Saves meal record into Apple Health or Health Connect.
   ///
   /// Returns true if successful, false otherwise.
   ///
@@ -528,11 +547,49 @@ class Health {
   ///    It must be equal to or earlier than [endTime].
   ///  * [endTime] - the end time when the meal was consumed.
   ///    It must be equal to or later than [startTime].
+  ///  * [name] - optional name information about this meal.
   ///  * [caloriesConsumed] - total calories consumed with this meal.
   ///  * [carbohydrates] - optional carbohydrates information.
   ///  * [protein] - optional protein information.
   ///  * [fatTotal] - optional total fat information.
-  ///  * [name] - optional name information about this meal.
+  ///  * [caffeine] - optional caffeine information.
+  ///  * [vitaminA] - optional vitamin A information.
+  ///  * [b1Thiamin] - optional vitamin B1 (thiamin) information.
+  ///  * [b2Riboflavin] - optional vitamin B2 (riboflavin) information.
+  ///  * [b3Niacin] - optional vitamin B3 (niacin) information.
+  ///  * [b5PantothenicAcid] - optional vitamin B5 (pantothenic acid) information.
+  ///  * [b6Pyridoxine] - optional vitamin B6 (pyridoxine) information.
+  ///  * [b7Biotin] - optional vitamin B7 (biotin) information.
+  ///  * [b9Folate] - optional vitamin B9 (folate) information.
+  ///  * [b12Cobalamin] - optional vitamin B12 (cobalamin) information.
+  ///  * [vitaminC] - optional vitamin C information.
+  ///  * [vitaminD] - optional vitamin D information.
+  ///  * [vitaminE] - optional vitamin E information.
+  ///  * [vitaminK] - optional vitamin K information.
+  ///  * [calcium] - optional calcium information.
+  ///  * [cholesterol] - optional cholesterol information.
+  ///  * [chloride] - optional chloride information.
+  ///  * [chromium] - optional chromium information.
+  ///  * [copper] - optional copper information.
+  ///  * [fatUnsaturated] - optional unsaturated fat information.
+  ///  * [fatMonounsaturated] - optional monounsaturated fat information.
+  ///  * [fatPolyunsaturated] - optional polyunsaturated fat information.
+  ///  * [fatSaturated] - optional saturated fat information.
+  ///  * [fatTransMonoenoic] - optional trans-monoenoic fat information.
+  ///  * [fiber] - optional fiber information.
+  ///  * [iodine] - optional iodine information.
+  ///  * [iron] - optional iron information.
+  ///  * [magnesium] - optional magnesium information.
+  ///  * [manganese] - optional manganese information.
+  ///  * [molybdenum] - optional molybdenum information.
+  ///  * [phosphorus] - optional phosphorus information.
+  ///  * [potassium] - optional potassium information.
+  ///  * [selenium] - optional selenium information.
+  ///  * [sodium] - optional sodium information.
+  ///  * [sugar] - optional sugar information.
+  ///  * [water] - optional water information.
+  ///  * [zinc] - optional zinc information.
+  ///  * [recordingMethod] - the recording method of the data point.
   Future<bool> writeMeal({
     required MealType mealType,
     required DateTime startTime,
@@ -543,24 +600,149 @@ class Health {
     double? fatTotal,
     String? name,
     double? caffeine,
+    double? vitaminA,
+    double? b1Thiamin,
+    double? b2Riboflavin,
+    double? b3Niacin,
+    double? b5PantothenicAcid,
+    double? b6Pyridoxine,
+    double? b7Biotin,
+    double? b9Folate,
+    double? b12Cobalamin,
+    double? vitaminC,
+    double? vitaminD,
+    double? vitaminE,
+    double? vitaminK,
+    double? calcium,
+    double? cholesterol,
+    double? chloride,
+    double? chromium,
+    double? copper,
+    double? fatUnsaturated,
+    double? fatMonounsaturated,
+    double? fatPolyunsaturated,
+    double? fatSaturated,
+    double? fatTransMonoenoic,
+    double? fiber,
+    double? iodine,
+    double? iron,
+    double? magnesium,
+    double? manganese,
+    double? molybdenum,
+    double? phosphorus,
+    double? potassium,
+    double? selenium,
+    double? sodium,
+    double? sugar,
+    double? water,
+    double? zinc,
+    RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
+    if (Platform.isIOS &&
+        [RecordingMethod.active, RecordingMethod.unknown]
+            .contains(recordingMethod)) {
+      throw ArgumentError("recordingMethod must be manual or automatic on iOS");
+    }
+
     if (startTime.isAfter(endTime)) {
       throw ArgumentError("startTime must be equal or earlier than endTime");
     }
 
     Map<String, dynamic> args = {
-      'startTime': startTime.millisecondsSinceEpoch,
-      'endTime': endTime.millisecondsSinceEpoch,
-      'caloriesConsumed': caloriesConsumed,
-      'carbohydrates': carbohydrates,
-      'protein': protein,
-      'fatTotal': fatTotal,
       'name': name,
+      'meal_type': mealType.name,
+      'start_time': startTime.millisecondsSinceEpoch,
+      'end_time': endTime.millisecondsSinceEpoch,
+      'calories': caloriesConsumed,
+      'carbs': carbohydrates,
+      'protein': protein,
+      'fat': fatTotal,
       'caffeine': caffeine,
-      'mealType': mealType.name,
+      'vitamin_a': vitaminA,
+      'b1_thiamin': b1Thiamin,
+      'b2_riboflavin': b2Riboflavin,
+      'b3_niacin': b3Niacin,
+      'b5_pantothenic_acid': b5PantothenicAcid,
+      'b6_pyridoxine': b6Pyridoxine,
+      'b7_biotin': b7Biotin,
+      'b9_folate': b9Folate,
+      'b12_cobalamin': b12Cobalamin,
+      'vitamin_c': vitaminC,
+      'vitamin_d': vitaminD,
+      'vitamin_e': vitaminE,
+      'vitamin_k': vitaminK,
+      'calcium': calcium,
+      'cholesterol': cholesterol,
+      'chloride': chloride,
+      'chromium': chromium,
+      'copper': copper,
+      'fat_unsaturated': fatUnsaturated,
+      'fat_monounsaturated': fatMonounsaturated,
+      'fat_polyunsaturated': fatPolyunsaturated,
+      'fat_saturated': fatSaturated,
+      'fat_trans_monoenoic': fatTransMonoenoic,
+      'fiber': fiber,
+      'iodine': iodine,
+      'iron': iron,
+      'magnesium': magnesium,
+      'manganese': manganese,
+      'molybdenum': molybdenum,
+      'phosphorus': phosphorus,
+      'potassium': potassium,
+      'selenium': selenium,
+      'sodium': sodium,
+      'sugar': sugar,
+      'water': water,
+      'zinc': zinc,
+      'recordingMethod': recordingMethod.toInt(),
     };
     bool? success = await _channel.invokeMethod('writeMeal', args);
     return success ?? false;
+  }
+
+  /// Save menstruation flow into Apple Health and Google Health Connect.
+  ///
+  /// Returns true if successful, false otherwise.
+  ///
+  /// Parameters:
+  ///  * [flow] - the menstrual flow
+  ///  * [startTime] - the start time when the menstrual flow is measured.
+  ///  * [endTime] - the start time when the menstrual flow is measured.
+  ///  * [isStartOfCycle] - A bool that indicates whether the sample represents
+  ///    the start of a menstrual cycle.
+  ///  * [recordingMethod] - the recording method of the data point.
+  Future<bool> writeMenstruationFlow({
+    required MenstrualFlow flow,
+    required DateTime startTime,
+    required DateTime endTime,
+    required bool isStartOfCycle,
+    RecordingMethod recordingMethod = RecordingMethod.automatic,
+  }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
+    if (Platform.isIOS &&
+        [RecordingMethod.active, RecordingMethod.unknown]
+            .contains(recordingMethod)) {
+      throw ArgumentError("recordingMethod must be manual or automatic on iOS");
+    }
+
+    var value =
+        Platform.isAndroid ? MenstrualFlow.toHealthConnect(flow) : flow.index;
+
+    if (value == -1) {
+      throw ArgumentError(
+          "$flow is not a valid menstrual flow value for $platformType");
+    }
+
+    Map<String, dynamic> args = {
+      'value': value,
+      'startTime': startTime.millisecondsSinceEpoch,
+      'endTime': endTime.millisecondsSinceEpoch,
+      'isStartOfCycle': isStartOfCycle,
+      'dataTypeKey': HealthDataType.MENSTRUATION_FLOW.name,
+      'recordingMethod': recordingMethod.toInt(),
+    };
+    return await _channel.invokeMethod('writeMenstruationFlow', args) == true;
   }
 
   /// Saves audiogram into Apple Health. Not supported on Android.
@@ -618,17 +800,62 @@ class Health {
     return await _channel.invokeMethod('writeAudiogram', args) == true;
   }
 
+  /// Saves insulin delivery record into Apple Health.
+  ///
+  /// Returns true if successful, false otherwise.
+  ///
+  /// Parameters:
+  ///  * [units] - the number of units of insulin taken.
+  ///  * [reason] - the insulin reason, basal or bolus.
+  ///  * [startTime] - the start time when the meal was consumed.
+  ///    It must be equal to or earlier than [endTime].
+  ///  * [endTime] - the end time when the meal was consumed.
+  ///    It must be equal to or later than [startTime].
+  Future<bool> writeInsulinDelivery(
+    double units,
+    InsulinDeliveryReason reason,
+    DateTime startTime,
+    DateTime endTime,
+  ) async {
+    if (startTime.isAfter(endTime)) {
+      throw ArgumentError("startTime must be equal or earlier than endTime");
+    }
+
+    if (reason == InsulinDeliveryReason.NOT_SET) {
+      throw ArgumentError("set a valid insulin delivery reason");
+    }
+
+    if (Platform.isAndroid) {
+      throw UnsupportedError(
+          "writeInsulinDelivery is not supported on Android");
+    }
+
+    Map<String, dynamic> args = {
+      'units': units,
+      'reason': reason.index,
+      'startTime': startTime.millisecondsSinceEpoch,
+      'endTime': endTime.millisecondsSinceEpoch
+    };
+
+    bool? success = await _channel.invokeMethod('writeInsulinDelivery', args);
+    return success ?? false;
+  }
+
   /// Fetch a list of health data points based on [types].
+  /// You can also specify the [recordingMethodsToFilter] to filter the data points.
+  /// If not specified, all data points will be included.
   Future<List<HealthDataPoint>> getHealthDataFromTypes({
     required List<HealthDataType> types,
     required DateTime startTime,
     required DateTime endTime,
-    bool includeManualEntry = true,
+    List<RecordingMethod> recordingMethodsToFilter = const [],
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
     List<HealthDataPoint> dataPoints = [];
 
     for (var type in types) {
-      final result = await _prepareQuery(startTime, endTime, type, includeManualEntry);
+      final result = await _prepareQuery(
+          startTime, endTime, type, recordingMethodsToFilter);
       dataPoints.addAll(result);
     }
 
@@ -640,18 +867,21 @@ class Health {
     return removeDuplicates(dataPoints);
   }
 
-  /// Fetch a list of health data points based on [Dates][types].
+  /// Fetch a list of health data points based on [types].
+  /// You can also specify the [recordingMethodsToFilter] to filter the data points.
+  /// If not specified, all data points will be included.Vkk
   Future<List<HealthDataPoint>> getHealthIntervalDataFromTypes(
       {required DateTime startDate,
       required DateTime endDate,
       required List<HealthDataType> types,
       required int interval,
-      bool includeManualEntry = true}) async {
+      List<RecordingMethod> recordingMethodsToFilter = const []}) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
     List<HealthDataPoint> dataPoints = [];
 
     for (var type in types) {
       final result = await _prepareIntervalQuery(
-          startDate, endDate, type, interval, includeManualEntry);
+          startDate, endDate, type, interval, recordingMethodsToFilter);
       dataPoints.addAll(result);
     }
 
@@ -666,6 +896,7 @@ class Health {
     int activitySegmentDuration = 1,
     bool includeManualEntry = true,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
     List<HealthDataPoint> dataPoints = [];
 
     final result = await _prepareAggregateQuery(
@@ -680,7 +911,7 @@ class Health {
     DateTime startTime,
     DateTime endTime,
     HealthDataType dataType,
-    bool includeManualEntry,
+    List<RecordingMethod> recordingMethodsToFilter,
   ) async {
     // Ask for device ID only once
     _deviceId ??= Platform.isAndroid
@@ -695,9 +926,10 @@ class Health {
 
     // If BodyMassIndex is requested on Android, calculate this manually
     if (dataType == HealthDataType.BODY_MASS_INDEX && Platform.isAndroid) {
-      return _computeAndroidBMI(startTime, endTime, includeManualEntry);
+      return _computeAndroidBMI(startTime, endTime, recordingMethodsToFilter);
     }
-    return await _dataQuery(startTime, endTime, dataType, includeManualEntry);
+    return await _dataQuery(
+        startTime, endTime, dataType, recordingMethodsToFilter);
   }
 
   /// Prepares an interval query, i.e. checks if the types are available, etc.
@@ -706,7 +938,7 @@ class Health {
       DateTime endDate,
       HealthDataType dataType,
       int interval,
-      bool includeManualEntry) async {
+      List<RecordingMethod> recordingMethodsToFilter) async {
     // Ask for device ID only once
     _deviceId ??= Platform.isAndroid
         ? (await _deviceInfo.androidInfo).id
@@ -719,7 +951,7 @@ class Health {
     }
 
     return await _dataIntervalQuery(
-        startDate, endDate, dataType, interval, includeManualEntry);
+        startDate, endDate, dataType, interval, recordingMethodsToFilter);
   }
 
   /// Prepares an aggregate query, i.e. checks if the types are available, etc.
@@ -746,14 +978,18 @@ class Health {
   }
 
   /// Fetches data points from Android/iOS native code.
-  Future<List<HealthDataPoint>> _dataQuery(DateTime startTime, DateTime endTime,
-      HealthDataType dataType, bool includeManualEntry) async {
+  Future<List<HealthDataPoint>> _dataQuery(
+      DateTime startTime,
+      DateTime endTime,
+      HealthDataType dataType,
+      List<RecordingMethod> recordingMethodsToFilter) async {
     final args = <String, dynamic>{
       'dataTypeKey': dataType.name,
       'dataUnitKey': dataTypeToUnit[dataType]!.name,
       'startTime': startTime.millisecondsSinceEpoch,
       'endTime': endTime.millisecondsSinceEpoch,
-      'includeManualEntry': includeManualEntry
+      'recordingMethodsToFilter':
+          recordingMethodsToFilter.map((e) => e.toInt()).toList(),
     };
     final fetchedDataPoints = await _channel.invokeMethod('getData', args);
 
@@ -780,14 +1016,15 @@ class Health {
       DateTime endDate,
       HealthDataType dataType,
       int interval,
-      bool includeManualEntry) async {
+      List<RecordingMethod> recordingMethodsToFilter) async {
     final args = <String, dynamic>{
       'dataTypeKey': dataType.name,
       'dataUnitKey': dataTypeToUnit[dataType]!.name,
       'startTime': startDate.millisecondsSinceEpoch,
       'endTime': endDate.millisecondsSinceEpoch,
       'interval': interval,
-      'includeManualEntry': includeManualEntry
+      'recordingMethodsToFilter':
+          recordingMethodsToFilter.map((e) => e.toInt()).toList(),
     };
 
     final fetchedDataPoints =
@@ -834,7 +1071,10 @@ class Health {
     final dataType = message["dataType"] as HealthDataType;
     final dataPoints = message["dataPoints"] as List;
 
-    return dataPoints.map<HealthDataPoint>((dataPoint) => HealthDataPoint.fromHealthDataPoint(dataType, dataPoint)).toList();
+    return dataPoints
+        .map<HealthDataPoint>((dataPoint) =>
+            HealthDataPoint.fromHealthDataPoint(dataType, dataPoint))
+        .toList();
   }
 
   /// Return a list of [HealthDataPoint] based on [points] with no duplicates.
@@ -843,15 +1083,14 @@ class Health {
 
   /// Get the total number of steps within a specific time period.
   /// Returns null if not successful.
-  ///
-  /// Is a fix according to https://stackoverflow.com/questions/29414386/step-count-retrieved-through-google-fit-api-does-not-match-step-count-displayed/29415091#29415091
-  Future<int?> getTotalStepsInInterval(
-    DateTime startTime,
-    DateTime endTime,
-  ) async {
+  Future<int?> getTotalStepsInInterval(DateTime startTime, DateTime endTime,
+      {bool includeManualEntry = true}) async {
     final args = <String, dynamic>{
       'startTime': startTime.millisecondsSinceEpoch,
-      'endTime': endTime.millisecondsSinceEpoch
+      'endTime': endTime.millisecondsSinceEpoch,
+      'recordingMethodsToFilter': includeManualEntry
+          ? <RecordingMethod>[]
+          : [RecordingMethod.manual.toInt()],
     };
     final stepsCount = await _channel.invokeMethod<int?>(
       'getTotalStepsInInterval',
@@ -863,13 +1102,11 @@ class Health {
   /// Assigns numbers to specific [HealthDataType]s.
   int _alignValue(HealthDataType type) => switch (type) {
         HealthDataType.SLEEP_IN_BED => 0,
+        HealthDataType.SLEEP_ASLEEP => 1,
         HealthDataType.SLEEP_AWAKE => 2,
-        HealthDataType.SLEEP_ASLEEP => 3,
+        HealthDataType.SLEEP_LIGHT => 3,
         HealthDataType.SLEEP_DEEP => 4,
         HealthDataType.SLEEP_REM => 5,
-        HealthDataType.SLEEP_ASLEEP_CORE => 3,
-        HealthDataType.SLEEP_ASLEEP_DEEP => 4,
-        HealthDataType.SLEEP_ASLEEP_REM => 5,
         HealthDataType.HEADACHE_UNSPECIFIED => 0,
         HealthDataType.HEADACHE_NOT_PRESENT => 1,
         HealthDataType.HEADACHE_MILD => 2,
@@ -879,7 +1116,7 @@ class Health {
             "HealthDataType was not aligned correctly - please report bug at https://github.com/cph-cachet/flutter-plugins/issues"),
       };
 
-  /// Write workout data to Apple Health or Google Fit or Google Health Connect.
+  /// Write workout data to Apple Health or Google Health Connect.
   ///
   /// Returns true if the workout data was successfully added.
   ///
@@ -895,6 +1132,7 @@ class Health {
   ///    *ONLY FOR IOS* Default value is METER.
   ///  - [title] The title of the workout.
   ///    *ONLY FOR HEALTH CONNECT* Default value is the [activityType], e.g. "STRENGTH_TRAINING".
+  ///  - [recordingMethod] The recording method of the data point, automatic by default (on iOS this can only be automatic or manual).
   Future<bool> writeWorkoutData({
     required HealthWorkoutActivityType activityType,
     required DateTime start,
@@ -904,7 +1142,15 @@ class Health {
     int? totalDistance,
     HealthDataUnit totalDistanceUnit = HealthDataUnit.METER,
     String? title,
+    RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
+    await _checkIfHealthConnectAvailableOnAndroid();
+    if (Platform.isIOS &&
+        [RecordingMethod.active, RecordingMethod.unknown]
+            .contains(recordingMethod)) {
+      throw ArgumentError("recordingMethod must be manual or automatic on iOS");
+    }
+
     // Check that value is on the current Platform
     if (Platform.isIOS && !_isOnIOS(activityType)) {
       throw HealthException(activityType,
@@ -922,6 +1168,7 @@ class Health {
       'totalDistance': totalDistance,
       'totalDistanceUnit': totalDistanceUnit.name,
       'title': title,
+      'recordingMethod': recordingMethod.toInt(),
     };
     return await _channel.invokeMethod('writeWorkoutData', args) == true;
   }
@@ -930,84 +1177,87 @@ class Health {
   bool _isOnIOS(HealthWorkoutActivityType type) {
     // Returns true if the type is part of the iOS set
     return {
+      HealthWorkoutActivityType.AMERICAN_FOOTBALL,
       HealthWorkoutActivityType.ARCHERY,
+      HealthWorkoutActivityType.AUSTRALIAN_FOOTBALL,
       HealthWorkoutActivityType.BADMINTON,
+      HealthWorkoutActivityType.BARRE,
       HealthWorkoutActivityType.BASEBALL,
       HealthWorkoutActivityType.BASKETBALL,
       HealthWorkoutActivityType.BIKING,
+      HealthWorkoutActivityType.BOWLING,
       HealthWorkoutActivityType.BOXING,
+      HealthWorkoutActivityType.CARDIO_DANCE,
+      HealthWorkoutActivityType.CLIMBING,
+      HealthWorkoutActivityType.COOLDOWN,
+      HealthWorkoutActivityType.CORE_TRAINING,
       HealthWorkoutActivityType.CRICKET,
+      HealthWorkoutActivityType.CROSS_COUNTRY_SKIING,
+      HealthWorkoutActivityType.CROSS_TRAINING,
       HealthWorkoutActivityType.CURLING,
+      HealthWorkoutActivityType.DISC_SPORTS,
+      HealthWorkoutActivityType.DOWNHILL_SKIING,
       HealthWorkoutActivityType.ELLIPTICAL,
+      HealthWorkoutActivityType.EQUESTRIAN_SPORTS,
       HealthWorkoutActivityType.FENCING,
-      HealthWorkoutActivityType.AMERICAN_FOOTBALL,
-      HealthWorkoutActivityType.AUSTRALIAN_FOOTBALL,
-      HealthWorkoutActivityType.SOCCER,
+      HealthWorkoutActivityType.FISHING,
+      HealthWorkoutActivityType.FITNESS_GAMING,
+      HealthWorkoutActivityType.FLEXIBILITY,
+      HealthWorkoutActivityType.FUNCTIONAL_STRENGTH_TRAINING,
       HealthWorkoutActivityType.GOLF,
       HealthWorkoutActivityType.GYMNASTICS,
+      HealthWorkoutActivityType.HAND_CYCLING,
       HealthWorkoutActivityType.HANDBALL,
       HealthWorkoutActivityType.HIGH_INTENSITY_INTERVAL_TRAINING,
       HealthWorkoutActivityType.HIKING,
       HealthWorkoutActivityType.HOCKEY,
-      HealthWorkoutActivityType.SKATING,
+      HealthWorkoutActivityType.HUNTING,
       HealthWorkoutActivityType.JUMP_ROPE,
       HealthWorkoutActivityType.KICKBOXING,
+      HealthWorkoutActivityType.LACROSSE,
       HealthWorkoutActivityType.MARTIAL_ARTS,
+      HealthWorkoutActivityType.MIND_AND_BODY,
+      HealthWorkoutActivityType.MIXED_CARDIO,
+      HealthWorkoutActivityType.OTHER,
+      HealthWorkoutActivityType.PADDLE_SPORTS,
+      HealthWorkoutActivityType.PICKLEBALL,
       HealthWorkoutActivityType.PILATES,
+      HealthWorkoutActivityType.PLAY,
+      HealthWorkoutActivityType.PREPARATION_AND_RECOVERY,
       HealthWorkoutActivityType.RACQUETBALL,
       HealthWorkoutActivityType.ROWING,
       HealthWorkoutActivityType.RUGBY,
       HealthWorkoutActivityType.RUNNING,
       HealthWorkoutActivityType.SAILING,
-      HealthWorkoutActivityType.CROSS_COUNTRY_SKIING,
-      HealthWorkoutActivityType.DOWNHILL_SKIING,
+      HealthWorkoutActivityType.SKATING,
+      HealthWorkoutActivityType.SNOW_SPORTS,
       HealthWorkoutActivityType.SNOWBOARDING,
+      HealthWorkoutActivityType.SOCCER,
+      HealthWorkoutActivityType.SOCIAL_DANCE,
       HealthWorkoutActivityType.SOFTBALL,
       HealthWorkoutActivityType.SQUASH,
       HealthWorkoutActivityType.STAIR_CLIMBING,
-      HealthWorkoutActivityType.SWIMMING,
-      HealthWorkoutActivityType.TABLE_TENNIS,
-      HealthWorkoutActivityType.TENNIS,
-      HealthWorkoutActivityType.VOLLEYBALL,
-      HealthWorkoutActivityType.WALKING,
-      HealthWorkoutActivityType.WATER_POLO,
-      HealthWorkoutActivityType.YOGA,
-      HealthWorkoutActivityType.BOWLING,
-      HealthWorkoutActivityType.CROSS_TRAINING,
-      HealthWorkoutActivityType.TRACK_AND_FIELD,
-      HealthWorkoutActivityType.DISC_SPORTS,
-      HealthWorkoutActivityType.LACROSSE,
-      HealthWorkoutActivityType.PREPARATION_AND_RECOVERY,
-      HealthWorkoutActivityType.FLEXIBILITY,
-      HealthWorkoutActivityType.COOLDOWN,
-      HealthWorkoutActivityType.WHEELCHAIR_WALK_PACE,
-      HealthWorkoutActivityType.WHEELCHAIR_RUN_PACE,
-      HealthWorkoutActivityType.HAND_CYCLING,
-      HealthWorkoutActivityType.CORE_TRAINING,
-      HealthWorkoutActivityType.FUNCTIONAL_STRENGTH_TRAINING,
-      HealthWorkoutActivityType.TRADITIONAL_STRENGTH_TRAINING,
-      HealthWorkoutActivityType.MIXED_CARDIO,
       HealthWorkoutActivityType.STAIRS,
       HealthWorkoutActivityType.STEP_TRAINING,
-      HealthWorkoutActivityType.FITNESS_GAMING,
-      HealthWorkoutActivityType.BARRE,
-      HealthWorkoutActivityType.CARDIO_DANCE,
-      HealthWorkoutActivityType.SOCIAL_DANCE,
-      HealthWorkoutActivityType.MIND_AND_BODY,
-      HealthWorkoutActivityType.PICKLEBALL,
-      HealthWorkoutActivityType.CLIMBING,
-      HealthWorkoutActivityType.EQUESTRIAN_SPORTS,
-      HealthWorkoutActivityType.FISHING,
-      HealthWorkoutActivityType.HUNTING,
-      HealthWorkoutActivityType.PLAY,
-      HealthWorkoutActivityType.SNOW_SPORTS,
-      HealthWorkoutActivityType.PADDLE_SPORTS,
-      HealthWorkoutActivityType.SURFING_SPORTS,
-      HealthWorkoutActivityType.WATER_FITNESS,
-      HealthWorkoutActivityType.WATER_SPORTS,
+      HealthWorkoutActivityType.SURFING,
+      HealthWorkoutActivityType.SWIMMING,
+      HealthWorkoutActivityType.TABLE_TENNIS,
       HealthWorkoutActivityType.TAI_CHI,
+      HealthWorkoutActivityType.TENNIS,
+      HealthWorkoutActivityType.TRACK_AND_FIELD,
+      HealthWorkoutActivityType.TRADITIONAL_STRENGTH_TRAINING,
+      HealthWorkoutActivityType.VOLLEYBALL,
+      HealthWorkoutActivityType.WALKING,
+      HealthWorkoutActivityType.WATER_FITNESS,
+      HealthWorkoutActivityType.WATER_POLO,
+      HealthWorkoutActivityType.WATER_SPORTS,
+      HealthWorkoutActivityType.WHEELCHAIR_RUN_PACE,
+      HealthWorkoutActivityType.WHEELCHAIR_WALK_PACE,
       HealthWorkoutActivityType.WRESTLING,
-      HealthWorkoutActivityType.OTHER,
+      HealthWorkoutActivityType.YOGA,
+      HealthWorkoutActivityType.SWIMMING_OPEN_WATER,
+      HealthWorkoutActivityType.SWIMMING_POOL,
+      HealthWorkoutActivityType.UNDERWATER_DIVING,
     }.contains(type);
   }
 
@@ -1016,28 +1266,27 @@ class Health {
     // Returns true if the type is part of the Android set
     return {
       // Both
+      HealthWorkoutActivityType.AMERICAN_FOOTBALL,
       HealthWorkoutActivityType.ARCHERY,
+      HealthWorkoutActivityType.AUSTRALIAN_FOOTBALL,
       HealthWorkoutActivityType.BADMINTON,
       HealthWorkoutActivityType.BASEBALL,
       HealthWorkoutActivityType.BASKETBALL,
       HealthWorkoutActivityType.BIKING,
       HealthWorkoutActivityType.BOXING,
+      HealthWorkoutActivityType.CARDIO_DANCE,
       HealthWorkoutActivityType.CRICKET,
+      HealthWorkoutActivityType.CROSS_COUNTRY_SKIING,
       HealthWorkoutActivityType.CURLING,
+      HealthWorkoutActivityType.DOWNHILL_SKIING,
       HealthWorkoutActivityType.ELLIPTICAL,
       HealthWorkoutActivityType.FENCING,
-      HealthWorkoutActivityType.AMERICAN_FOOTBALL,
-      HealthWorkoutActivityType.AUSTRALIAN_FOOTBALL,
-      HealthWorkoutActivityType.SOCCER,
       HealthWorkoutActivityType.GOLF,
       HealthWorkoutActivityType.GYMNASTICS,
       HealthWorkoutActivityType.HANDBALL,
       HealthWorkoutActivityType.HIGH_INTENSITY_INTERVAL_TRAINING,
       HealthWorkoutActivityType.HIKING,
       HealthWorkoutActivityType.HOCKEY,
-      HealthWorkoutActivityType.SKATING,
-      HealthWorkoutActivityType.JUMP_ROPE,
-      HealthWorkoutActivityType.KICKBOXING,
       HealthWorkoutActivityType.MARTIAL_ARTS,
       HealthWorkoutActivityType.PILATES,
       HealthWorkoutActivityType.RACQUETBALL,
@@ -1045,91 +1294,44 @@ class Health {
       HealthWorkoutActivityType.RUGBY,
       HealthWorkoutActivityType.RUNNING,
       HealthWorkoutActivityType.SAILING,
-      HealthWorkoutActivityType.CROSS_COUNTRY_SKIING,
-      HealthWorkoutActivityType.DOWNHILL_SKIING,
+      HealthWorkoutActivityType.SKATING,
       HealthWorkoutActivityType.SNOWBOARDING,
+      HealthWorkoutActivityType.SOCCER,
+      HealthWorkoutActivityType.SOCIAL_DANCE,
       HealthWorkoutActivityType.SOFTBALL,
       HealthWorkoutActivityType.SQUASH,
       HealthWorkoutActivityType.STAIR_CLIMBING,
-      HealthWorkoutActivityType.SWIMMING,
       HealthWorkoutActivityType.TABLE_TENNIS,
       HealthWorkoutActivityType.TENNIS,
       HealthWorkoutActivityType.VOLLEYBALL,
       HealthWorkoutActivityType.WALKING,
       HealthWorkoutActivityType.WATER_POLO,
+      HealthWorkoutActivityType.WHEELCHAIR_RUN_PACE,
+      HealthWorkoutActivityType.WHEELCHAIR_WALK_PACE,
       HealthWorkoutActivityType.YOGA,
 
       // Android only
-      // Once Google Fit is removed, this list needs to be changed
-      HealthWorkoutActivityType.AEROBICS,
-      HealthWorkoutActivityType.BIATHLON,
-      HealthWorkoutActivityType.BIKING_HAND,
-      HealthWorkoutActivityType.BIKING_MOUNTAIN,
-      HealthWorkoutActivityType.BIKING_ROAD,
-      HealthWorkoutActivityType.BIKING_SPINNING,
       HealthWorkoutActivityType.BIKING_STATIONARY,
-      HealthWorkoutActivityType.BIKING_UTILITY,
       HealthWorkoutActivityType.CALISTHENICS,
-      HealthWorkoutActivityType.CIRCUIT_TRAINING,
-      HealthWorkoutActivityType.CROSS_FIT,
       HealthWorkoutActivityType.DANCING,
-      HealthWorkoutActivityType.DIVING,
-      HealthWorkoutActivityType.ELEVATOR,
-      HealthWorkoutActivityType.ERGOMETER,
-      HealthWorkoutActivityType.ESCALATOR,
       HealthWorkoutActivityType.FRISBEE_DISC,
-      HealthWorkoutActivityType.GARDENING,
       HealthWorkoutActivityType.GUIDED_BREATHING,
-      HealthWorkoutActivityType.HORSEBACK_RIDING,
-      HealthWorkoutActivityType.HOUSEWORK,
-      HealthWorkoutActivityType.INTERVAL_TRAINING,
-      HealthWorkoutActivityType.IN_VEHICLE,
       HealthWorkoutActivityType.ICE_SKATING,
-      HealthWorkoutActivityType.KAYAKING,
-      HealthWorkoutActivityType.KETTLEBELL_TRAINING,
-      HealthWorkoutActivityType.KICK_SCOOTER,
-      HealthWorkoutActivityType.KITE_SURFING,
-      HealthWorkoutActivityType.MEDITATION,
-      HealthWorkoutActivityType.MIXED_MARTIAL_ARTS,
-      HealthWorkoutActivityType.P90X,
       HealthWorkoutActivityType.PARAGLIDING,
-      HealthWorkoutActivityType.POLO,
       HealthWorkoutActivityType.ROCK_CLIMBING,
       HealthWorkoutActivityType.ROWING_MACHINE,
-      HealthWorkoutActivityType.RUNNING_JOGGING,
-      HealthWorkoutActivityType.RUNNING_SAND,
       HealthWorkoutActivityType.RUNNING_TREADMILL,
       HealthWorkoutActivityType.SCUBA_DIVING,
-      HealthWorkoutActivityType.SKATING_CROSS,
-      HealthWorkoutActivityType.SKATING_INDOOR,
-      HealthWorkoutActivityType.SKATING_INLINE,
       HealthWorkoutActivityType.SKIING,
-      HealthWorkoutActivityType.SKIING_BACK_COUNTRY,
-      HealthWorkoutActivityType.SKIING_KITE,
-      HealthWorkoutActivityType.SKIING_ROLLER,
-      HealthWorkoutActivityType.SLEDDING,
-      HealthWorkoutActivityType.SNOWMOBILE,
       HealthWorkoutActivityType.SNOWSHOEING,
       HealthWorkoutActivityType.STAIR_CLIMBING_MACHINE,
-      HealthWorkoutActivityType.STANDUP_PADDLEBOARDING,
-      HealthWorkoutActivityType.STILL,
       HealthWorkoutActivityType.STRENGTH_TRAINING,
       HealthWorkoutActivityType.SURFING,
       HealthWorkoutActivityType.SWIMMING_OPEN_WATER,
       HealthWorkoutActivityType.SWIMMING_POOL,
-      HealthWorkoutActivityType.TEAM_SPORTS,
-      HealthWorkoutActivityType.TILTING,
-      HealthWorkoutActivityType.VOLLEYBALL_BEACH,
-      HealthWorkoutActivityType.VOLLEYBALL_INDOOR,
-      HealthWorkoutActivityType.WAKEBOARDING,
-      HealthWorkoutActivityType.WALKING_FITNESS,
-      HealthWorkoutActivityType.WALKING_NORDIC,
-      HealthWorkoutActivityType.WALKING_STROLLER,
       HealthWorkoutActivityType.WALKING_TREADMILL,
       HealthWorkoutActivityType.WEIGHTLIFTING,
       HealthWorkoutActivityType.WHEELCHAIR,
-      HealthWorkoutActivityType.WINDSURFING,
-      HealthWorkoutActivityType.ZUMBA,
       HealthWorkoutActivityType.OTHER,
     }.contains(type);
   }

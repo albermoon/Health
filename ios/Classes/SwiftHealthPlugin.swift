@@ -2,11 +2,19 @@ import Flutter
 import HealthKit
 import UIKit
 
-public class SwiftHealthPlugin: NSObject, FlutterPlugin {
+enum RecordingMethod: Int {
+    case unknown = 0           // RECORDING_METHOD_UNKNOWN (not supported on iOS)
+    case active = 1            // RECORDING_METHOD_ACTIVELY_RECORDED (not supported on iOS)
+    case automatic = 2         // RECORDING_METHOD_AUTOMATICALLY_RECORDED
+    case manual = 3            // RECORDING_METHOD_MANUAL_ENTRY
+}
 
+public class SwiftHealthPlugin: NSObject, FlutterPlugin {
+    
     let healthStore = HKHealthStore()
     var healthDataTypes = [HKSampleType]()
     var healthDataQuantityTypes = [HKQuantityType]()
+    var characteristicsDataTypes = [HKCharacteristicType]()
     var heartRateEventTypes = Set<HKSampleType>()
     var headacheType = Set<HKSampleType>()
     var allDataTypes = Set<HKSampleType>()
@@ -14,9 +22,12 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     var dataQuantityTypesDict: [String: HKQuantityType] = [:]
     var unitDict: [String: HKUnit] = [:]
     var workoutActivityTypeMap: [String: HKWorkoutActivityType] = [:]
-
+    var characteristicsTypesDict: [String: HKCharacteristicType] = [:]
+    var nutritionList: [String] = []
+    
     // Health Data Type Keys
     let ACTIVE_ENERGY_BURNED = "ACTIVE_ENERGY_BURNED"
+    let ATRIAL_FIBRILLATION_BURDEN = "ATRIAL_FIBRILLATION_BURDEN"
     let AUDIOGRAM = "AUDIOGRAM"
     let BASAL_ENERGY_BURNED = "BASAL_ENERGY_BURNED"
     let BLOOD_GLUCOSE = "BLOOD_GLUCOSE"
@@ -24,20 +35,99 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let BLOOD_PRESSURE = "BLOOD_PRESSURE"
     let BLOOD_PRESSURE_DIASTOLIC = "BLOOD_PRESSURE_DIASTOLIC"
     let BLOOD_PRESSURE_SYSTOLIC = "BLOOD_PRESSURE_SYSTOLIC"
- 
     let BODY_FAT_PERCENTAGE = "BODY_FAT_PERCENTAGE"
+    let LEAN_BODY_MASS = "LEAN_BODY_MASS"
     let BODY_MASS_INDEX = "BODY_MASS_INDEX"
     let BODY_TEMPERATURE = "BODY_TEMPERATURE"
+    // Nutrition
     let DIETARY_CARBS_CONSUMED = "DIETARY_CARBS_CONSUMED"
     let DIETARY_ENERGY_CONSUMED = "DIETARY_ENERGY_CONSUMED"
     let DIETARY_FATS_CONSUMED = "DIETARY_FATS_CONSUMED"
     let DIETARY_PROTEIN_CONSUMED = "DIETARY_PROTEIN_CONSUMED"
     let DIETARY_CAFFEINE = "DIETARY_CAFFEINE"
+    let DIETARY_FIBER = "DIETARY_FIBER"
+    let DIETARY_SUGAR = "DIETARY_SUGAR"
+    let DIETARY_FAT_MONOUNSATURATED = "DIETARY_FAT_MONOUNSATURATED"
+    let DIETARY_FAT_POLYUNSATURATED = "DIETARY_FAT_POLYUNSATURATED"
+    let DIETARY_FAT_SATURATED = "DIETARY_FAT_SATURATED"
+    let DIETARY_CHOLESTEROL = "DIETARY_CHOLESTEROL"
+    let DIETARY_VITAMIN_A = "DIETARY_VITAMIN_A"
+    let DIETARY_THIAMIN = "DIETARY_THIAMIN"
+    let DIETARY_RIBOFLAVIN = "DIETARY_RIBOFLAVIN"
+    let DIETARY_NIACIN = "DIETARY_NIACIN"
+    let DIETARY_PANTOTHENIC_ACID = "DIETARY_PANTOTHENIC_ACID"
+    let DIETARY_VITAMIN_B6 = "DIETARY_VITAMIN_B6"
+    let DIETARY_BIOTIN = "DIETARY_BIOTIN"
+    let DIETARY_VITAMIN_B12 = "DIETARY_VITAMIN_B12"
+    let DIETARY_VITAMIN_C = "DIETARY_VITAMIN_C"
+    let DIETARY_VITAMIN_D = "DIETARY_VITAMIN_D"
+    let DIETARY_VITAMIN_E = "DIETARY_VITAMIN_E"
+    let DIETARY_VITAMIN_K = "DIETARY_VITAMIN_K"
+    let DIETARY_FOLATE = "DIETARY_FOLATE"
+    let DIETARY_CALCIUM = "DIETARY_CALCIUM"
+    let DIETARY_CHLORIDE = "DIETARY_CHLORIDE"
+    let DIETARY_IRON = "DIETARY_IRON"
+    let DIETARY_MAGNESIUM = "DIETARY_MAGNESIUM"
+    let DIETARY_PHOSPHORUS = "DIETARY_PHOSPHORUS"
+    let DIETARY_POTASSIUM = "DIETARY_POTASSIUM"
+    let DIETARY_SODIUM = "DIETARY_SODIUM"
+    let DIETARY_ZINC = "DIETARY_ZINC"
+    let DIETARY_WATER = "WATER"
+    let DIETARY_CHROMIUM = "DIETARY_CHROMIUM"
+    let DIETARY_COPPER = "DIETARY_COPPER"
+    let DIETARY_IODINE = "DIETARY_IODINE"
+    let DIETARY_MANGANESE = "DIETARY_MANGANESE"
+    let DIETARY_MOLYBDENUM = "DIETARY_MOLYBDENUM"
+    let DIETARY_SELENIUM = "DIETARY_SELENIUM"
+    let NUTRITION_KEYS: [String: HKQuantityTypeIdentifier] = [
+        "calories": .dietaryEnergyConsumed,
+        "protein": .dietaryProtein,
+        "carbs": .dietaryCarbohydrates,
+        "fat": .dietaryFatTotal,
+        "caffeine": .dietaryCaffeine,
+        "vitamin_a": .dietaryVitaminA,
+        "b1_thiamine": .dietaryThiamin,
+        "b2_riboflavin": .dietaryRiboflavin,
+        "b3_niacin" : .dietaryNiacin,
+        "b5_pantothenic_acid" : .dietaryPantothenicAcid,
+        "b6_pyridoxine" : .dietaryVitaminB6,
+        "b7_biotin" : .dietaryBiotin,
+        "b9_folate" : .dietaryFolate,
+        "b12_cobalamin": .dietaryVitaminB12,
+        "vitamin_c": .dietaryVitaminC,
+        "vitamin_d": .dietaryVitaminD,
+        "vitamin_e": .dietaryVitaminE,
+        "vitamin_k": .dietaryVitaminK,
+        "calcium": .dietaryCalcium,
+        "chloride": .dietaryChloride,
+        "cholesterol": .dietaryCholesterol,
+        "chromium": .dietaryChromium,
+        "copper": .dietaryCopper,
+        "fat_unsaturated": .dietaryFatMonounsaturated,
+        "fat_monounsaturated": .dietaryFatMonounsaturated,
+        "fat_polyunsaturated": .dietaryFatPolyunsaturated,
+        "fat_saturated": .dietaryFatSaturated,
+        // "fat_trans_monoenoic": .dietaryFatTransMonoenoic,
+        "fiber": .dietaryFiber,
+        "iodine": .dietaryIodine,
+        "iron": .dietaryIron,
+        "magnesium": .dietaryMagnesium,
+        "manganese": .dietaryManganese,
+        "molybdenum": .dietaryMolybdenum,
+        "phosphorus": .dietaryPhosphorus,
+        "potassium": .dietaryPotassium,
+        "selenium": .dietarySelenium,
+        "sodium": .dietarySodium,
+        "sugar": .dietarySugar,
+        "water": .dietaryWater,
+        "zinc": .dietaryZinc,
+    ]
     let ELECTRODERMAL_ACTIVITY = "ELECTRODERMAL_ACTIVITY"
     let FORCED_EXPIRATORY_VOLUME = "FORCED_EXPIRATORY_VOLUME"
     let HEART_RATE = "HEART_RATE"
     let HEART_RATE_VARIABILITY_SDNN = "HEART_RATE_VARIABILITY_SDNN"
     let HEIGHT = "HEIGHT"
+    let INSULIN_DELIVERY = "INSULIN_DELIVERY"
     let HIGH_HEART_RATE_EVENT = "HIGH_HEART_RATE_EVENT"
     let IRREGULAR_HEART_RATE_EVENT = "IRREGULAR_HEART_RATE_EVENT"
     let LOW_HEART_RATE_EVENT = "LOW_HEART_RATE_EVENT"
@@ -52,17 +142,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let DISTANCE_SWIMMING = "DISTANCE_SWIMMING"
     let DISTANCE_CYCLING = "DISTANCE_CYCLING"
     let FLIGHTS_CLIMBED = "FLIGHTS_CLIMBED"
-    let WATER = "WATER"
     let MINDFULNESS = "MINDFULNESS"
-    let SLEEP_IN_BED = "SLEEP_IN_BED"
     let SLEEP_ASLEEP = "SLEEP_ASLEEP"
-    let SLEEP_ASLEEP_CORE = "SLEEP_ASLEEP_CORE"
-    let SLEEP_ASLEEP_DEEP = "SLEEP_ASLEEP_DEEP"
-    let SLEEP_ASLEEP_REM = "SLEEP_ASLEEP_REM"
     let SLEEP_AWAKE = "SLEEP_AWAKE"
     let SLEEP_DEEP = "SLEEP_DEEP"
+    let SLEEP_IN_BED = "SLEEP_IN_BED"
+    let SLEEP_LIGHT = "SLEEP_LIGHT"
     let SLEEP_REM = "SLEEP_REM"
-
+    
     let EXERCISE_TIME = "EXERCISE_TIME"
     let WORKOUT = "WORKOUT"
     let HEADACHE_UNSPECIFIED = "HEADACHE_UNSPECIFIED"
@@ -72,7 +159,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let HEADACHE_SEVERE = "HEADACHE_SEVERE"
     let ELECTROCARDIOGRAM = "ELECTROCARDIOGRAM"
     let NUTRITION = "NUTRITION"
-
+    let BIRTH_DATE = "BIRTH_DATE"
+    let GENDER = "GENDER"
+    let BLOOD_TYPE = "BLOOD_TYPE"
+    let MENSTRUATION_FLOW = "MENSTRUATION_FLOW"
+    let WATER_TEMPERATURE = "WATER_TEMPERATURE"
+    let UNDERWATER_DEPTH = "UNDERWATER_DEPTH"
+    
+    
     // Health Unit types
     // MOLE_UNIT_WITH_MOLAR_MASS, // requires molar mass input - not supported yet
     // MOLE_UNIT_WITH_PREFIX_MOLAR_MASS, // requires molar mass & prefix input - not supported yet
@@ -124,22 +218,22 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
     let MILLIGRAM_PER_DECILITER = "MILLIGRAM_PER_DECILITER"
     let UNKNOWN_UNIT = "UNKNOWN_UNIT"
     let NO_UNIT = "NO_UNIT"
-
+    
     struct PluginError: Error {
         let message: String
     }
-
+    
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(
             name: "flutter_health", binaryMessenger: registrar.messenger())
         let instance = SwiftHealthPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
-
+    
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         // Set up all data types
         initializeTypes()
-
+        
         /// Handle checkIfHealthDataAvailable
         if call.method.elementsEqual("checkIfHealthDataAvailable") {
             checkIfHealthDataAvailable(call: call, result: result)
@@ -147,69 +241,72 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         else if call.method.elementsEqual("requestAuthorization") {
             try! requestAuthorization(call: call, result: result)
         }
-
+        
         /// Handle getData
         else if call.method.elementsEqual("getData") {
             getData(call: call, result: result)
         }
-
+        
         /// Handle getIntervalData
         else if (call.method.elementsEqual("getIntervalData")){
             getIntervalData(call: call, result: result)
         }
-
+        
         /// Handle getTotalStepsInInterval
         else if call.method.elementsEqual("getTotalStepsInInterval") {
             getTotalStepsInInterval(call: call, result: result)
         }
-
+        
         /// Handle writeData
         else if call.method.elementsEqual("writeData") {
             try! writeData(call: call, result: result)
         }
-
+        
         /// Handle writeAudiogram
         else if call.method.elementsEqual("writeAudiogram") {
             try! writeAudiogram(call: call, result: result)
         }
-
+        
         /// Handle writeBloodPressure
         else if call.method.elementsEqual("writeBloodPressure") {
             try! writeBloodPressure(call: call, result: result)
         }
-
+        
         /// Handle writeMeal
         else if (call.method.elementsEqual("writeMeal")){
             try! writeMeal(call: call, result: result)
         }
-
+        
+        /// Handle writeInsulinDelivery
+        else if (call.method.elementsEqual("writeInsulinDelivery")){
+            try! writeInsulinDelivery(call: call, result: result)
+        }
+        
         /// Handle writeWorkoutData
         else if call.method.elementsEqual("writeWorkoutData") {
             try! writeWorkoutData(call: call, result: result)
         }
-
+        
+        /// Handle writeMenstruationFlow
+        else if call.method.elementsEqual("writeMenstruationFlow") {
+            try! writeMenstruationFlow(call: call, result: result)
+        }
+        
         /// Handle hasPermission
         else if call.method.elementsEqual("hasPermissions") {
             try! hasPermissions(call: call, result: result)
         }
-
+        
         /// Handle delete data
         else if call.method.elementsEqual("delete") {
             try! delete(call: call, result: result)
         }
-
-        /// Disconnect
-        else if (call.method.elementsEqual("disconnect")){
-            // Do nothing.
-            result(true)
-        }
-
     }
-
+    
     func checkIfHealthDataAvailable(call: FlutterMethodCall, result: @escaping FlutterResult) {
         result(HKHealthStore.isHealthDataAvailable())
     }
-
+    
     func hasPermissions(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         let arguments = call.arguments as? NSDictionary
         guard var types = arguments?["types"] as? [String],
@@ -218,24 +315,18 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         else {
             throw PluginError(message: "Invalid Arguments!")
         }
-
+        
         if let nutritionIndex = types.firstIndex(of: NUTRITION) {
             types.remove(at: nutritionIndex)
             let nutritionPermission = permissions[nutritionIndex]
             permissions.remove(at: nutritionIndex)
-
-            types.append(DIETARY_ENERGY_CONSUMED)
-            permissions.append(nutritionPermission)
-            types.append(DIETARY_CARBS_CONSUMED)
-            permissions.append(nutritionPermission)
-            types.append(DIETARY_PROTEIN_CONSUMED)
-            permissions.append(nutritionPermission)
-            types.append(DIETARY_FATS_CONSUMED)
-            permissions.append(nutritionPermission)
-            types.append(DIETARY_CAFFEINE)
-            permissions.append(nutritionPermission)
+            
+            for nutritionType in nutritionList {
+                types.append(nutritionType)
+                permissions.append(nutritionPermission)
+            }
         }
-
+        
         for (index, type) in types.enumerated() {
             let sampleType = dataTypeLookUp(key: type)
             let success = hasPermission(type: sampleType, access: permissions[index])
@@ -243,28 +334,35 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 result(success)
                 return
             }
+            if let characteristicType = characteristicsTypesDict[type] {
+                let characteristicSuccess = hasPermission(type: characteristicType, access: permissions[index])
+                if (characteristicSuccess == nil || characteristicSuccess == false) {
+                    result(characteristicSuccess)
+                    return
+                }
+            }
         }
-
+        
         result(true)
     }
-
-    func hasPermission(type: HKSampleType, access: Int) -> Bool? {
-
+    
+    func hasPermission(type: HKObjectType, access: Int) -> Bool? {
+        
         if #available(iOS 13.0, *) {
             let status = healthStore.authorizationStatus(for: type)
             switch access {
             case 0:  // READ
-                return (status == HKAuthorizationStatus.sharingAuthorized)
+                return nil
             case 1:  // WRITE
                 return (status == HKAuthorizationStatus.sharingAuthorized)
             default:  // READ_WRITE
-                return (status == HKAuthorizationStatus.sharingAuthorized)
+                return nil
             }
         } else {
-            return false
+            return nil
         }
     }
-
+    
     func requestAuthorization(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let arguments = call.arguments as? NSDictionary,
               let types = arguments["types"] as? [String],
@@ -273,22 +371,18 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         else {
             throw PluginError(message: "Invalid Arguments!")
         }
-
-        var typesToRead = Set<HKSampleType>()
+        
+        var typesToRead = Set<HKObjectType>()
         var typesToWrite = Set<HKSampleType>()
         for (index, key) in types.enumerated() {
             if (key == NUTRITION) {
-                let caloriesType = dataTypeLookUp(key: DIETARY_ENERGY_CONSUMED)
-                let carbsType = dataTypeLookUp(key: DIETARY_CARBS_CONSUMED)
-                let proteinType = dataTypeLookUp(key: DIETARY_PROTEIN_CONSUMED)
-                let fatType = dataTypeLookUp(key: DIETARY_FATS_CONSUMED)
-                let caffeineType = dataTypeLookUp(key: DIETARY_CAFFEINE)
-                typesToWrite.insert(caloriesType);
-                typesToWrite.insert(carbsType);
-                typesToWrite.insert(proteinType);
-                typesToWrite.insert(fatType);
-                typesToWrite.insert(caffeineType);
-            } else if (key == BLOOD_PRESSURE){
+                for nutritionType in nutritionList {
+                    let nutritionData = dataTypeLookUp(key: nutritionType)
+                    typesToWrite.insert(nutritionData)
+                }
+            }
+
+             else if (key == BLOOD_PRESSURE){
                 let access = permissions[index]
                 let systolicType = HKObjectType.quantityType(forIdentifier: .bloodPressureSystolic)!
                 let diastolicType = HKObjectType.quantityType(forIdentifier: .bloodPressureDiastolic)!
@@ -306,7 +400,12 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                         typesToWrite.insert(systolicType)
                         typesToWrite.insert(diastolicType)
                 }
-            } else {
+            } 
+            
+            
+            
+            
+             else {
                 let dataType = dataTypeLookUp(key: key)
                 let access = permissions[index]
                 switch access {
@@ -318,52 +417,65 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                     typesToRead.insert(dataType)
                     typesToWrite.insert(dataType)
                 }
+                if let characteristicsType = characteristicsTypesDict[key] {
+                    let access = permissions[index]
+                    switch access {
+                    case 0:
+                        typesToRead.insert(characteristicsType)
+                    case 1:
+                        throw PluginError(message: "Can not ask for reading permissions to the type of \(characteristicsType)")
+                    default:
+                        break
+                    }
+                }
             }
         }
         
         if #available(iOS 13.0, *) {
-                healthStore.requestAuthorization(toShare: typesToWrite, read: typesToRead) { (success, error) in
-                    DispatchQueue.main.async {
-                        if let error = error {
-                            print("Authorization Error: \(error.localizedDescription)")
-                            result(FlutterError(code: "AUTHORIZATION_ERROR", message: error.localizedDescription, details: nil))
-                        } else {
-                            result(success)
-                        }
-                    }
+            healthStore.requestAuthorization(toShare: typesToWrite, read: typesToRead) {
+                (success, error) in
+                DispatchQueue.main.async {
+                    result(success)
                 }
-            } else {
-                result(false)  // Handle the error here.
             }
+        } else {
+            result(false)  // Handle the error here.
+        }
     }
-
+    
     func writeData(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let arguments = call.arguments as? NSDictionary,
               let value = (arguments["value"] as? Double),
               let type = (arguments["dataTypeKey"] as? String),
               let unit = (arguments["dataUnitKey"] as? String),
               let startTime = (arguments["startTime"] as? NSNumber),
-              let endTime = (arguments["endTime"] as? NSNumber)
+              let endTime = (arguments["endTime"] as? NSNumber),
+              let recordingMethod = (arguments["recordingMethod"] as? Int)
         else {
             throw PluginError(message: "Invalid Arguments")
         }
-
+        
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
 
+        let isManualEntry = recordingMethod == RecordingMethod.manual.rawValue
+        let metadata: [String: Any] = [
+            HKMetadataKeyWasUserEntered: NSNumber(value: isManualEntry)
+        ]
+        
         let sample: HKObject
-
+        
         if dataTypeLookUp(key: type).isKind(of: HKCategoryType.self) {
             sample = HKCategorySample(
                 type: dataTypeLookUp(key: type) as! HKCategoryType, value: Int(value), start: dateFrom,
-                end: dateTo)
+                end: dateTo, metadata: metadata)
         } else {
             let quantity = HKQuantity(unit: unitDict[unit]!, doubleValue: value)
             sample = HKQuantitySample(
                 type: dataTypeLookUp(key: type) as! HKQuantityType, quantity: quantity, start: dateFrom,
-                end: dateTo)
+                end: dateTo, metadata: metadata)
         }
-
+        
         HKHealthStore().save(
             sample,
             withCompletion: { (success, error) in
@@ -375,7 +487,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
             })
     }
-
+    
     func writeAudiogram(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let arguments = call.arguments as? NSDictionary,
               let frequencies = (arguments["frequencies"] as? [Double]),
@@ -386,12 +498,12 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         else {
             throw PluginError(message: "Invalid Arguments")
         }
-
+        
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
-
+        
         var sensitivityPoints = [HKAudiogramSensitivityPoint]()
-
+        
         for index in 0...frequencies.count - 1 {
             let frequency = HKQuantity(unit: HKUnit.hertz(), doubleValue: frequencies[index])
             let dbUnit = HKUnit.decibelHearingLevel()
@@ -401,23 +513,23 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 frequency: frequency, leftEarSensitivity: left, rightEarSensitivity: right)
             sensitivityPoints.append(sensitivityPoint)
         }
-
+        
         let audiogram: HKAudiogramSample
         let metadataReceived = (arguments["metadata"] as? [String: Any]?)
-
+        
         if (metadataReceived) != nil {
             guard let deviceName = metadataReceived?!["HKDeviceName"] as? String else { return }
             guard let externalUUID = metadataReceived?!["HKExternalUUID"] as? String else { return }
-
+            
             audiogram = HKAudiogramSample(
                 sensitivityPoints: sensitivityPoints, start: dateFrom, end: dateTo,
                 metadata: [HKMetadataKeyDeviceName: deviceName, HKMetadataKeyExternalUUID: externalUUID])
-
+            
         } else {
             audiogram = HKAudiogramSample(
                 sensitivityPoints: sensitivityPoints, start: dateFrom, end: dateTo, metadata: nil)
         }
-
+        
         HKHealthStore().save(
             audiogram,
             withCompletion: { (success, error) in
@@ -429,31 +541,37 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
             })
     }
-
+    
     func writeBloodPressure(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let arguments = call.arguments as? NSDictionary,
               let systolic = (arguments["systolic"] as? Double),
               let diastolic = (arguments["diastolic"] as? Double),
               let startTime = (arguments["startTime"] as? NSNumber),
-              let endTime = (arguments["endTime"] as? NSNumber)
+              let endTime = (arguments["endTime"] as? NSNumber),
+              let recordingMethod = (arguments["recordingMethod"] as? Int)
         else {
             throw PluginError(message: "Invalid Arguments")
         }
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
 
+        let isManualEntry = recordingMethod == RecordingMethod.manual.rawValue
+        let metadata = [
+            HKMetadataKeyWasUserEntered: NSNumber(value: isManualEntry)
+        ]
+        
         let systolic_sample = HKQuantitySample(
             type: HKSampleType.quantityType(forIdentifier: .bloodPressureSystolic)!,
             quantity: HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: systolic),
-            start: dateFrom, end: dateTo)
+            start: dateFrom, end: dateTo, metadata: metadata)
         let diastolic_sample = HKQuantitySample(
             type: HKSampleType.quantityType(forIdentifier: .bloodPressureDiastolic)!,
             quantity: HKQuantity(unit: HKUnit.millimeterOfMercury(), doubleValue: diastolic),
-            start: dateFrom, end: dateTo)
+            start: dateFrom, end: dateTo, metadata: metadata)
         let bpCorrelationType = HKCorrelationType.correlationType(forIdentifier: .bloodPressure)!
         let bpCorrelation = Set(arrayLiteral: systolic_sample, diastolic_sample)
         let blood_pressure_sample = HKCorrelation(type: bpCorrelationType , start: dateFrom, end: dateTo, objects: bpCorrelation)
-
+        
         HKHealthStore().save(
             [blood_pressure_sample],
             withCompletion: { (success, error) in
@@ -465,61 +583,44 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
             })
     }
-
+    
     func writeMeal(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let arguments = call.arguments as? NSDictionary,
-              let startTime = (arguments["startTime"] as? NSNumber),
-              let endTime = (arguments["endTime"] as? NSNumber),
-              let calories = (arguments["caloriesConsumed"] as? Double?) ?? 0,
-              let carbs = (arguments["carbohydrates"] as? Double?) ?? 0,
-              let protein = (arguments["protein"] as? Double?) ?? 0,
-              let fat = (arguments["fatTotal"] as? Double?) ?? 0,
               let name = (arguments["name"] as? String?),
-              let caffeine = (arguments["caffeine"] as? Double?) ?? 0,
-              let mealType = (arguments["mealType"] as? String?)
+              let startTime = (arguments["start_time"] as? NSNumber),
+              let endTime = (arguments["end_time"] as? NSNumber),
+              let mealType = (arguments["meal_type"] as? String?),
+              let recordingMethod = arguments["recordingMethod"] as? Int
         else {
             throw PluginError(message: "Invalid Arguments")
         }
+        
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
+        
+        let mealTypeString = mealType ?? "UNKNOWN"
 
-        var mealTypeString = mealType ?? "UNKNOWN"
-        var metadata = ["HKFoodMeal": "\(mealTypeString)"]
-
-        if(name != nil) {
+        let isManualEntry = recordingMethod == RecordingMethod.manual.rawValue
+        
+        var metadata = ["HKFoodMeal": mealTypeString, HKMetadataKeyWasUserEntered: NSNumber(value: isManualEntry)] as [String : Any]
+        if (name != nil) {
             metadata[HKMetadataKeyFoodType] = "\(name!)"
         }
 
         var nutrition = Set<HKSample>()
-
-        if(calories > 0) {
-            let caloriesSample = HKQuantitySample(type: HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!, quantity: HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: calories), start: dateFrom, end: dateTo, metadata: metadata)
-            nutrition.insert(caloriesSample)
-        }
-
-        if(carbs > 0) {
-            let carbsSample = HKQuantitySample(type: HKSampleType.quantityType(forIdentifier: .dietaryCarbohydrates)!, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: carbs), start: dateFrom, end: dateTo, metadata: metadata)
-            nutrition.insert(carbsSample)
-        }
-
-        if(protein > 0) {
-            let proteinSample = HKQuantitySample(type: HKSampleType.quantityType(forIdentifier: .dietaryProtein)!, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: protein), start: dateFrom, end: dateTo, metadata: metadata)
-            nutrition.insert(proteinSample)
-        }
-
-        if(fat > 0) {
-            let fatSample = HKQuantitySample(type: HKSampleType.quantityType(forIdentifier: .dietaryFatTotal)!, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: fat), start: dateFrom, end: dateTo, metadata: metadata)
-            nutrition.insert(fatSample)
-        }
-
-        if(caffeine > 0) {
-            let caffeineSample = HKQuantitySample(type: HKSampleType.quantityType(forIdentifier: .dietaryCaffeine)!, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: caffeine), start: dateFrom, end: dateTo, metadata: metadata)
-            nutrition.insert(caffeineSample)
+        for (key, identifier) in NUTRITION_KEYS {
+            let value = arguments[key] as? Double
+            guard let unwrappedValue = value else { continue }
+            let unit = key == "calories" ? HKUnit.kilocalorie() : key == "water" ? HKUnit.literUnit(with: .milli) : HKUnit.gram()
+            let nutritionSample = HKQuantitySample(
+                type: HKSampleType.quantityType(forIdentifier: identifier)!, quantity: HKQuantity(unit: unit, doubleValue: unwrappedValue), start: dateFrom, end: dateTo, metadata: metadata)
+            nutrition.insert(nutritionSample)
         }
         
         if #available(iOS 15.0, *){
-            let meal = HKCorrelation.init(type: HKCorrelationType.init(HKCorrelationTypeIdentifier.food), start: dateFrom, end: dateTo, objects: nutrition, metadata: metadata)
-
+            let type = HKCorrelationType.correlationType(forIdentifier: HKCorrelationTypeIdentifier.food)!
+            let meal = HKCorrelation(type: type, start: dateFrom, end: dateTo, objects: nutrition, metadata: metadata)
+            
             HKHealthStore().save(meal, withCompletion: { (success, error) in
                 if let err = error {
                     print("Error Saving Meal Sample: \(err.localizedDescription)")
@@ -532,7 +633,77 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             result(false)
         }
     }
+    func writeInsulinDelivery(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let arguments = call.arguments as? NSDictionary,
+              let units = (arguments["units"] as? Double),
+              let reason = (arguments["reason"] as? NSNumber),
+              let startTime = (arguments["startTime"] as? NSNumber),
+              let endTime = (arguments["endTime"] as? NSNumber)
+        else {
+            throw PluginError(message: "Invalid Arguments")
+        }
+        let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
+        let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
+        
+        let type = HKSampleType.quantityType(forIdentifier: .insulinDelivery)!
+        let quantity = HKQuantity(unit: HKUnit.internationalUnit(), doubleValue: units)
+        let metadata = [HKMetadataKeyInsulinDeliveryReason: reason]
+        
+        let insulin_sample = HKQuantitySample(type: type, quantity: quantity, start: dateFrom, end: dateTo, metadata: metadata)
+        
+        HKHealthStore().save(insulin_sample, withCompletion: { (success, error) in
+            if let err = error {
+                print("Error Saving Insulin Delivery Sample: \(err.localizedDescription)")
+            }
+            DispatchQueue.main.async {
+                result(success)
+            }
+        })
+    }
+    
+    func writeMenstruationFlow(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+        guard let arguments = call.arguments as? NSDictionary,
+              let flow = (arguments["value"] as? Int),
+              let endTime = (arguments["endTime"] as? NSNumber),
+              let isStartOfCycle = (arguments["isStartOfCycle"] as? NSNumber),
+              let recordingMethod = (arguments["recordingMethod"] as? Int)
+        else {
+            throw PluginError(message: "Invalid Arguments - value, startTime, endTime or isStartOfCycle invalid")
+        }
+        guard let menstrualFlowType = HKCategoryValueMenstrualFlow(rawValue: flow) else {
+            throw PluginError(message: "Invalid Menstrual Flow Type")
+        }
+        
+        let dateTime = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
 
+        let isManualEntry = recordingMethod == RecordingMethod.manual.rawValue
+
+        guard let categoryType = HKSampleType.categoryType(forIdentifier: .menstrualFlow) else {
+            throw PluginError(message: "Invalid Menstrual Flow Type")
+        }
+
+        let metadata = [HKMetadataKeyMenstrualCycleStart: isStartOfCycle, HKMetadataKeyWasUserEntered: NSNumber(value: isManualEntry)] as [String : Any]
+        
+        let sample = HKCategorySample(
+            type: categoryType,
+            value: menstrualFlowType.rawValue, 
+            start: dateTime, 
+            end: dateTime,
+            metadata: metadata
+        )
+        
+        HKHealthStore().save(
+            sample,
+            withCompletion: { (success, error) in
+                if let err = error {
+                    print("Error Saving Menstruation Flow Sample: \(err.localizedDescription)")
+                }
+                DispatchQueue.main.async {
+                    result(success)
+                }
+            })
+    }
+    
     func writeWorkoutData(call: FlutterMethodCall, result: @escaping FlutterResult) throws {
         guard let arguments = call.arguments as? NSDictionary,
               let activityType = (arguments["activityType"] as? String),
@@ -542,10 +713,10 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         else {
             throw PluginError(message: "Invalid Arguments - activityType, startTime or endTime invalid")
         }
-
+        
         var totalEnergyBurned: HKQuantity?
         var totalDistance: HKQuantity? = nil
-
+        
         // Handle optional arguments
         if let teb = (arguments["totalEnergyBurned"] as? Double) {
             totalEnergyBurned = HKQuantity(
@@ -555,17 +726,17 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             totalDistance = HKQuantity(
                 unit: unitDict[(arguments["totalDistanceUnit"] as! String)]!, doubleValue: td)
         }
-
+        
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
-
+        
         var workout: HKWorkout
-
+        
         workout = HKWorkout(
             activityType: ac, start: dateFrom, end: dateTo, duration: dateTo.timeIntervalSince(dateFrom),
             totalEnergyBurned: totalEnergyBurned ?? nil,
             totalDistance: totalDistance ?? nil, metadata: nil)
-
+        
         HKHealthStore().save(
             workout,
             withCompletion: { (success, error) in
@@ -577,33 +748,36 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
             })
     }
-
+    
     func delete(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? NSDictionary
         let dataTypeKey = (arguments?["dataTypeKey"] as? String)!
         let startTime = (arguments?["startTime"] as? NSNumber) ?? 0
         let endTime = (arguments?["endTime"] as? NSNumber) ?? 0
-
+        
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
-
+        
         let dataType = dataTypeLookUp(key: dataTypeKey)
-
-        let predicate = HKQuery.predicateForSamples(
+        
+        let samplePredicate = HKQuery.predicateForSamples(
             withStart: dateFrom, end: dateTo, options: .strictStartDate)
+        let ownerPredicate = HKQuery.predicateForObjects(from: HKSource.default())
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
-
+        
         let deleteQuery = HKSampleQuery(
-            sampleType: dataType, predicate: predicate, limit: HKObjectQueryNoLimit,
+            sampleType: dataType,
+            predicate: NSCompoundPredicate(andPredicateWithSubpredicates: [samplePredicate, ownerPredicate]),
+            limit: HKObjectQueryNoLimit,
             sortDescriptors: [sortDescriptor]
         ) { [self] x, samplesOrNil, error in
-
+            
             guard let samplesOrNil = samplesOrNil, error == nil else {
                 // Handle the error if necessary
                 print("Error deleting \(dataType)")
                 return
             }
-
+            
             // Delete the retrieved objects from the HealthKit store
             HKHealthStore().delete(samplesOrNil) { (success, error) in
                 if let err = error {
@@ -614,10 +788,10 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
             }
         }
-
+        
         HKHealthStore().execute(deleteQuery)
     }
-
+    
     func getData(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? NSDictionary
         let dataTypeKey = (arguments?["dataTypeKey"] as? String)!
@@ -625,19 +799,68 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         let startTime = (arguments?["startTime"] as? NSNumber) ?? 0
         let endTime = (arguments?["endTime"] as? NSNumber) ?? 0
         let limit = (arguments?["limit"] as? Int) ?? HKObjectQueryNoLimit
-        let includeManualEntry = (arguments?["includeManualEntry"] as? Bool) ?? true
-
+        let recordingMethodsToFilter = (arguments?["recordingMethodsToFilter"] as? [Int]) ?? []
+        let includeManualEntry = !recordingMethodsToFilter.contains(RecordingMethod.manual.rawValue)
+        
         // Convert dates from milliseconds to Date()
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
-
+        
         let dataType = dataTypeLookUp(key: dataTypeKey)
         var unit: HKUnit?
         if let dataUnitKey = dataUnitKey {
             unit = unitDict[dataUnitKey]
         }
-
-        var predicate = HKQuery.predicateForSamples( withStart: dateFrom, end: dateTo, options: .strictStartDate)
+        
+        let sourceIdForCharacteristic = "com.apple.Health"
+        let sourceNameForCharacteristic = "Health"
+        
+        switch(dataTypeKey) {
+        case "BIRTH_DATE":
+            let dateOfBirth = getBirthDate()
+            result([
+                [
+                    "value": dateOfBirth?.timeIntervalSince1970,
+                    "date_from": Int(dateFrom.timeIntervalSince1970 * 1000),
+                    "date_to": Int(dateTo.timeIntervalSince1970 * 1000),
+                    "source_id": sourceIdForCharacteristic,
+                    "source_name": sourceNameForCharacteristic,
+                    "recording_method": RecordingMethod.manual.rawValue
+                ]
+            ])
+            return
+        case "GENDER":
+            let gender = getGender()
+            result([
+                [
+                    "value": gender?.rawValue,
+                    "date_from": Int(dateFrom.timeIntervalSince1970 * 1000),
+                    "date_to": Int(dateTo.timeIntervalSince1970 * 1000),
+                    "source_id": sourceIdForCharacteristic,
+                    "source_name": sourceNameForCharacteristic,
+                    "recording_method": RecordingMethod.manual.rawValue
+                ]
+            ])
+            return
+        case "BLOOD_TYPE":
+            let bloodType = getBloodType()
+            result([
+                [
+                    "value": bloodType?.rawValue,
+                    "date_from": Int(dateFrom.timeIntervalSince1970 * 1000),
+                    "date_to": Int(dateTo.timeIntervalSince1970 * 1000),
+                    "source_id": sourceIdForCharacteristic,
+                    "source_name": sourceNameForCharacteristic,
+                    "recording_method": RecordingMethod.manual.rawValue
+                ]
+            ])
+            return
+        default:
+            break
+        }
+        
+        var predicate = HKQuery.predicateForSamples(
+            withStart: dateFrom, end: dateTo, options: .strictStartDate)
         if (!includeManualEntry) {
             let manualPredicate = NSPredicate(format: "metadata.%K != YES", HKMetadataKeyWasUserEntered)
             predicate = NSCompoundPredicate(type: .and, subpredicates: [predicate, manualPredicate])
@@ -667,7 +890,11 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                         "date_to": Int(correlation.endDate.timeIntervalSince1970 * 1000),
                         "source_id": systolicSample?.sourceRevision.source.bundleIdentifier ?? "",
                         "source_name": systolicSample?.sourceRevision.source.name ?? "",
-                        "is_manual_entry": systolicSample?.metadata?[HKMetadataKeyWasUserEntered] as? Bool ?? false
+                        "recording_method": (systolicSample?.metadata?[HKMetadataKeyWasUserEntered] as? Bool == true)
+                            ? RecordingMethod.manual.rawValue
+                            : RecordingMethod.automatic.rawValue,
+                        "metadata": [:],
+                        "dataUnitKey": HKUnit.millimeterOfMercury().unitString
                     ]
                 }
                 DispatchQueue.main.async {
@@ -677,46 +904,46 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             healthStore.execute(correlationQuery)
             }
         else{
-
-            let query = HKSampleQuery( sampleType: dataType, predicate: predicate, limit: limit, sortDescriptors: [sortDescriptor]) {
+            
+            let query = HKSampleQuery(
+                sampleType: dataType, predicate: predicate, limit: limit, sortDescriptors: [sortDescriptor]
+            ) {
                 [self]
                 x, samplesOrNil, error in
-
+                
                 switch samplesOrNil {
                 case let (samples as [HKQuantitySample]) as Any:
                     let dictionaries = samples.map { sample -> NSDictionary in
                         return [
                             "uuid": "\(sample.uuid)",
-                            "value": sample.quantity.doubleValue(for: unit!),
+                            "value": sample.quantity.doubleValue(for: unit ?? HKUnit.internationalUnit()),
                             "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                             "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                             "source_id": sample.sourceRevision.source.bundleIdentifier,
                             "source_name": sample.sourceRevision.source.name,
-                            "is_manual_entry": sample.metadata?[HKMetadataKeyWasUserEntered] != nil
+                            "recording_method": (sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool == true)
+                                ? RecordingMethod.manual.rawValue
+                                : RecordingMethod.automatic.rawValue,
+                            "metadata": dataTypeKey == INSULIN_DELIVERY ? sample.metadata : nil,
+                            "dataUnitKey": unit?.unitString
                         ]
                     }
                     DispatchQueue.main.async {
                         result(dictionaries)
                     }
-
+                    
                 case var (samplesCategory as [HKCategorySample]) as Any:
-
+                    
                     if dataTypeKey == self.SLEEP_IN_BED {
                         samplesCategory = samplesCategory.filter { $0.value == 0 }
                     }
-                    if dataTypeKey == self.SLEEP_ASLEEP_CORE {
-                        samplesCategory = samplesCategory.filter { $0.value == 3 }
-                    }
-                    if dataTypeKey == self.SLEEP_ASLEEP_DEEP {
-                        samplesCategory = samplesCategory.filter { $0.value == 4 }
-                    }
-                    if dataTypeKey == self.SLEEP_ASLEEP_REM {
-                        samplesCategory = samplesCategory.filter { $0.value == 5 }
+                    if dataTypeKey == self.SLEEP_ASLEEP {
+                        samplesCategory = samplesCategory.filter { $0.value == 1 }
                     }
                     if dataTypeKey == self.SLEEP_AWAKE {
                         samplesCategory = samplesCategory.filter { $0.value == 2 }
                     }
-                    if dataTypeKey == self.SLEEP_ASLEEP {
+                    if dataTypeKey == self.SLEEP_LIGHT {
                         samplesCategory = samplesCategory.filter { $0.value == 3 }
                     }
                     if dataTypeKey == self.SLEEP_DEEP {
@@ -741,6 +968,14 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                         samplesCategory = samplesCategory.filter { $0.value == 4 }
                     }
                     let categories = samplesCategory.map { sample -> NSDictionary in
+                        var metadata: [String: Any] = [:]
+                        
+                        if let sampleMetadata = sample.metadata {
+                            for (key, value) in sampleMetadata {
+                                metadata[key] = value
+                            }
+                        }
+                        
                         return [
                             "uuid": "\(sample.uuid)",
                             "value": sample.value,
@@ -748,15 +983,16 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                             "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                             "source_id": sample.sourceRevision.source.bundleIdentifier,
                             "source_name": sample.sourceRevision.source.name,
-                            "is_manual_entry": sample.metadata?[HKMetadataKeyWasUserEntered] != nil
+                            "recording_method": (sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool == true) ? RecordingMethod.manual.rawValue : RecordingMethod.automatic.rawValue,
+                            "metadata": metadata
                         ]
                     }
                     DispatchQueue.main.async {
                         result(categories)
                     }
-
+                    
                 case let (samplesWorkout as [HKWorkout]) as Any:
-
+                    
                     let dictionaries = samplesWorkout.map { sample -> NSDictionary in
                         return [
                             "uuid": "\(sample.uuid)",
@@ -771,17 +1007,17 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                             "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                             "source_id": sample.sourceRevision.source.bundleIdentifier,
                             "source_name": sample.sourceRevision.source.name,
-                            "is_manual_entry": sample.metadata?[HKMetadataKeyWasUserEntered] != nil,
+                            "recording_method": (sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool == true) ? RecordingMethod.manual.rawValue : RecordingMethod.automatic.rawValue,
                             "workout_type": self.getWorkoutType(type: sample.workoutActivityType),
                             "total_distance": sample.totalDistance != nil ? Int(sample.totalDistance!.doubleValue(for: HKUnit.meter())) : 0,
                             "total_energy_burned": sample.totalEnergyBurned != nil ? Int(sample.totalEnergyBurned!.doubleValue(for: HKUnit.kilocalorie())) : 0
                         ]
                     }
-
+                    
                     DispatchQueue.main.async {
                         result(dictionaries)
                     }
-
+                    
                 case let (samplesAudiogram as [HKAudiogramSample]) as Any:
                     let dictionaries = samplesAudiogram.map { sample -> NSDictionary in
                         var frequencies = [Double]()
@@ -808,55 +1044,45 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                     DispatchQueue.main.async {
                         result(dictionaries)
                     }
-
+                    
                 case let (nutritionSample as [HKCorrelation]) as Any:
-
-                    //let samples = nutritionSample[0].objects(for: HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!)
-                    var calories = 0.0
-                    var fat = 0.0
-                    var carbs = 0.0
-                    var protein = 0.0
-
-                    let name = nutritionSample[0].metadata?[HKMetadataKeyFoodType] as! String
-                    let mealType = nutritionSample[0].metadata?["HKFoodMeal"]
-                    let samples = nutritionSample[0].objects
-                    for sample in samples {
-                        if let quantitySample = sample as? HKQuantitySample {
-                            if (quantitySample.quantityType == HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)){
-                                calories = quantitySample.quantity.doubleValue(for: HKUnit.kilocalorie())
+                    var foods: [[String: Any?]] = []
+                    for food in nutritionSample {
+                        let name = food.metadata?[HKMetadataKeyFoodType] as? String
+                        let mealType = food.metadata?["HKFoodMeal"]
+                        let samples = food.objects
+                        // get first sample if it exists
+                        if let sample = samples.first as? HKQuantitySample {
+                            var sampleDict = [
+                                "uuid": "\(sample.uuid)",
+                                "name": name,
+                                "meal_type": mealType,
+                                "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
+                                "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
+                                "source_id": sample.sourceRevision.source.bundleIdentifier,
+                                "source_name": sample.sourceRevision.source.name,
+                                "recording_method": (sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool == true)
+                                    ? RecordingMethod.manual.rawValue
+                                    : RecordingMethod.automatic.rawValue
+                            ]
+                            for sample in samples {
+                                if let quantitySample = sample as? HKQuantitySample {
+                                    for (key, identifier) in NUTRITION_KEYS {
+                                        if (quantitySample.quantityType == HKObjectType.quantityType(forIdentifier: identifier)){
+                                            let unit = key == "calories" ? HKUnit.kilocalorie() : key == "water" ? HKUnit.literUnit(with: .milli) : HKUnit.gram()
+                                            sampleDict[key] = quantitySample.quantity.doubleValue(for: unit)
+                                        }
+                                    }
+                                }
                             }
-                            if (quantitySample.quantityType == HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates)){
-                                carbs = quantitySample.quantity.doubleValue(for: HKUnit.gram())
-                            }
-                            if (quantitySample.quantityType == HKObjectType.quantityType(forIdentifier: .dietaryProtein)){
-                                protein = quantitySample.quantity.doubleValue(for: HKUnit.gram())
-                            }
-                            if (quantitySample.quantityType == HKObjectType.quantityType(forIdentifier: .dietaryFatTotal)){
-                                fat = quantitySample.quantity.doubleValue(for: HKUnit.gram())
-                            }
+                            foods.append(sampleDict)
                         }
                     }
-
-
-                    let dictionaries = nutritionSample.map { sample -> NSDictionary in
-                        return [
-                            "uuid": "\(sample.uuid)",
-                            "calories": calories,
-                            "carbs": carbs,
-                            "protein": protein,
-                            "fat": fat,
-                            "name": name,
-                            "mealType": mealType,
-                            "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
-                            "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
-                            "source_id": sample.sourceRevision.source.bundleIdentifier,
-                            "source_name": sample.sourceRevision.source.name,
-                        ]
-                    }
+                    
                     DispatchQueue.main.async {
-                        result(dictionaries)
+                        result(foods)
                     }
-
+                    
                 default:
                     if #available(iOS 14.0, *), let ecgSamples = samplesOrNil as? [HKElectrocardiogram] {
                         let dictionaries = ecgSamples.map(fetchEcgMeasurements)
@@ -871,14 +1097,11 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                     }
                 }
             }
+            
             HKHealthStore().execute(query)
-        }     
+        }
     }
-
-    func getBloodPressure(){
-
-    }
-
+    
     @available(iOS 14.0, *)
     private func fetchEcgMeasurements(_ sample: HKElectrocardiogram) -> NSDictionary {
         let semaphore = DispatchSemaphore(value: 0)
@@ -912,7 +1135,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             "source_name": sample.sourceRevision.source.name,
         ]
     }
-
+    
     func getIntervalData(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? NSDictionary
         let dataTypeKey = (arguments?["dataTypeKey"] as? String) ?? "DEFAULT"
@@ -920,25 +1143,26 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         let startDate = (arguments?["startTime"] as? NSNumber) ?? 0
         let endDate = (arguments?["endTime"] as? NSNumber) ?? 0
         let intervalInSecond = (arguments?["interval"] as? Int) ?? 1
-        let includeManualEntry = (arguments?["includeManualEntry"] as? Bool) ?? true
-
+        let recordingMethodsToFilter = (arguments?["recordingMethodsToFilter"] as? [Int]) ?? []
+        let includeManualEntry = !recordingMethodsToFilter.contains(RecordingMethod.manual.rawValue)
+        
         // Set interval in seconds.
         var interval = DateComponents()
         interval.second = intervalInSecond
-
+        
         // Convert dates from milliseconds to Date()
         let dateFrom = Date(timeIntervalSince1970: startDate.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endDate.doubleValue / 1000)
-
+        
         let quantityType: HKQuantityType! = dataQuantityTypesDict[dataTypeKey]
         var predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: [])
         if (!includeManualEntry) {
             let manualPredicate = NSPredicate(format: "metadata.%K != YES", HKMetadataKeyWasUserEntered)
             predicate = NSCompoundPredicate(type: .and, subpredicates: [predicate, manualPredicate])
         }
-
+        
         let query = HKStatisticsCollectionQuery(quantityType: quantityType, quantitySamplePredicate: predicate, options: [.cumulativeSum, .separateBySource], anchorDate: dateFrom, intervalComponents: interval)
-
+        
         query.initialResultsHandler = {
             [weak self] _, statisticCollectionOrNil, error in
             guard let self = self else {
@@ -949,7 +1173,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
                 return
             }
-
+            
             // Error detected.
             if let error = error {
                 print("Query error: \(error.localizedDescription)")
@@ -958,7 +1182,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
                 return
             }
-
+            
             guard let collection = statisticCollectionOrNil as? HKStatisticsCollection else {
                 print("Unexpected result from query")
                 DispatchQueue.main.async {
@@ -966,7 +1190,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 }
                 return
             }
-
+            
             var dictionaries = [[String: Any]]()
             collection.enumerateStatistics(from: dateFrom, to: dateTo) {
                 [weak self] statisticData, _ in
@@ -975,7 +1199,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                     print("Self is nil during enumeration")
                     return
                 }
-
+                
                 do {
                     if let quantity = statisticData.sumQuantity(),
                        let dataUnitKey = dataUnitKey,
@@ -999,27 +1223,36 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         }
         HKHealthStore().execute(query)
     }
-
+    
     func getTotalStepsInInterval(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? NSDictionary
         let startTime = (arguments?["startTime"] as? NSNumber) ?? 0
         let endTime = (arguments?["endTime"] as? NSNumber) ?? 0
-
+        let recordingMethodsToFilter = (arguments?["recordingMethodsToFilter"] as? [Int]) ?? []
+        let includeManualEntry = !recordingMethodsToFilter.contains(RecordingMethod.manual.rawValue)
+        
         // Convert dates from milliseconds to Date()
         let dateFrom = Date(timeIntervalSince1970: startTime.doubleValue / 1000)
         let dateTo = Date(timeIntervalSince1970: endTime.doubleValue / 1000)
-
+        
         let sampleType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
-        let predicate = HKQuery.predicateForSamples(
+        var predicate = HKQuery.predicateForSamples(
             withStart: dateFrom, end: dateTo, options: .strictStartDate)
-
-        let query = HKStatisticsQuery(
+        if (!includeManualEntry) {
+            let manualPredicate = NSPredicate(format: "metadata.%K != YES", HKMetadataKeyWasUserEntered)
+            predicate = NSCompoundPredicate(type: .and, subpredicates: [predicate, manualPredicate])
+        }
+        
+        // TODO: [NOTE] Computational heavy
+        let query = HKStatisticsCollectionQuery(
             quantityType: sampleType,
             quantitySamplePredicate: predicate,
-            options: .cumulativeSum
-        ) { query, queryResult, error in
-
-            guard let queryResult = queryResult else {
+            options: .cumulativeSum,
+            anchorDate: dateFrom,
+            intervalComponents: DateComponents(day: 1)
+        )
+        query.initialResultsHandler = { query, results, error in
+            guard let results = results else { 
                 let error = error! as NSError
                 print("Error getting total steps in interval \(error.localizedDescription)")
 
@@ -1027,38 +1260,71 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                     result(nil)
                 }
                 return
-            }
+             }
 
-            var steps = 0.0
+             var totalSteps = 0.0
+             results.enumerateStatistics(from: dateFrom, to: dateTo) { statistics, stop in
+                if let quantity = statistics.sumQuantity() {
+                    let unit = HKUnit.count()
+                    totalSteps += quantity.doubleValue(for: unit)
+                }
+             }
 
-            if let quantity = queryResult.sumQuantity() {
-                let unit = HKUnit.count()
-                steps = quantity.doubleValue(for: unit)
-            }
-
-            let totalSteps = Int(steps)
-            DispatchQueue.main.async {
-                result(totalSteps)
-            }
+             DispatchQueue.main.async {
+                result(Int(totalSteps))
+             }
         }
-
+        
         HKHealthStore().execute(query)
     }
-
+    
     func unitLookUp(key: String) -> HKUnit {
         guard let unit = unitDict[key] else {
             return HKUnit.count()
         }
         return unit
     }
-
+    
     func dataTypeLookUp(key: String) -> HKSampleType {
         guard let dataType_ = dataTypesDict[key] else {
             return HKSampleType.quantityType(forIdentifier: .bodyMass)!
         }
         return dataType_
     }
-
+    
+    func getGender() -> HKBiologicalSex? {
+        var bioSex:HKBiologicalSex?
+        do {
+            bioSex = try healthStore.biologicalSex().biologicalSex
+        } catch {
+            bioSex = nil
+            print("Error retrieving biologicalSex: \(error)")
+        }
+        return bioSex
+    }
+    
+    func getBirthDate() -> Date? {
+        var dob:Date?
+        do {
+            dob = try healthStore.dateOfBirthComponents().date
+        } catch {
+            dob = nil
+            print("Error retrieving date of birth: \(error)")
+        }
+        return dob
+    }
+    
+    func getBloodType() -> HKBloodType? {
+        var bloodType:HKBloodType?
+        do {
+            bloodType = try healthStore.bloodType().bloodType
+        } catch {
+            bloodType = nil
+            print("Error retrieving blood type: \(error)")
+        }
+        return bloodType
+    }
+    
     func initializeTypes() {
         // Initialize units
         unitDict[GRAM] = HKUnit.gram()
@@ -1107,7 +1373,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         unitDict[MILLIGRAM_PER_DECILITER] = HKUnit.init(from: "mg/dL")
         unitDict[UNKNOWN_UNIT] = HKUnit.init(from: "")
         unitDict[NO_UNIT] = HKUnit.init(from: "")
-
+        
         // Initialize workout types
         workoutActivityTypeMap["ARCHERY"] = .archery
         workoutActivityTypeMap["BOWLING"] = .bowling
@@ -1131,8 +1397,6 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         workoutActivityTypeMap["FLEXIBILITY"] = .flexibility
         workoutActivityTypeMap["WALKING"] = .walking
         workoutActivityTypeMap["RUNNING"] = .running
-        workoutActivityTypeMap["RUNNING_JOGGING"] = .running  // Supported due to combining with Android naming
-        workoutActivityTypeMap["RUNNING_SAND"] = .running  // Supported due to combining with Android naming
         workoutActivityTypeMap["RUNNING_TREADMILL"] = .running  // Supported due to combining with Android naming
         workoutActivityTypeMap["WHEELCHAIR_WALK_PACE"] = .wheelchairWalkPace
         workoutActivityTypeMap["WHEELCHAIR_RUN_PACE"] = .wheelchairRunPace
@@ -1173,14 +1437,13 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         workoutActivityTypeMap["SNOW_SPORTS"] = .snowSports
         workoutActivityTypeMap["SNOWBOARDING"] = .snowboarding
         workoutActivityTypeMap["SKATING"] = .skatingSports
-        workoutActivityTypeMap["SKATING_CROSS,"] = .skatingSports  // Supported due to combining with Android naming
-        workoutActivityTypeMap["SKATING_INDOOR,"] = .skatingSports  // Supported due to combining with Android naming
-        workoutActivityTypeMap["SKATING_INLINE,"] = .skatingSports  // Supported due to combining with Android naming
         workoutActivityTypeMap["PADDLE_SPORTS"] = .paddleSports
         workoutActivityTypeMap["ROWING"] = .rowing
         workoutActivityTypeMap["SAILING"] = .sailing
-        workoutActivityTypeMap["SURFING_SPORTS"] = .surfingSports
+        workoutActivityTypeMap["SURFING"] = .surfingSports
         workoutActivityTypeMap["SWIMMING"] = .swimming
+        workoutActivityTypeMap["SWIMMING_OPEN_WATER"] = .swimming
+        workoutActivityTypeMap["SWIMMING_POOL"] = .swimming
         workoutActivityTypeMap["WATER_FITNESS"] = .waterFitness
         workoutActivityTypeMap["WATER_POLO"] = .waterPolo
         workoutActivityTypeMap["WATER_SPORTS"] = .waterSports
@@ -1190,7 +1453,22 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
         workoutActivityTypeMap["TAI_CHI"] = .taiChi
         workoutActivityTypeMap["WRESTLING"] = .wrestling
         workoutActivityTypeMap["OTHER"] = .other
+        if #available(iOS 17.0, *) {
+            workoutActivityTypeMap["UNDERWATER_DIVING"] = .underwaterDiving
+        }
 
+        nutritionList = [
+            DIETARY_ENERGY_CONSUMED, DIETARY_CARBS_CONSUMED, DIETARY_PROTEIN_CONSUMED,
+            DIETARY_FATS_CONSUMED, DIETARY_CAFFEINE, DIETARY_FIBER, DIETARY_SUGAR,
+            DIETARY_FAT_MONOUNSATURATED, DIETARY_FAT_POLYUNSATURATED, DIETARY_FAT_SATURATED,
+            DIETARY_CHOLESTEROL, DIETARY_VITAMIN_A, DIETARY_THIAMIN, DIETARY_RIBOFLAVIN,
+            DIETARY_NIACIN, DIETARY_PANTOTHENIC_ACID, DIETARY_VITAMIN_B6, DIETARY_BIOTIN,
+            DIETARY_VITAMIN_B12, DIETARY_VITAMIN_C, DIETARY_VITAMIN_D, DIETARY_VITAMIN_E,
+            DIETARY_VITAMIN_K, DIETARY_FOLATE, DIETARY_CALCIUM, DIETARY_CHLORIDE,
+            DIETARY_IRON, DIETARY_MAGNESIUM, DIETARY_PHOSPHORUS, DIETARY_POTASSIUM,
+            DIETARY_SODIUM, DIETARY_ZINC, DIETARY_WATER, DIETARY_CHROMIUM, DIETARY_COPPER,
+            DIETARY_IODINE, DIETARY_MANGANESE, DIETARY_MOLYBDENUM, DIETARY_SELENIUM,
+        ]
         // Set up iOS 13 specific types (ordinary health data types)
         if #available(iOS 13.0, *) {
             dataTypesDict[ACTIVE_ENERGY_BURNED] = HKSampleType.quantityType(
@@ -1209,18 +1487,51 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             
             dataTypesDict[BODY_FAT_PERCENTAGE] = HKSampleType.quantityType(
                 forIdentifier: .bodyFatPercentage)!
+            dataTypesDict[LEAN_BODY_MASS] = HKSampleType.quantityType(forIdentifier: .leanBodyMass)!
             dataTypesDict[BODY_MASS_INDEX] = HKSampleType.quantityType(forIdentifier: .bodyMassIndex)!
             dataTypesDict[BODY_TEMPERATURE] = HKSampleType.quantityType(forIdentifier: .bodyTemperature)!
-            dataTypesDict[DIETARY_CARBS_CONSUMED] = HKSampleType.quantityType(
-                forIdentifier: .dietaryCarbohydrates)!
-            dataTypesDict[DIETARY_ENERGY_CONSUMED] = HKSampleType.quantityType(
-                forIdentifier: .dietaryEnergyConsumed)!
-            dataTypesDict[DIETARY_CAFFEINE] = HKSampleType.quantityType(
-                forIdentifier: .dietaryCaffeine)!
-            dataTypesDict[DIETARY_FATS_CONSUMED] = HKSampleType.quantityType(
-                forIdentifier: .dietaryFatTotal)!
-            dataTypesDict[DIETARY_PROTEIN_CONSUMED] = HKSampleType.quantityType(
-                forIdentifier: .dietaryProtein)!
+            
+            // Nutrition
+            dataTypesDict[DIETARY_CARBS_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryCarbohydrates)!
+            dataTypesDict[DIETARY_CAFFEINE] = HKSampleType.quantityType(forIdentifier: .dietaryCaffeine)!
+            dataTypesDict[DIETARY_ENERGY_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
+            dataTypesDict[DIETARY_FATS_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryFatTotal)!
+            dataTypesDict[DIETARY_PROTEIN_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryProtein)!
+            dataTypesDict[DIETARY_FIBER] = HKSampleType.quantityType(forIdentifier: .dietaryFiber)!
+            dataTypesDict[DIETARY_SUGAR] = HKSampleType.quantityType(forIdentifier: .dietarySugar)!
+            dataTypesDict[DIETARY_FAT_MONOUNSATURATED] = HKSampleType.quantityType(forIdentifier: .dietaryFatMonounsaturated)!
+            dataTypesDict[DIETARY_FAT_POLYUNSATURATED] = HKSampleType.quantityType(forIdentifier: .dietaryFatPolyunsaturated)!
+            dataTypesDict[DIETARY_FAT_SATURATED] = HKSampleType.quantityType(forIdentifier: .dietaryFatSaturated)!
+            dataTypesDict[DIETARY_CHOLESTEROL] = HKSampleType.quantityType(forIdentifier: .dietaryCholesterol)!
+            dataTypesDict[DIETARY_VITAMIN_A] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminA)!
+            dataTypesDict[DIETARY_THIAMIN] = HKSampleType.quantityType(forIdentifier: .dietaryThiamin)!
+            dataTypesDict[DIETARY_RIBOFLAVIN] = HKSampleType.quantityType(forIdentifier: .dietaryRiboflavin)!
+            dataTypesDict[DIETARY_NIACIN] = HKSampleType.quantityType(forIdentifier: .dietaryNiacin)!
+            dataTypesDict[DIETARY_PANTOTHENIC_ACID] = HKSampleType.quantityType(forIdentifier: .dietaryPantothenicAcid)!
+            dataTypesDict[DIETARY_VITAMIN_B6] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminB6)!
+            dataTypesDict[DIETARY_BIOTIN] = HKSampleType.quantityType(forIdentifier: .dietaryBiotin)!
+            dataTypesDict[DIETARY_VITAMIN_B12] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminB12)!
+            dataTypesDict[DIETARY_VITAMIN_C] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminC)!
+            dataTypesDict[DIETARY_VITAMIN_D] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminD)!
+            dataTypesDict[DIETARY_VITAMIN_E] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminE)!
+            dataTypesDict[DIETARY_VITAMIN_K] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminK)!
+            dataTypesDict[DIETARY_FOLATE] = HKSampleType.quantityType(forIdentifier: .dietaryFolate)!
+            dataTypesDict[DIETARY_CALCIUM] = HKSampleType.quantityType(forIdentifier: .dietaryCalcium)!
+            dataTypesDict[DIETARY_CHLORIDE] = HKSampleType.quantityType(forIdentifier: .dietaryChloride)!
+            dataTypesDict[DIETARY_IRON] = HKSampleType.quantityType(forIdentifier: .dietaryIron)!
+            dataTypesDict[DIETARY_MAGNESIUM] = HKSampleType.quantityType(forIdentifier: .dietaryMagnesium)!
+            dataTypesDict[DIETARY_PHOSPHORUS] = HKSampleType.quantityType(forIdentifier: .dietaryPhosphorus)!
+            dataTypesDict[DIETARY_POTASSIUM] = HKSampleType.quantityType(forIdentifier: .dietaryPotassium)!
+            dataTypesDict[DIETARY_SODIUM] = HKSampleType.quantityType(forIdentifier: .dietarySodium)!
+            dataTypesDict[DIETARY_ZINC] = HKSampleType.quantityType(forIdentifier: .dietaryZinc)!
+            dataTypesDict[DIETARY_WATER] = HKSampleType.quantityType(forIdentifier: .dietaryWater)!
+            dataTypesDict[DIETARY_CHROMIUM] = HKSampleType.quantityType(forIdentifier: .dietaryChromium)!
+            dataTypesDict[DIETARY_COPPER] = HKSampleType.quantityType(forIdentifier: .dietaryCopper)!
+            dataTypesDict[DIETARY_IODINE] = HKSampleType.quantityType(forIdentifier: .dietaryIodine)!
+            dataTypesDict[DIETARY_MANGANESE] = HKSampleType.quantityType(forIdentifier: .dietaryManganese)!
+            dataTypesDict[DIETARY_MOLYBDENUM] = HKSampleType.quantityType(forIdentifier: .dietaryMolybdenum)!
+            dataTypesDict[DIETARY_SELENIUM] = HKSampleType.quantityType(forIdentifier: .dietarySelenium)!
+            
             dataTypesDict[ELECTRODERMAL_ACTIVITY] = HKSampleType.quantityType(
                 forIdentifier: .electrodermalActivity)!
             dataTypesDict[FORCED_EXPIRATORY_VOLUME] = HKSampleType.quantityType(
@@ -1229,6 +1540,7 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[HEART_RATE_VARIABILITY_SDNN] = HKSampleType.quantityType(
                 forIdentifier: .heartRateVariabilitySDNN)!
             dataTypesDict[HEIGHT] = HKSampleType.quantityType(forIdentifier: .height)!
+            dataTypesDict[INSULIN_DELIVERY] = HKSampleType.quantityType(forIdentifier: .insulinDelivery)!
             dataTypesDict[RESTING_HEART_RATE] = HKSampleType.quantityType(
                 forIdentifier: .restingHeartRate)!
             dataTypesDict[STEPS] = HKSampleType.quantityType(forIdentifier: .stepCount)!
@@ -1242,25 +1554,29 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataTypesDict[DISTANCE_SWIMMING] = HKSampleType.quantityType(forIdentifier: .distanceSwimming)!
             dataTypesDict[DISTANCE_CYCLING] = HKSampleType.quantityType(forIdentifier: .distanceCycling)!
             dataTypesDict[FLIGHTS_CLIMBED] = HKSampleType.quantityType(forIdentifier: .flightsClimbed)!
-            dataTypesDict[WATER] = HKSampleType.quantityType(forIdentifier: .dietaryWater)!
             dataTypesDict[MINDFULNESS] = HKSampleType.categoryType(forIdentifier: .mindfulSession)!
-            dataTypesDict[SLEEP_IN_BED] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
-            dataTypesDict[SLEEP_ASLEEP] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
-            dataTypesDict[SLEEP_ASLEEP_CORE] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
-            dataTypesDict[SLEEP_ASLEEP_DEEP] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
-            dataTypesDict[SLEEP_ASLEEP_REM] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[SLEEP_AWAKE] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[SLEEP_DEEP] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            dataTypesDict[SLEEP_IN_BED] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            dataTypesDict[SLEEP_LIGHT] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
             dataTypesDict[SLEEP_REM] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
-
+            dataTypesDict[SLEEP_ASLEEP] = HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!
+            dataTypesDict[MENSTRUATION_FLOW] = HKSampleType.categoryType(forIdentifier: .menstrualFlow)!
+            
+            
             dataTypesDict[EXERCISE_TIME] = HKSampleType.quantityType(forIdentifier: .appleExerciseTime)!
             dataTypesDict[WORKOUT] = HKSampleType.workoutType()
             dataTypesDict[NUTRITION] = HKSampleType.correlationType(
                 forIdentifier: .food)!
-
+            
             healthDataTypes = Array(dataTypesDict.values)
+            
+            characteristicsTypesDict[BIRTH_DATE] = HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!
+            characteristicsTypesDict[GENDER] = HKObjectType.characteristicType(forIdentifier: .biologicalSex)!
+            characteristicsTypesDict[BLOOD_TYPE] = HKObjectType.characteristicType(forIdentifier: .bloodType)!
+            characteristicsDataTypes = Array(characteristicsTypesDict.values)
         }
-
+        
         // Set up iOS 11 specific types (ordinary health data quantity types)
         if #available(iOS 11.0, *) {
             dataQuantityTypesDict[ACTIVE_ENERGY_BURNED] = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
@@ -1270,12 +1586,51 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataQuantityTypesDict[BLOOD_PRESSURE_DIASTOLIC] = HKQuantityType.quantityType(forIdentifier: .bloodPressureDiastolic)!
             dataQuantityTypesDict[BLOOD_PRESSURE_SYSTOLIC] = HKQuantityType.quantityType(forIdentifier: .bloodPressureSystolic)!
             dataQuantityTypesDict[BODY_FAT_PERCENTAGE] = HKQuantityType.quantityType(forIdentifier: .bodyFatPercentage)!
+            dataQuantityTypesDict[LEAN_BODY_MASS] = HKSampleType.quantityType(forIdentifier: .leanBodyMass)!
             dataQuantityTypesDict[BODY_MASS_INDEX] = HKQuantityType.quantityType(forIdentifier: .bodyMassIndex)!
             dataQuantityTypesDict[BODY_TEMPERATURE] = HKQuantityType.quantityType(forIdentifier: .bodyTemperature)!
-            dataQuantityTypesDict[DIETARY_CARBS_CONSUMED] = HKQuantityType.quantityType(forIdentifier: .dietaryCarbohydrates)!
-            dataQuantityTypesDict[DIETARY_ENERGY_CONSUMED] = HKQuantityType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
-            dataQuantityTypesDict[DIETARY_FATS_CONSUMED] = HKQuantityType.quantityType(forIdentifier: .dietaryFatTotal)!
-            dataQuantityTypesDict[DIETARY_PROTEIN_CONSUMED] = HKQuantityType.quantityType(forIdentifier: .dietaryProtein)!
+            
+            // Nutrition
+            dataQuantityTypesDict[DIETARY_CARBS_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryCarbohydrates)!
+            dataQuantityTypesDict[DIETARY_CAFFEINE] = HKSampleType.quantityType(forIdentifier: .dietaryCaffeine)!
+            dataQuantityTypesDict[DIETARY_ENERGY_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!
+            dataQuantityTypesDict[DIETARY_FATS_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryFatTotal)!
+            dataQuantityTypesDict[DIETARY_PROTEIN_CONSUMED] = HKSampleType.quantityType(forIdentifier: .dietaryProtein)!
+            dataQuantityTypesDict[DIETARY_FIBER] = HKSampleType.quantityType(forIdentifier: .dietaryFiber)!
+            dataQuantityTypesDict[DIETARY_SUGAR] = HKSampleType.quantityType(forIdentifier: .dietarySugar)!
+            dataQuantityTypesDict[DIETARY_FAT_MONOUNSATURATED] = HKSampleType.quantityType(forIdentifier: .dietaryFatMonounsaturated)!
+            dataQuantityTypesDict[DIETARY_FAT_POLYUNSATURATED] = HKSampleType.quantityType(forIdentifier: .dietaryFatPolyunsaturated)!
+            dataQuantityTypesDict[DIETARY_FAT_SATURATED] = HKSampleType.quantityType(forIdentifier: .dietaryFatSaturated)!
+            dataQuantityTypesDict[DIETARY_CHOLESTEROL] = HKSampleType.quantityType(forIdentifier: .dietaryCholesterol)!
+            dataQuantityTypesDict[DIETARY_VITAMIN_A] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminA)!
+            dataQuantityTypesDict[DIETARY_THIAMIN] = HKSampleType.quantityType(forIdentifier: .dietaryThiamin)!
+            dataQuantityTypesDict[DIETARY_RIBOFLAVIN] = HKSampleType.quantityType(forIdentifier: .dietaryRiboflavin)!
+            dataQuantityTypesDict[DIETARY_NIACIN] = HKSampleType.quantityType(forIdentifier: .dietaryNiacin)!
+            dataQuantityTypesDict[DIETARY_PANTOTHENIC_ACID] = HKSampleType.quantityType(forIdentifier: .dietaryPantothenicAcid)!
+            dataQuantityTypesDict[DIETARY_VITAMIN_B6] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminB6)!
+            dataQuantityTypesDict[DIETARY_BIOTIN] = HKSampleType.quantityType(forIdentifier: .dietaryBiotin)!
+            dataQuantityTypesDict[DIETARY_VITAMIN_B12] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminB12)!
+            dataQuantityTypesDict[DIETARY_VITAMIN_C] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminC)!
+            dataQuantityTypesDict[DIETARY_VITAMIN_D] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminD)!
+            dataQuantityTypesDict[DIETARY_VITAMIN_E] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminE)!
+            dataQuantityTypesDict[DIETARY_VITAMIN_K] = HKSampleType.quantityType(forIdentifier: .dietaryVitaminK)!
+            dataQuantityTypesDict[DIETARY_FOLATE] = HKSampleType.quantityType(forIdentifier: .dietaryFolate)!
+            dataQuantityTypesDict[DIETARY_CALCIUM] = HKSampleType.quantityType(forIdentifier: .dietaryCalcium)!
+            dataQuantityTypesDict[DIETARY_CHLORIDE] = HKSampleType.quantityType(forIdentifier: .dietaryChloride)!
+            dataQuantityTypesDict[DIETARY_IRON] = HKSampleType.quantityType(forIdentifier: .dietaryIron)!
+            dataQuantityTypesDict[DIETARY_MAGNESIUM] = HKSampleType.quantityType(forIdentifier: .dietaryMagnesium)!
+            dataQuantityTypesDict[DIETARY_PHOSPHORUS] = HKSampleType.quantityType(forIdentifier: .dietaryPhosphorus)!
+            dataQuantityTypesDict[DIETARY_POTASSIUM] = HKSampleType.quantityType(forIdentifier: .dietaryPotassium)!
+            dataQuantityTypesDict[DIETARY_SODIUM] = HKSampleType.quantityType(forIdentifier: .dietarySodium)!
+            dataQuantityTypesDict[DIETARY_ZINC] = HKSampleType.quantityType(forIdentifier: .dietaryZinc)!
+            dataQuantityTypesDict[DIETARY_WATER] = HKSampleType.quantityType(forIdentifier: .dietaryWater)!
+            dataQuantityTypesDict[DIETARY_CHROMIUM] = HKSampleType.quantityType(forIdentifier: .dietaryChromium)!
+            dataQuantityTypesDict[DIETARY_COPPER] = HKSampleType.quantityType(forIdentifier: .dietaryCopper)!
+            dataQuantityTypesDict[DIETARY_IODINE] = HKSampleType.quantityType(forIdentifier: .dietaryIodine)!
+            dataQuantityTypesDict[DIETARY_MANGANESE] = HKSampleType.quantityType(forIdentifier: .dietaryManganese)!
+            dataQuantityTypesDict[DIETARY_MOLYBDENUM] = HKSampleType.quantityType(forIdentifier: .dietaryMolybdenum)!
+            dataQuantityTypesDict[DIETARY_SELENIUM] = HKSampleType.quantityType(forIdentifier: .dietarySelenium)!
+            
             dataQuantityTypesDict[ELECTRODERMAL_ACTIVITY] = HKQuantityType.quantityType(forIdentifier: .electrodermalActivity)!
             dataQuantityTypesDict[FORCED_EXPIRATORY_VOLUME] = HKQuantityType.quantityType(forIdentifier: .forcedExpiratoryVolume1)!
             dataQuantityTypesDict[HEART_RATE] = HKQuantityType.quantityType(forIdentifier: .heartRate)!
@@ -1290,11 +1645,10 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             dataQuantityTypesDict[DISTANCE_SWIMMING] = HKQuantityType.quantityType(forIdentifier: .distanceSwimming)!
             dataQuantityTypesDict[DISTANCE_CYCLING] = HKQuantityType.quantityType(forIdentifier: .distanceCycling)!
             dataQuantityTypesDict[FLIGHTS_CLIMBED] = HKQuantityType.quantityType(forIdentifier: .flightsClimbed)!
-            dataQuantityTypesDict[WATER] = HKQuantityType.quantityType(forIdentifier: .dietaryWater)!
-
+            
             healthDataQuantityTypes = Array(dataQuantityTypesDict.values)
         }
-
+        
         // Set up heart rate data types specific to the apple watch, requires iOS 12
         if #available(iOS 12.2, *) {
             dataTypesDict[HIGH_HEART_RATE_EVENT] = HKSampleType.categoryType(
@@ -1303,43 +1657,50 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
                 forIdentifier: .lowHeartRateEvent)!
             dataTypesDict[IRREGULAR_HEART_RATE_EVENT] = HKSampleType.categoryType(
                 forIdentifier: .irregularHeartRhythmEvent)!
-
+            
             heartRateEventTypes = Set([
                 HKSampleType.categoryType(forIdentifier: .highHeartRateEvent)!,
                 HKSampleType.categoryType(forIdentifier: .lowHeartRateEvent)!,
                 HKSampleType.categoryType(forIdentifier: .irregularHeartRhythmEvent)!,
             ])
         }
-
+        
         if #available(iOS 13.6, *) {
             dataTypesDict[HEADACHE_UNSPECIFIED] = HKSampleType.categoryType(forIdentifier: .headache)!
             dataTypesDict[HEADACHE_NOT_PRESENT] = HKSampleType.categoryType(forIdentifier: .headache)!
             dataTypesDict[HEADACHE_MILD] = HKSampleType.categoryType(forIdentifier: .headache)!
             dataTypesDict[HEADACHE_MODERATE] = HKSampleType.categoryType(forIdentifier: .headache)!
             dataTypesDict[HEADACHE_SEVERE] = HKSampleType.categoryType(forIdentifier: .headache)!
-
+            
             headacheType = Set([
                 HKSampleType.categoryType(forIdentifier: .headache)!
             ])
         }
-
+        
         if #available(iOS 14.0, *) {
             dataTypesDict[ELECTROCARDIOGRAM] = HKSampleType.electrocardiogramType()
-
+            
             unitDict[VOLT] = HKUnit.volt()
             unitDict[INCHES_OF_MERCURY] = HKUnit.inchesOfMercury()
-
+            
             workoutActivityTypeMap["CARDIO_DANCE"] = HKWorkoutActivityType.cardioDance
             workoutActivityTypeMap["SOCIAL_DANCE"] = HKWorkoutActivityType.socialDance
             workoutActivityTypeMap["PICKLEBALL"] = HKWorkoutActivityType.pickleball
             workoutActivityTypeMap["COOLDOWN"] = HKWorkoutActivityType.cooldown
         }
 
+        if #available(iOS 16.0, *) {
+            dataTypesDict[ATRIAL_FIBRILLATION_BURDEN] = HKQuantityType.quantityType(forIdentifier: .atrialFibrillationBurden)!
+
+            dataTypesDict[WATER_TEMPERATURE] = HKQuantityType.quantityType(forIdentifier: .waterTemperature)!
+            dataTypesDict[UNDERWATER_DEPTH] = HKQuantityType.quantityType(forIdentifier: .underwaterDepth)!
+        } 
+        
         // Concatenate heart events, headache and health data types (both may be empty)
         allDataTypes = Set(heartRateEventTypes + healthDataTypes)
         allDataTypes = allDataTypes.union(headacheType)
     }
-
+    
     func getWorkoutType(type: HKWorkoutActivityType) -> String {
         switch type {
         case .americanFootball:
@@ -1490,8 +1851,10 @@ public class SwiftHealthPlugin: NSObject, FlutterPlugin {
             return "mixedCardio"
         case .handCycling:
             return "handCycling"
+        case .underwaterDiving:
+            return "underwaterDiving"
         default:
             return "other"
         }
-    }
+   }
 }
