@@ -2,13 +2,14 @@ library;
 
 import 'dart:async';
 import 'dart:collection';
-import 'dart:io' show Platform;
 
 import 'package:carp_serializable/carp_serializable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:universal_io/io.dart';
+
 
 part 'src/heath_data_types.dart';
 part 'src/functions.dart';
