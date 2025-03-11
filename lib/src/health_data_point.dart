@@ -1,7 +1,7 @@
 part of '../health.dart';
 
 /// Types of health platforms.
-enum HealthPlatformType { appleHealth, googleHealthConnect, web, others, none }
+enum HealthPlatformType { appleHealth, googleHealthConnect }
 
 /// A [HealthDataPoint] object corresponds to a data point capture from
 /// Apple HealthKit or Google Health Connect with a [HealthValue]

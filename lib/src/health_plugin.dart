@@ -54,9 +54,16 @@ class Health {
   HealthConnectSdkStatus get healthConnectSdkStatus => _healthConnectSdkStatus;
 
   /// The type of platform of this device.
-  HealthPlatformType get platformType => Platform.isIOS
-      ? HealthPlatformType.appleHealth
-      : HealthPlatformType.googleHealthConnect;
+  HealthPlatformType get platformType {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        return HealthPlatformType.appleHealth;
+      case TargetPlatform.android:
+        return HealthPlatformType.googleHealthConnect;
+      default:
+        throw UnsupportedError('Unsupported platform: $defaultTargetPlatform');
+    }
+  }
 
   /// The id of this device.
   ///
@@ -66,15 +73,18 @@ class Health {
 
   /// Configure the health plugin. Must be called before using the plugin.
   Future<void> configure() async {
-    _deviceId = Platform.isAndroid
-        ? (await _deviceInfo.androidInfo).id
-        : (await _deviceInfo.iosInfo).identifierForVendor;
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      _deviceId = (await _deviceInfo.androidInfo).id;
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      _deviceId = (await _deviceInfo.iosInfo).identifierForVendor;
+    }
   }
 
   /// Check if a given data type is available on the platform
-  bool isDataTypeAvailable(HealthDataType dataType) => Platform.isAndroid
-      ? dataTypeKeysAndroid.contains(dataType)
-      : dataTypeKeysIOS.contains(dataType);
+  bool isDataTypeAvailable(HealthDataType dataType) =>
+      defaultTargetPlatform == TargetPlatform.android
+          ? dataTypeKeysAndroid.contains(dataType)
+          : dataTypeKeysIOS.contains(dataType);
 
   /// Determines if the health data [types] have been granted with the specified
   /// access rights [permissions].
@@ -117,7 +127,9 @@ class Health {
         : permissions.map((permission) => permission.index).toList();
 
     /// On Android, if BMI is requested, then also ask for weight and height
-    if (Platform.isAndroid) _handleBMI(mTypes, mPermissions);
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      _handleBMI(mTypes, mPermissions);
+    }
 
     return await _channel.invokeMethod('hasPermissions', {
       "types": mTypes.map((type) => type.name).toList(),
@@ -132,7 +144,7 @@ class Health {
   ///
   /// Android only. On iOS this does nothing.
   Future<void> revokePermissions() async {
-    if (Platform.isIOS) return;
+    if (defaultTargetPlatform == TargetPlatform.iOS) return;
 
     await _checkIfHealthConnectAvailableOnAndroid();
     try {
@@ -149,7 +161,7 @@ class Health {
   ///
   /// Android only. Returns null on iOS or if an error occurs.
   Future<HealthConnectSdkStatus?> getHealthConnectSdkStatus() async {
-    if (Platform.isIOS) return null;
+    if (defaultTargetPlatform == TargetPlatform.iOS) return null;
 
     try {
       final status =
@@ -168,17 +180,18 @@ class Health {
   /// Is Google Health Connect available on this phone?
   ///
   /// Android only. Returns always true on iOS.
-  Future<bool> isHealthConnectAvailable() async => !Platform.isAndroid
-      ? true
-      : (await getHealthConnectSdkStatus() ==
-          HealthConnectSdkStatus.sdkAvailable);
+  Future<bool> isHealthConnectAvailable() async =>
+      defaultTargetPlatform != TargetPlatform.android
+          ? true
+          : (await getHealthConnectSdkStatus() ==
+              HealthConnectSdkStatus.sdkAvailable);
 
   /// Prompt the user to install the Google Health Connect app via the
   /// installed store (most likely Play Store).
   ///
   /// Android only. On iOS this does nothing.
   Future<void> installHealthConnect() async {
-    if (Platform.isIOS) return;
+    if ((defaultTargetPlatform == TargetPlatform.iOS)) return;
 
     try {
       await _channel.invokeMethod('installHealthConnect');
@@ -191,7 +204,7 @@ class Health {
   /// if not.
   /// Internal methods used to check availability before any getter or setter methods.
   Future<void> _checkIfHealthConnectAvailableOnAndroid() async {
-    if (!Platform.isAndroid) return;
+    if (defaultTargetPlatform != TargetPlatform.android) return;
 
     if (!(await isHealthConnectAvailable())) {
       throw UnsupportedError(
@@ -241,7 +254,8 @@ class Health {
                 type == HealthDataType.WALKING_HEART_RATE ||
                 type == HealthDataType.ATRIAL_FIBRILLATION_BURDEN) &&
             permission != HealthDataAccess.READ) {
-          permissions[i] = HealthDataAccess.READ;        }
+          permissions[i] = HealthDataAccess.READ;
+        }
       }
     }
 
@@ -252,7 +266,8 @@ class Health {
         : permissions.map((permission) => permission.index).toList();
 
     // on Android, if BMI is requested, then also ask for weight and height
-    if (Platform.isAndroid) _handleBMI(mTypes, mPermissions);
+    if (defaultTargetPlatform == TargetPlatform.android)
+      _handleBMI(mTypes, mPermissions);
 
     List<String> keys = mTypes.map((e) => e.name).toList();
     final bool? isAuthorized = await _channel.invokeMethod(
@@ -264,7 +279,7 @@ class Health {
   void _handleBMI(List<HealthDataType> mTypes, List<int> mPermissions) {
     final index = mTypes.indexOf(HealthDataType.BODY_MASS_INDEX);
 
-    if (index != -1 && Platform.isAndroid) {
+    if (index != -1 && defaultTargetPlatform == TargetPlatform.android) {
       if (!mTypes.contains(HealthDataType.WEIGHT)) {
         mTypes.add(HealthDataType.WEIGHT);
         mPermissions.add(mPermissions[index]);
@@ -352,7 +367,7 @@ class Health {
     RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
     await _checkIfHealthConnectAvailableOnAndroid();
-    if (Platform.isIOS &&
+    if ((defaultTargetPlatform == TargetPlatform.iOS) &&
         [RecordingMethod.active, RecordingMethod.unknown]
             .contains(recordingMethod)) {
       throw ArgumentError("recordingMethod must be manual or automatic on iOS");
@@ -376,7 +391,7 @@ class Health {
           HealthDataType.IRREGULAR_HEART_RATE_EVENT,
           HealthDataType.ELECTROCARDIOGRAM,
         }.contains(type) &&
-        Platform.isIOS) {
+        defaultTargetPlatform == TargetPlatform.iOS) {
       throw ArgumentError(
           "$type - iOS does not support writing this data type in HealthKit");
     }
@@ -464,7 +479,7 @@ class Health {
     RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
     await _checkIfHealthConnectAvailableOnAndroid();
-    if (Platform.isIOS &&
+    if ((defaultTargetPlatform == TargetPlatform.iOS) &&
         [RecordingMethod.active, RecordingMethod.unknown]
             .contains(recordingMethod)) {
       throw ArgumentError("recordingMethod must be manual or automatic on iOS");
@@ -505,7 +520,7 @@ class Health {
     RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
     await _checkIfHealthConnectAvailableOnAndroid();
-    if (Platform.isIOS &&
+    if ((defaultTargetPlatform == TargetPlatform.iOS) &&
         [RecordingMethod.active, RecordingMethod.unknown]
             .contains(recordingMethod)) {
       throw ArgumentError("recordingMethod must be manual or automatic on iOS");
@@ -517,14 +532,14 @@ class Health {
     }
     bool? success;
 
-    if (Platform.isIOS) {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
       success = await writeHealthData(
           value: saturation,
           type: HealthDataType.BLOOD_OXYGEN,
           startTime: startTime,
           endTime: endTime,
           recordingMethod: recordingMethod);
-    } else if (Platform.isAndroid) {
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
       Map<String, dynamic> args = {
         'value': saturation,
         'startTime': startTime.millisecondsSinceEpoch,
@@ -639,7 +654,7 @@ class Health {
     RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
     await _checkIfHealthConnectAvailableOnAndroid();
-    if (Platform.isIOS &&
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
         [RecordingMethod.active, RecordingMethod.unknown]
             .contains(recordingMethod)) {
       throw ArgumentError("recordingMethod must be manual or automatic on iOS");
@@ -720,14 +735,15 @@ class Health {
     RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
     await _checkIfHealthConnectAvailableOnAndroid();
-    if (Platform.isIOS &&
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
         [RecordingMethod.active, RecordingMethod.unknown]
             .contains(recordingMethod)) {
       throw ArgumentError("recordingMethod must be manual or automatic on iOS");
     }
 
-    var value =
-        Platform.isAndroid ? MenstrualFlow.toHealthConnect(flow) : flow.index;
+    var value = defaultTargetPlatform == TargetPlatform.android
+        ? MenstrualFlow.toHealthConnect(flow)
+        : flow.index;
 
     if (value == -1) {
       throw ArgumentError(
@@ -784,7 +800,7 @@ class Health {
     if (startTime.isAfter(endTime)) {
       throw ArgumentError("startTime must be equal or earlier than endTime");
     }
-    if (Platform.isAndroid) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
       throw UnsupportedError("writeAudiogram is not supported on Android");
     }
 
@@ -825,7 +841,7 @@ class Health {
       throw ArgumentError("set a valid insulin delivery reason");
     }
 
-    if (Platform.isAndroid) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
       throw UnsupportedError(
           "writeInsulinDelivery is not supported on Android");
     }
@@ -914,7 +930,7 @@ class Health {
     List<RecordingMethod> recordingMethodsToFilter,
   ) async {
     // Ask for device ID only once
-    _deviceId ??= Platform.isAndroid
+    _deviceId ??= defaultTargetPlatform == TargetPlatform.android
         ? (await _deviceInfo.androidInfo).id
         : (await _deviceInfo.iosInfo).identifierForVendor;
 
@@ -925,7 +941,8 @@ class Health {
     }
 
     // If BodyMassIndex is requested on Android, calculate this manually
-    if (dataType == HealthDataType.BODY_MASS_INDEX && Platform.isAndroid) {
+    if (dataType == HealthDataType.BODY_MASS_INDEX &&
+        defaultTargetPlatform == TargetPlatform.android) {
       return _computeAndroidBMI(startTime, endTime, recordingMethodsToFilter);
     }
     return await _dataQuery(
@@ -940,7 +957,7 @@ class Health {
       int interval,
       List<RecordingMethod> recordingMethodsToFilter) async {
     // Ask for device ID only once
-    _deviceId ??= Platform.isAndroid
+    _deviceId ??= defaultTargetPlatform == TargetPlatform.android
         ? (await _deviceInfo.androidInfo).id
         : (await _deviceInfo.iosInfo).identifierForVendor;
 
@@ -962,7 +979,7 @@ class Health {
       int activitySegmentDuration,
       bool includeManualEntry) async {
     // Ask for device ID only once
-    _deviceId ??= Platform.isAndroid
+    _deviceId ??= defaultTargetPlatform == TargetPlatform.android
         ? (await _deviceInfo.androidInfo).id
         : (await _deviceInfo.iosInfo).identifierForVendor;
 
@@ -1145,17 +1162,19 @@ class Health {
     RecordingMethod recordingMethod = RecordingMethod.automatic,
   }) async {
     await _checkIfHealthConnectAvailableOnAndroid();
-    if (Platform.isIOS &&
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
         [RecordingMethod.active, RecordingMethod.unknown]
             .contains(recordingMethod)) {
       throw ArgumentError("recordingMethod must be manual or automatic on iOS");
     }
 
     // Check that value is on the current Platform
-    if (Platform.isIOS && !_isOnIOS(activityType)) {
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
+        !_isOnIOS(activityType)) {
       throw HealthException(activityType,
           "Workout activity type $activityType is not supported on iOS");
-    } else if (Platform.isAndroid && !_isOnAndroid(activityType)) {
+    } else if (defaultTargetPlatform == TargetPlatform.android &&
+        !_isOnAndroid(activityType)) {
       throw HealthException(activityType,
           "Workout activity type $activityType is not supported on Android");
     }

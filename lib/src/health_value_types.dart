@@ -885,9 +885,9 @@ class MenstruationFlowHealthValue extends HealthValue {
     // Parse flow value safely
     final flowValueIndex = dataPoint['value'] as int? ?? 0;
     MenstrualFlow? menstrualFlow;
-    if (Platform.isAndroid) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
       menstrualFlow = MenstrualFlow.fromHealthConnect(flowValueIndex);
-    } else if (Platform.isIOS) {
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       menstrualFlow = MenstrualFlow.fromHealthKit(flowValueIndex);
     }
 
