@@ -6,30 +6,47 @@ part of 'health.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
-    HealthDataPoint(
-      uuid: json['uuid'] as String,
-      value: HealthValue.fromJson(json['value'] as Map<String, dynamic>),
-      type: $enumDecode(_$HealthDataTypeEnumMap, json['type']),
-      unit: $enumDecode(_$HealthDataUnitEnumMap, json['unit']),
-      dateFrom: DateTime.parse(json['dateFrom'] as String),
-      dateTo: json['dateTo'] != null 
-          ? DateTime.parse(json['dateTo'] as String)
-          : DateTime.parse(json['dateFrom'] as String),
-      sourcePlatform:
-          $enumDecode(_$HealthPlatformTypeEnumMap, json['sourcePlatform']),
-      sourceDeviceId: json['sourceDeviceId'] as String,
-      sourceId: json['sourceId'] as String,
-      sourceName: json['sourceName'] as String,
-      recordingMethod: $enumDecodeNullable(
-              _$RecordingMethodEnumMap, json['recordingMethod']) ??
-          RecordingMethod.unknown,
-      workoutSummary: json['workoutSummary'] == null
-          ? null
-          : WorkoutSummary.fromJson(
-              json['workoutSummary'] as Map<String, dynamic>),
-      metadata: json['metadata'] as Map<String, dynamic>?,
-    );
+HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) {
+  dynamic valueData = json['value'];
+  Map<String, dynamic> valueMap;
+  
+  // Handle the case where the value is a JSON string
+  if (valueData is String) {
+    try {
+      valueMap = jsonDecode(valueData) as Map<String, dynamic>;
+    } catch (e) {
+      throw FormatException('Failed to parse value as JSON: $e');
+    }
+  } else if (valueData is Map<String, dynamic>) {
+    valueMap = valueData;
+  } else {
+    throw FormatException('Value must be a JSON string or Map, but was ${valueData.runtimeType}');
+  }
+
+  return HealthDataPoint(
+    uuid: json['uuid'] as String,
+    value: HealthValue.fromJson(valueMap),
+    type: $enumDecode(_$HealthDataTypeEnumMap, json['type']),
+    unit: $enumDecode(_$HealthDataUnitEnumMap, json['unit']),
+    dateFrom: DateTime.parse(json['dateFrom'] as String),
+    dateTo: json['dateTo'] != null 
+        ? DateTime.parse(json['dateTo'] as String)
+        : DateTime.parse(json['dateFrom'] as String),
+    sourcePlatform:
+        $enumDecode(_$HealthPlatformTypeEnumMap, json['sourcePlatform']),
+    sourceDeviceId: json['sourceDeviceId'] as String,
+    sourceId: json['sourceId'] as String,
+    sourceName: json['sourceName'] as String,
+    recordingMethod: $enumDecodeNullable(
+            _$RecordingMethodEnumMap, json['recordingMethod']) ??
+        RecordingMethod.unknown,
+    workoutSummary: json['workoutSummary'] == null
+        ? null
+        : WorkoutSummary.fromJson(
+            json['workoutSummary'] as Map<String, dynamic>),
+    metadata: json['metadata'] as Map<String, dynamic>?,
+  );
+}
 
 Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) =>
     <String, dynamic>{
