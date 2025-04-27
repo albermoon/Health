@@ -166,9 +166,7 @@ class HealthAppState extends State<HealthApp> {
       debugPrint('Total number of data points: ${healthData.length}. '
           '${healthData.length > 100 ? 'Only showing the first 100.' : ''}');
 
-      // sort the data points by date
-      healthData.sort((a, b) => b.dateTo.compareTo(a.dateTo));
-
+      
       // save all the new data points (only the first 100)
       _healthDataList.addAll(
           (healthData.length < 100) ? healthData : healthData.sublist(0, 100));
@@ -691,7 +689,7 @@ class HealthAppState extends State<HealthApp> {
         if (p.value is AudiogramHealthValue) {
           return ListTile(
             title: Text("${p.typeString}: ${p.value}"),
-            trailing: Text(p.unitString),
+            trailing: Text(p.unitString ?? ''),
             subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
           );
         }
@@ -715,7 +713,7 @@ class HealthAppState extends State<HealthApp> {
         }
         return ListTile(
           title: Text("${p.typeString}: ${p.value}"),
-          trailing: Text(p.unitString),
+          trailing: Text(p.unitString ?? ''),
           subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
         );
       });

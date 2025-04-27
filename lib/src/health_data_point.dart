@@ -15,34 +15,34 @@ class HealthDataPoint {
   HealthValue value;
 
   /// The type of the data point.
-  HealthDataType type;
+  HealthDataType? type;
 
   /// The data point type as a string.
-  String get typeString => type.name;
+  String? get typeString => type?.name;
 
   /// The unit of the data point.
-  HealthDataUnit unit;
+  HealthDataUnit? unit;
 
   /// The data point unit as a string.
-  String get unitString => unit.name;
+  String? get unitString => unit?.name;
 
   /// The start of the time interval.
   DateTime dateFrom;
 
   /// The end of the time interval.
-  DateTime dateTo;
+  DateTime? dateTo;
 
   /// The health platform that this data point was fetched.
-  HealthPlatformType sourcePlatform;
+  HealthPlatformType? sourcePlatform;
 
   /// The id of the device from which the data point was fetched.
-  String sourceDeviceId;
+  String? sourceDeviceId;
 
   /// The id of the source from which the data point was fetched.
-  String sourceId;
+  String? sourceId;
 
   /// The name of the source from which the data point was fetched.
-  String sourceName;
+  String? sourceName;
 
   /// How the data point was recorded
   /// (on Android: https://developer.android.com/reference/kotlin/androidx/health/connect/client/records/metadata/Metadata#summary)
@@ -58,14 +58,14 @@ class HealthDataPoint {
   HealthDataPoint({
     required this.uuid,
     required this.value,
-    required this.type,
-    required this.unit,
+    this.type,
+    this.unit,
     required this.dateFrom,
-    required this.dateTo,
-    required this.sourcePlatform,
-    required this.sourceDeviceId,
-    required this.sourceId,
-    required this.sourceName,
+    this.dateTo,
+    this.sourcePlatform,
+    this.sourceDeviceId,
+    this.sourceId,
+    this.sourceName,
     this.recordingMethod = RecordingMethod.unknown,
     this.workoutSummary,
     this.metadata,
@@ -93,8 +93,8 @@ class HealthDataPoint {
 
   /// Converts dateTo - dateFrom to minutes.
   NumericHealthValue _convertMinutes() => NumericHealthValue(
-      numericValue:
-          (dateTo.millisecondsSinceEpoch - dateFrom.millisecondsSinceEpoch) /
+        numericValue:
+            (dateTo!.millisecondsSinceEpoch - dateFrom.millisecondsSinceEpoch) /
               (1000 * 60));
 
   /// Create a [HealthDataPoint] from json.
@@ -129,14 +129,18 @@ class HealthDataPoint {
       _ => NumericHealthValue.fromHealthDataPoint(dataPoint),
     };
 
-    final DateTime from = DateTime.fromMillisecondsSinceEpoch(dataPoint['date_from'] as int);
-    final DateTime to = DateTime.fromMillisecondsSinceEpoch(dataPoint['date_to'] as int);
-    final String sourceId = dataPoint["source_id"] as String;
-    final String sourceName = dataPoint["source_name"] as String;
+    final DateTime? from = dataPoint['date_from'] != null 
+        ? DateTime.fromMillisecondsSinceEpoch(dataPoint['date_from'] as int)
+        : null;
+    final DateTime? to = dataPoint['date_to'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(dataPoint['date_to'] as int)
+        : null;
+    final String? sourceId = dataPoint["source_id"] as String?;
+    final String? sourceName = dataPoint["source_name"] as String?;
     final Map<String, dynamic>? metadata = dataPoint["metadata"] == null
         ? null
         : Map<String, dynamic>.from(dataPoint['metadata'] as Map);
-    final unit = dataTypeToUnit[dataType] ?? HealthDataUnit.UNKNOWN_UNIT;
+    final unit = dataType != null ? dataTypeToUnit[dataType] ?? HealthDataUnit.UNKNOWN_UNIT : null;
     final String? uuid = dataPoint["uuid"] as String?;
 
     // Set WorkoutSummary, if available.
@@ -155,8 +159,8 @@ class HealthDataPoint {
       value: value,
       type: dataType,
       unit: unit,
-      dateFrom: from,
-      dateTo: to,
+      dateFrom: from!,
+      dateTo: to!,
       sourcePlatform: Health().platformType,
       sourceDeviceId: Health().deviceId,
       sourceId: sourceId,
@@ -171,10 +175,10 @@ class HealthDataPoint {
   String toString() => """$runtimeType -
     uuid: $uuid,
     value: ${value.toString()},
-    unit: ${unit.name},
+    unit: ${unit?.name},
     dateFrom: $dateFrom,
     dateTo: $dateTo,
-    dataType: ${type.name},
+    dataType: ${type?.name},
     platform: $sourcePlatform,
     deviceId: $sourceDeviceId,
     sourceId: $sourceId,

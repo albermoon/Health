@@ -13,7 +13,9 @@ HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) =>
       type: $enumDecode(_$HealthDataTypeEnumMap, json['type']),
       unit: $enumDecode(_$HealthDataUnitEnumMap, json['unit']),
       dateFrom: DateTime.parse(json['dateFrom'] as String),
-      dateTo: DateTime.parse(json['dateTo'] as String),
+      dateTo: json['dateTo'] != null 
+          ? DateTime.parse(json['dateTo'] as String)
+          : DateTime.parse(json['dateFrom'] as String),
       sourcePlatform:
           $enumDecode(_$HealthPlatformTypeEnumMap, json['sourcePlatform']),
       sourceDeviceId: json['sourceDeviceId'] as String,
@@ -36,7 +38,7 @@ Map<String, dynamic> _$HealthDataPointToJson(HealthDataPoint instance) =>
       'type': _$HealthDataTypeEnumMap[instance.type]!,
       'unit': _$HealthDataUnitEnumMap[instance.unit]!,
       'dateFrom': instance.dateFrom.toIso8601String(),
-      'dateTo': instance.dateTo.toIso8601String(),
+      'dateTo': instance.dateTo?.toIso8601String(),
       'sourcePlatform': _$HealthPlatformTypeEnumMap[instance.sourcePlatform]!,
       'sourceDeviceId': instance.sourceDeviceId,
       'sourceId': instance.sourceId,
