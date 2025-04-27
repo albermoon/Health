@@ -1,3 +1,6 @@
+## 12.0.3
+* Fix: Use dateFrom as fallback when dateTo is null or missing in JSON deserialization
+
 ## 12.0.2
 * Adapt to join BloodPressure in one.
 
