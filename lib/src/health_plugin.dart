@@ -38,11 +38,15 @@ part of '../health.dart';
 /// or getter methods. Otherwise, the plugin will throw an exception.
 class Health {
   static const MethodChannel _channel = MethodChannel('flutter_health');
+  static final Uuid _uuid = Uuid();
 
   String? _deviceId;
   final DeviceInfoPlugin _deviceInfo;
   HealthConnectSdkStatus _healthConnectSdkStatus =
       HealthConnectSdkStatus.sdkUnavailable;
+
+  /// Generate a new UUID for a HealthDataPoint
+  static String generateUuid() => _uuid.v1;
 
   /// Get an instance of the health plugin.
   Health({DeviceInfoPlugin? deviceInfo})
@@ -861,10 +865,18 @@ class Health {
 
     const int threshold = 100;
     if (dataPoints.length > threshold) {
-      return compute(removeDuplicates, dataPoints);
+      dataPoints = await compute((points) {
+        points = removeDuplicates(points);
+        points = aggregateStepsByDay(points);
+        return aggregateHeartRateByDay(points);
+      }, dataPoints);
+    } else {
+      dataPoints = removeDuplicates(dataPoints);
+      dataPoints = aggregateStepsByDay(dataPoints);
+      dataPoints = aggregateHeartRateByDay(dataPoints);
     }
 
-    return removeDuplicates(dataPoints);
+    return dataPoints;
   }
 
   /// Fetch a list of health data points based on [types].

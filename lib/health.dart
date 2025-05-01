@@ -1,8 +1,9 @@
-library;
+library health;
 
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:carp_serializable/carp_serializable.dart';
 import 'package:json_annotation/json_annotation.dart';

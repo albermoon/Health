@@ -24,7 +24,7 @@ const List<HealthDataType> dataTypesIOS = [
   // HealthDataType.HEIGHT,
   // HealthDataType.RESPIRATORY_RATE,
   // HealthDataType.PERIPHERAL_PERFUSION_INDEX,
-  // HealthDataType.STEPS,
+  HealthDataType.STEPS,
   // HealthDataType.WAIST_CIRCUMFERENCE,
   // HealthDataType.WEIGHT,
   // HealthDataType.FLIGHTS_CLIMBED,
