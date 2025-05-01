@@ -32,18 +32,16 @@ HealthDataPoint _$HealthDataPointFromJson(Map<String, dynamic> json) {
     dateTo: json['dateTo'] != null 
         ? DateTime.parse(json['dateTo'] as String)
         : DateTime.parse(json['dateFrom'] as String),
-    sourcePlatform:
-        $enumDecode(_$HealthPlatformTypeEnumMap, json['sourcePlatform']),
-    sourceDeviceId: json['sourceDeviceId'] as String,
-    sourceId: json['sourceId'] as String,
-    sourceName: json['sourceName'] as String,
+    sourcePlatform: $enumDecodeNullable(_$HealthPlatformTypeEnumMap, json['sourcePlatform']),
+    sourceDeviceId: json['sourceDeviceId'] as String?,
+    sourceId: json['sourceId'] as String?,
+    sourceName: json['sourceName'] as String?,
     recordingMethod: $enumDecodeNullable(
             _$RecordingMethodEnumMap, json['recordingMethod']) ??
         RecordingMethod.unknown,
     workoutSummary: json['workoutSummary'] == null
         ? null
-        : WorkoutSummary.fromJson(
-            json['workoutSummary'] as Map<String, dynamic>),
+        : WorkoutSummary.fromJson(json['workoutSummary'] as Map<String, dynamic>),
     metadata: json['metadata'] as Map<String, dynamic>?,
   );
 }
