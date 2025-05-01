@@ -1,3 +1,6 @@
+## 12.0.5
+* Optimize performance in getHealthDataFromTypes by combining compute operations and reducing isolate overhead
+
 ## 12.0.3
 * Fix: Use dateFrom as fallback when dateTo is null or missing in JSON deserialization
 
