@@ -56,10 +56,7 @@ enum HealthConnectSdkStatus {
   List<HealthDataPoint> aggregateStepsByDay(List<HealthDataPoint> points) {
     if (points.isEmpty) return [];
 
-    // Keep non-step points
     final List<HealthDataPoint> resultPoints = points.where((point) => point.type != HealthDataType.STEPS).toList();
-
-    // Group step points by day
     final Map<String, List<HealthDataPoint>> dayGroups = {};
     
     for (var point in points) {
@@ -98,7 +95,7 @@ enum HealthConnectSdkStatus {
         sourceDeviceId: firstPoint.sourceDeviceId,
         sourceId: firstPoint.sourceId,
         sourceName: firstPoint.sourceName,
-        recordingMethod: firstPoint.recordingMethod,
+        recordingMethod: RecordingMethod.automatic,
         metadata: {
           'aggregated': true,
           'number_of_records': points.length,
@@ -168,7 +165,7 @@ enum HealthConnectSdkStatus {
         sourceDeviceId: firstPoint.sourceDeviceId,
         sourceId: firstPoint.sourceId,
         sourceName: firstPoint.sourceName,
-        recordingMethod: firstPoint.recordingMethod,
+        recordingMethod: RecordingMethod.automatic,
         metadata: {
           'aggregated': true,
           'number_of_records': validMeasurements,
